@@ -1,0 +1,275 @@
+fecha,nombre,tipo,caracter_legal,ambito,fuente
+2013-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-01-31,Bicentenario de la Asamblea General Constituyente de 1813,feriado excepcional,feriado,nacional,Ley 26.840
+2013-02-11,Carnaval (lunes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-02-12,Carnaval (martes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-02-20,Bicentenario de la Batalla de Salta,feriado excepcional,feriado,nacional,Ley 26.837
+2013-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-03-28,Jueves Santo,día no laborable,no laborable,nacional,Decreto 1584/2010
+2013-03-29,Viernes Santo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-04-01,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1585/2010
+2013-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-06-21,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1585/2010
+2013-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-08-19,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2013-10-14,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2013-11-25,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2013-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2013-12-25,Navidad,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-03-03,Carnaval (lunes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-03-04,Carnaval (martes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-04-17,Jueves Santo,día no laborable,no laborable,nacional,Decreto 1584/2010
+2014-04-18,Viernes Santo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-05-02,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1768/2013
+2014-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-08-18,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2014-10-13,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2014-11-24,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2014-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-12-25,Navidad,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2014-12-26,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1768/2013
+2015-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-02-16,Carnaval (lunes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-02-17,Carnaval (martes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-03-23,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1768/2013
+2015-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas / Jueves Santo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-04-03,Viernes Santo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-08-17,Paso a la Inmortalidad del General Don José de San Martín,feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2015-10-12,Día del Respeto a la Diversidad Cultural,feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2015-11-27,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Decreto 2226/2015
+2015-12-07,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1768/2013
+2015-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2015-12-25,Navidad,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-02-08,Carnaval (lunes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-02-09,Carnaval (martes),feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-03-24,Día Nacional de la Memoria por la Verdad y la Justicia / Jueves Santo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-03-25,Viernes Santo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-06-17,Paso a la Inmortalidad del General Don Martín Miguel de Güemes,feriado inamovible,feriado,nacional,Ley 27.258; Decreto 1584/2010
+2016-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-07-08,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1768/2013
+2016-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-08-15,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2016-10-10,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2016-11-28,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Decreto 1584/2010 art. 2
+2016-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2016-12-09,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Decreto 1584/2010 art. 3 y Decreto 1768/2013
+2016-12-25,Navidad,feriado inamovible,feriado,nacional,Decreto 1584/2010
+2017-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-02-27,Carnaval (lunes),feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-02-28,Carnaval (martes),feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-04-13,Jueves Santo,día no laborable,no laborable,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-04-14,Viernes Santo,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-06-17,Paso a la Inmortalidad del General Don Martín Miguel de Güemes,feriado trasladable,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-08-21,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-10-16,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-11-20,Día de la Soberanía Nacional,feriado trasladable,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2017-12-25,Navidad,feriado inamovible,feriado,nacional,Decreto 1584/2010 mod. por Decretos 52/2017 y 80/2017
+2018-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2018-02-12,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2018-02-13,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2018-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2018-03-29,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2018-03-30,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2018-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Ley 27.399
+2018-04-30,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 923/2017
+2018-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2018-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2018-06-17,Paso a la Inmortalidad del General Don Martín Miguel de Güemes,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2018-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2018-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2018-08-20,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2018-10-15,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2018-11-19,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2018-11-30,Cumbre de Líderes del G20,feriado excepcional,feriado,CABA,Decreto 967/2018
+2018-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2018-12-24,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 923/2017
+2018-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2018-12-31,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 923/2017
+2019-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2019-03-04,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2019-03-05,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2019-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2019-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Ley 27.399
+2019-04-18,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2019-04-19,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2019-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2019-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2019-06-17,Paso a la Inmortalidad del General Don Martín Miguel de Güemes,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2019-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2019-07-08,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 923/2017
+2019-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2019-08-17,Paso a la Inmortalidad del General Don José de San Martín,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2019-08-19,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 923/2017
+2019-10-12,Día del Respeto a la Diversidad Cultural,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2019-10-14,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 923/2017
+2019-11-18,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2019-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2019-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2020-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2020-02-24,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2020-02-25,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2020-03-23,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 717/2019
+2020-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2020-03-31,Día del Veterano y de los Caídos en la Guerra de Malvinas (trasladado del 2/4),feriado inamovible,feriado,nacional,Ley 27.399; Decreto 297/2020 art. 7
+2020-04-09,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2020-04-10,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2020-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2020-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2020-06-15,Paso a la Inmortalidad del General Don Martín Miguel de Güemes (trasladado del 17/6),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2020-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2020-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2020-07-10,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 717/2019
+2020-08-17,Paso a la Inmortalidad del General Don José de San Martín,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2020-10-12,Día del Respeto a la Diversidad Cultural,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2020-11-23,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2020-12-07,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 717/2019
+2020-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2020-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2021-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2021-02-15,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2021-02-16,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2021-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2021-04-01,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2021-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas / Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2021-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2021-05-24,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 947/2020
+2021-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2021-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2021-06-21,Paso a la Inmortalidad del General Don Martín Miguel de Güemes (trasladado del 17/6),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2021-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2021-08-16,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2021-10-08,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 947/2020
+2021-10-11,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2021-11-20,Día de la Soberanía Nacional,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2021-11-22,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 947/2020
+2021-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2021-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2022-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2022-02-28,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2022-03-01,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2022-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2022-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Ley 27.399
+2022-04-14,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2022-04-15,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2022-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2022-05-18,"Censo Nacional de Población, Hogares y Viviendas 2022",feriado excepcional,feriado,nacional,Decreto 42/2022; Ley 24.254
+2022-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2022-06-17,Paso a la Inmortalidad del General Don Martín Miguel de Güemes,feriado trasladable,feriado,nacional,Ley 27.399 art. 6; Decreto 789/2021 art. 1
+2022-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2022-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2022-08-15,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2022-10-07,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 789/2021
+2022-10-10,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2022-11-20,Día de la Soberanía Nacional,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2022-11-21,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 789/2021
+2022-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2022-12-09,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 789/2021
+2022-12-20,Festejo del título en la Copa Mundial de la FIFA Catar 2022,feriado excepcional,feriado,nacional,Decreto DNU 842/2022
+2022-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2023-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2023-02-20,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2023-02-21,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2023-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2023-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Ley 27.399
+2023-04-06,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2023-04-07,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2023-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2023-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2023-05-26,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 764/2022
+2023-06-17,Paso a la Inmortalidad del General Don Martín Miguel de Güemes,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2023-06-19,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 764/2022
+2023-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2023-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2023-08-21,Paso a la Inmortalidad del General Don José de San Martín (trasladado del 17/8),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2023-10-13,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 764/2022
+2023-10-16,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2023-11-20,Día de la Soberanía Nacional,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2023-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2023-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2024-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2024-02-12,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2024-02-13,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2024-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2024-03-28,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2024-03-29,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2024-04-01,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 106/2023
+2024-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Ley 27.399
+2024-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2024-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2024-06-17,Paso a la Inmortalidad del General Don Martín Miguel de Güemes,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2024-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2024-06-21,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 106/2023
+2024-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2024-08-17,Paso a la Inmortalidad del General Don José de San Martín,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2024-10-11,Feriado con fines turísticos,día no laborable con fines turísticos,feriado,nacional,Ley 27.399 art. 7; Decreto 106/2023
+2024-10-12,Día del Respeto a la Diversidad Cultural,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2024-11-18,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2024-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2024-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2025-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2025-03-03,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2025-03-04,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2025-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2025-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,feriado inamovible,feriado,nacional,Ley 27.399
+2025-04-17,Jueves Santo,día no laborable,no laborable,nacional,Ley 27.399
+2025-04-18,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2025-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2025-05-02,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 1027/2024
+2025-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2025-06-16,Paso a la Inmortalidad del General Don Martín Miguel de Güemes (trasladado del 17/6),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2025-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2025-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2025-08-15,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 1027/2024
+2025-08-17,Paso a la Inmortalidad del General Don José de San Martín,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2025-10-10,Día del Respeto a la Diversidad Cultural (trasladado del 12/10),feriado trasladable,feriado,nacional,Ley 27.399; Decreto 614/2025; Resolución JGM 139/2025
+2025-11-21,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Decreto 1027/2024
+2025-11-24,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2025-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2025-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399
+2026-01-01,Año Nuevo,feriado inamovible,feriado,nacional,Ley 27.399
+2026-02-16,Carnaval (lunes),feriado inamovible,feriado,nacional,Ley 27.399
+2026-02-17,Carnaval (martes),feriado inamovible,feriado,nacional,Ley 27.399
+2026-03-23,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Resolución JGM 164/2025
+2026-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,feriado inamovible,feriado,nacional,Ley 27.399
+2026-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas / Jueves Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2026-04-03,Viernes Santo,feriado inamovible,feriado,nacional,Ley 27.399
+2026-05-01,Día del Trabajador,feriado inamovible,feriado,nacional,Ley 27.399
+2026-05-25,Día de la Revolución de Mayo,feriado inamovible,feriado,nacional,Ley 27.399
+2026-06-15,Paso a la Inmortalidad del General Don Martín Miguel de Güemes (trasladado del 17/6),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2026-06-20,Paso a la Inmortalidad del General Don Manuel Belgrano,feriado inamovible,feriado,nacional,Ley 27.399
+2026-07-09,Día de la Independencia,feriado inamovible,feriado,nacional,Ley 27.399
+2026-07-10,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Resolución JGM 164/2025
+2026-08-17,Paso a la Inmortalidad del General Don José de San Martín,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2026-10-12,Día del Respeto a la Diversidad Cultural,feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2026-11-09,Visita de Su Santidad el Papa León XIV,feriado excepcional,feriado,nacional,Decreto DNU 1103/2026 art. 2
+2026-11-10,Visita de Su Santidad el Papa León XIV,feriado excepcional,feriado,CABA y Provincia de Córdoba,Decreto DNU 1103/2026 art. 3
+2026-11-11,Visita de Su Santidad el Papa León XIV,feriado excepcional,feriado,Provincia de Buenos Aires (no CABA),Decreto DNU 1103/2026 art. 4
+2026-11-23,Día de la Soberanía Nacional (trasladado del 20/11),feriado trasladable,feriado,nacional,Ley 27.399 art. 6
+2026-12-07,Día no laborable con fines turísticos,día no laborable con fines turísticos,no laborable,nacional,Ley 27.399 art. 7; Resolución JGM 164/2025
+2026-12-08,Inmaculada Concepción de María,feriado inamovible,feriado,nacional,Ley 27.399
+2026-12-25,Navidad,feriado inamovible,feriado,nacional,Ley 27.399

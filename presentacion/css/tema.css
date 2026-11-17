@@ -1,0 +1,183 @@
+/* Tema de la teórica de series temporales. Claro para el contenido, oscuro para las escenas de mapa. */
+
+@font-face { font-family: "Fraunces"; font-weight: 400; src: url("../vendor/fonts/fraunces-400.woff2") format("woff2"); }
+@font-face { font-family: "Fraunces"; font-weight: 400; font-style: italic; src: url("../vendor/fonts/fraunces-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Fraunces"; font-weight: 600; src: url("../vendor/fonts/fraunces-600.woff2") format("woff2"); }
+@font-face { font-family: "Fraunces"; font-weight: 700; src: url("../vendor/fonts/fraunces-700.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("../vendor/fonts/inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("../vendor/fonts/inter-500.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("../vendor/fonts/inter-600.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("../vendor/fonts/inter-700.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("../vendor/fonts/jetbrains-mono-400.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 600; src: url("../vendor/fonts/jetbrains-mono-600.woff2") format("woff2"); }
+
+:root {
+  --surface: #fcfcfb;
+  --surface-2: #f3f2ee;
+  --ink: #141414;
+  --ink-2: #55534e;
+  --ink-3: #8a877f;
+  --rule: #e2e0da;
+  --grid: #ecebe6;
+  --accent: #1d4f9c;
+
+  /* Colores de las líneas de subte (identidad, no rango) */
+  --linea-A: #1a9fd0;
+  --linea-B: #d7182a;
+  --linea-C: #1d4f9c;
+  --linea-D: #008a57;
+  --linea-E: #6c2c87;
+  --linea-H: #e0a800;
+  --linea-PM: #8a6d3b;
+  --ecobici: #d4a017;
+
+  --dark-surface: #0e1013;
+  --dark-surface-2: #171a1f;
+  --dark-ink: #f2f1ec;
+  --dark-ink-2: #b9b7af;
+  --dark-ink-3: #7d7b74;
+
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Inter", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --r-background-color: var(--surface);
+  --r-main-font: var(--sans);
+  --r-main-font-size: 30px;
+  --r-main-color: var(--ink);
+  --r-heading-font: var(--serif);
+  --r-heading-color: var(--ink);
+  --r-heading-font-weight: 600;
+  --r-heading-text-transform: none;
+  --r-heading-letter-spacing: -0.01em;
+  --r-heading-line-height: 1.08;
+  --r-link-color: var(--accent);
+  --r-selection-background-color: #cfe0f7;
+  --r-code-font: var(--mono);
+}
+
+.reveal-viewport { background: var(--surface); }
+.reveal { font-family: var(--sans); color: var(--ink); font-size: var(--r-main-font-size); }
+.reveal .slides { text-align: left; }
+.reveal .slides section { height: 100%; padding: 56px 72px 48px; box-sizing: border-box; }
+.reveal h1, .reveal h2, .reveal h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.015em; margin: 0 0 0.35em; }
+.reveal h1 { font-size: 2.9em; line-height: 1.02; }
+.reveal h2 { font-size: 1.75em; }
+.reveal h3 { font-size: 1.15em; font-family: var(--sans); font-weight: 600; letter-spacing: 0; }
+.reveal p, .reveal li { line-height: 1.42; }
+.reveal ul { margin-left: 1.1em; }
+.reveal li + li { margin-top: 0.35em; }
+.reveal strong { font-weight: 600; }
+.reveal em { font-family: var(--serif); font-style: italic; }
+.reveal code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-2); padding: 0.05em 0.3em; border-radius: 4px; }
+.reveal pre { box-shadow: none; width: 100%; margin: 0.4em 0; }
+.reveal pre code { font-size: 0.62em; line-height: 1.5; padding: 18px 22px; border-radius: 10px; background: #15171b; color: #e8e6df; max-height: 560px; }
+
+/* Rótulo chico arriba del título */
+.kicker { font-family: var(--sans); font-size: 0.5em; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 0.9em; }
+.lede { font-family: var(--serif); font-size: 1.45em; line-height: 1.25; max-width: 28ch; }
+.muted { color: var(--ink-2); }
+.small { font-size: 0.7em; }
+.fuente { position: absolute; left: 72px; bottom: 22px; font-size: 0.42em; color: var(--ink-3); letter-spacing: 0.01em; }
+
+/* Columnas */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.cols.c-2-1 { grid-template-columns: 2fr 1fr; }
+.cols.c-1-2 { grid-template-columns: 1fr 2fr; }
+.cols.c-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Número grande */
+.dato { font-family: var(--serif); font-size: 3.4em; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.dato-label { font-size: 0.62em; color: var(--ink-2); margin-top: 0.4em; max-width: 22ch; }
+
+/* Chip de línea de subte */
+.linea { display: inline-grid; place-items: center; width: 1.35em; height: 1.35em; border-radius: 50%; color: #fff; font-weight: 700; font-size: 0.8em; vertical-align: 0.08em; font-family: var(--sans); }
+.linea.A { background: var(--linea-A); } .linea.B { background: var(--linea-B); } .linea.C { background: var(--linea-C); }
+.linea.D { background: var(--linea-D); } .linea.E { background: var(--linea-E); } .linea.H { background: var(--linea-H); color: #141414; }
+.linea.PM { background: var(--linea-PM); font-size: 0.55em; }
+
+/* Demos */
+.demo { position: relative; width: 100%; }
+.demo .controles { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; font-size: 0.52em; color: var(--ink-2); margin-bottom: 12px; min-height: 40px; }
+.demo .controles label { display: inline-flex; align-items: center; gap: 10px; }
+.demo .controles output { font-family: var(--mono); color: var(--ink); min-width: 4.5ch; display: inline-block; font-variant-numeric: tabular-nums; }
+.demo .grafico { width: 100%; }
+.demo .grafico svg { overflow: visible; }
+.demo .grafico figure { margin: 0; }
+.demo .lectura { font-size: 0.55em; color: var(--ink-2); margin-top: 10px; min-height: 1.4em; }
+.demo .lectura b { color: var(--ink); font-weight: 600; }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 260px; height: 4px; background: var(--rule); border-radius: 2px; outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--ink); cursor: pointer; }
+input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--accent); }
+
+.botones { display: inline-flex; gap: 0; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; background: var(--surface); }
+.botones button { font: 500 1em var(--sans); color: var(--ink-2); background: transparent; border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.botones button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.boton { font: 500 0.95em var(--sans); color: var(--surface); background: var(--ink); border: 0; border-radius: 999px; padding: 8px 18px; cursor: pointer; }
+.boton.secundario { color: var(--ink); background: transparent; border: 1px solid var(--rule); }
+
+/* Tooltip de los gráficos */
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--surface); font-size: 15px; line-height: 1.35; padding: 8px 11px; border-radius: 8px; white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity 0.12s; z-index: 10; font-variant-numeric: tabular-nums; }
+.tip.on { opacity: 1; }
+.tip .t2 { color: #c9c7bf; }
+
+/* Escenas oscuras (mapas) */
+.reveal .slides section.escena { padding: 0; color: var(--dark-ink); }
+.escena .mapa { position: absolute; inset: 0; }
+.escena .overlay { position: absolute; left: 56px; top: 48px; max-width: 560px; pointer-events: none; }
+.escena .overlay h2 { color: var(--dark-ink); }
+.escena .overlay .kicker { color: var(--dark-ink-3); }
+.escena .overlay p { color: var(--dark-ink-2); font-size: 0.7em; }
+.escena .reloj { position: absolute; right: 56px; top: 44px; font-family: var(--mono); font-size: 2.2em; color: var(--dark-ink); font-variant-numeric: tabular-nums; text-align: right; }
+.escena .reloj small { display: block; font-family: var(--sans); font-size: 0.26em; color: var(--dark-ink-3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 6px; }
+.escena .panel { position: absolute; left: 56px; right: 56px; bottom: 36px; display: flex; align-items: center; gap: 22px; font-size: 0.5em; color: var(--dark-ink-2); }
+.escena .panel input[type="range"] { flex: 1; width: auto; background: #2a2e35; }
+.escena .panel input[type="range"]::-webkit-slider-thumb { background: var(--dark-ink); border-color: var(--dark-surface); box-shadow: 0 0 0 1px var(--dark-ink); }
+.escena .panel .boton { background: var(--dark-ink); color: var(--dark-surface); }
+.escena .fuente { color: var(--dark-ink-3); }
+.escena .chart-mini { position: absolute; right: 56px; bottom: 96px; width: 460px; }
+
+/* Portada y cierre */
+.portada { display: flex; flex-direction: column; justify-content: flex-end; }
+.portada h1 { font-size: 4.2em; max-width: 12ch; }
+.portada .sub { font-size: 0.8em; color: var(--ink-2); margin-top: 0.6em; }
+.portada .logo { position: absolute; right: 72px; bottom: 48px; width: 190px; }
+
+/* Juego "¿qué pasó?" */
+.marca-evento { cursor: pointer; }
+.revelado { font-size: 0.6em; padding: 14px 18px; border-left: 3px solid var(--ink); background: var(--surface-2); border-radius: 0 8px 8px 0; margin-top: 12px; }
+
+.reveal .progress { color: var(--ink); height: 3px; }
+.reveal .slide-number { font-family: var(--mono); font-size: 13px; background: transparent; color: var(--ink-3); right: 22px; bottom: 16px; }
+.reveal .controls { color: var(--ink-3); }
+
+/* ¿Qué pasó este día? */
+.que-paso-tarjeta { margin: 4px 0 6px; }
+.que-paso-fecha { font-family: var(--serif); font-size: 1.15em; font-weight: 600; }
+.revelado a { color: var(--accent); }
+.botones button:disabled, .boton:disabled { opacity: 0.35; cursor: default; }
+
+/* Velos para leer texto sobre los mapas */
+.escena [data-demo]::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 760px; background: linear-gradient(90deg, rgba(14,16,19,0.88) 0%, rgba(14,16,19,0.55) 55%, rgba(14,16,19,0) 100%); pointer-events: none; }
+.escena [data-demo]::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 150px; background: linear-gradient(0deg, rgba(14,16,19,0.9), rgba(14,16,19,0)); pointer-events: none; }
+.escena .overlay, .escena .panel, .escena .reloj, .escena .fuente, .escena .chart-mini { z-index: 2; }
+.escena .chart-mini { background: rgba(14,16,19,0.78); padding: 14px 16px 6px; border-radius: 12px; }
+.escena .reloj { background: rgba(14,16,19,0.6); padding: 6px 14px 10px; border-radius: 12px; }
+
+/* Leyendas de Observable Plot: tamaño propio, no el de Reveal */
+.demo [class*="-swatches"] { font-size: 16px !important; font-family: var(--sans); color: var(--ink-2); margin-bottom: 6px; gap: 0 18px; }
+.demo [class*="-swatch"] > svg { margin-right: 6px; }
+.demo figure { margin: 0; }
+
+/* Divisores de bloque y recorrido */
+.reveal .slides section.divisor { display: flex !important; flex-direction: column; justify-content: center; }
+.divisor .num { font-family: var(--serif); font-size: 6.5em; line-height: 1; color: var(--rule); font-weight: 600; }
+.divisor h1 { font-size: 3.4em; margin-top: 0.1em; }
+.divisor p { color: var(--ink-2); max-width: 46ch; margin-top: 0.6em; }
+.recorrido { list-style: none; margin: 0.6em 0 0 !important; padding: 0; columns: 2; column-gap: 64px; }
+.recorrido li { break-inside: avoid; padding: 14px 0; border-top: 1px solid var(--rule); margin: 0 !important; }
+.recorrido b { font-family: var(--serif); font-size: 1.15em; margin-right: 12px; color: var(--ink-3); }
+
+/* Reveal pone display:block en la diapositiva activa: la portada necesita flex explícito */
+.reveal .slides section.portada { display: flex !important; flex-direction: column; justify-content: flex-end; }

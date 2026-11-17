@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Series temporales</title>
+<link rel="stylesheet" href="vendor/reveal/reset.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.css">
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/bloque3.css">
+<link rel="stylesheet" href="css/bloque4.css">
+<style>
+  /* Escenario de mapas: fijo detrás de las diapositivas, visible solo en las escenas */
+  #escenario { position: fixed; inset: 0; z-index: 0; display: none; background: var(--dark-surface); }
+  body.con-escena #escenario { display: block; }
+  body.con-escena .reveal-viewport, body.con-escena { background: transparent; }
+  .reveal { z-index: 1; }
+  body.con-escena .reveal .slides section.escena { pointer-events: none; }
+  body.con-escena .reveal .slides section.escena .panel,
+  body.con-escena .reveal .slides section.escena .interactivo { pointer-events: auto; }
+  body.con-escena .reveal .progress, body.con-escena .reveal .slide-number { color: var(--dark-ink-3); }
+</style>
+</head>
+<body>
+<div id="escenario"></div>
+<div class="reveal">
+<div class="slides">
+
+<!-- PORTADA -->
+<section class="portada">
+  <div class="kicker">Analítica de Datos · Teórica</div>
+  <h1>Series temporales</h1>
+  <p class="sub">Subte y Ecobici en Buenos Aires, 2013 a 2026</p>
+  <img class="logo" src="img/UdeSA.png" alt="Universidad de San Andrés">
+</section>
+
+<!-- ESCENA: UN DÍA DEL SUBTE -->
+<section class="escena" data-background-color="transparent">
+  <div data-demo="diaSubte" style="position:absolute; inset:0;">
+    <div class="overlay">
+      <div class="kicker">Un día en el subte</div>
+      <h2>Noventa estaciones, cada quince minutos</h2>
+      <p>Cada columna es una estación. Su altura es la cantidad de personas que pasaron por los molinetes en esa franja.</p>
+    </div>
+    <div class="reloj"></div>
+    <div class="chart-mini"></div>
+    <div class="panel"></div>
+    <div class="fuente">Fuente: SBASE, molinetes de subte, BA Data.</div>
+  </div>
+</section>
+
+<!-- ESCENA: UN DÍA DE ECOBICI -->
+<section class="escena" data-background-color="transparent">
+  <div data-demo="diaEcobici" style="position:absolute; inset:0;">
+    <div class="overlay">
+      <div class="kicker">Un día en Ecobici</div>
+      <h2>Cada viaje, de estación a estación</h2>
+      <p>Cada trazo es un viaje, dibujado en línea recta entre la estación de origen y la de destino, desde que se retira la bicicleta hasta que se devuelve.</p>
+    </div>
+    <div class="reloj"></div>
+    <div class="chart-mini"></div>
+    <div class="panel"></div>
+    <div class="fuente">Fuente: recorridos de Ecobici, BA Data; lluvia horaria de Open-Meteo.</div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">La pregunta</div>
+  <p class="lede">¿Cuántas personas van a viajar en subte el lunes que viene?</p>
+  <p class="muted" style="max-width: 40ch; margin-top: 1.4em;">Con esa cifra se programa la frecuencia de los trenes, el personal de cada estación y el mantenimiento. Para estimarla tenemos trece años de registros, cada quince minutos, de cada molinete de la red.</p>
+</section>
+
+<section>
+  <div class="kicker">Recorrido</div>
+  <h2>Seis partes</h2>
+  <ol class="recorrido">
+    <li><b>1</b>Mirar una serie</li>
+    <li><b>2</b>Las piezas de una serie</li>
+    <li><b>3</b>La memoria de una serie</li>
+    <li><b>4</b>Pronosticar</li>
+    <li><b>5</b>Variables externas</li>
+    <li><b>6</b>Lo que los números no dicen</li>
+  </ol>
+</section>
+
+<section class="divisor">
+  <div class="num">1</div>
+  <h1>Mirar una serie</h1>
+  <p>Escalas, frecuencias, suavizado y los días que no siguen el patrón.</p>
+</section>
+
+<section>
+  <div class="kicker">Qué es una serie temporal</div>
+  <h2>Observaciones ordenadas en el tiempo</h2>
+  <div class="cols" style="margin-top: 1em;">
+    <ul>
+      <li>Cada observación tiene una fecha, y <strong>el orden importa</strong>: mezclar las filas destruye la información.</li>
+      <li>Lo de hoy se parece a lo de ayer y a lo del mismo día de la semana pasada. Esa dependencia es lo que permite pronosticar.</li>
+      <li>La frecuencia (15 minutos, día, mes) la elige quien analiza, y cada frecuencia muestra cosas distintas.</li>
+    </ul>
+    <ul>
+      <li>En los modelos de la materia, cada fila era un cliente independiente de los demás.</li>
+      <li>Acá cada fila es un momento, y los momentos están encadenados.</li>
+      <li>Validar un modelo mezclando el pasado con el futuro es hacer trampa.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">Mirar una serie</div>
+  <h2>La misma serie a cinco escalas</h2>
+  <div data-demo="zoom"></div>
+  <div class="fuente">Total diario de pasajeros por molinetes, todas las líneas. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Mirar una serie</div>
+  <h2>La frecuencia la elige quien analiza</h2>
+  <div data-demo="frecuencia"></div>
+  <div class="fuente">Mayo de 2019, todas las líneas. En pandas: <code>serie.resample("h").sum()</code>, <code>"D"</code>, <code>"W-SUN"</code>. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Suavizar</div>
+  <h2>Media móvil</h2>
+  <div data-demo="mediaMovil"></div>
+  <div class="fuente">Cada punto rojo es el promedio de los días de la ventana. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Mirar una serie</div>
+  <h2>Hora por hora, día por día</h2>
+  <div data-demo="calor"></div>
+  <div class="fuente">Promedio de pasajeros por hora en días no feriados. Fuente: SBASE, BA Data; feriados según decretos nacionales.</div>
+</section>
+
+<section>
+  <div class="kicker">Mirar una serie</div>
+  <h2>¿Qué pasó este día?</h2>
+  <div data-demo="quePaso"></div>
+  <div class="fuente">Rojo: el día, cada 15 minutos. Gris: mediana del mismo día de la semana en las semanas vecinas sin feriados. Fuente: SBASE, BA Data; notas de prensa citadas en cada caso.</div>
+</section>
+
+<!-- BLOQUE 2: LAS PIEZAS DE UNA SERIE -->
+<section class="divisor">
+  <div class="num">2</div>
+  <h1>Las piezas de una serie</h1>
+  <p>Tendencia, ciclos y residuo.</p>
+</section>
+
+
+<section>
+  <div class="kicker">Las piezas de una serie</div>
+  <h2>Tendencia, ciclos y lo que sobra</h2>
+  <div class="cols" style="margin-top: 0.8em;">
+    <ul>
+      <li><strong>Tendencia</strong>: el nivel de fondo, que cambia en meses o años.</li>
+      <li><strong>Ciclos</strong> (estacionalidad): patrones que se repiten con un período fijo. El subte tiene tres: el día, la semana y el año.</li>
+      <li><strong>Residuo</strong>: lo que queda después de sacar lo anterior.</li>
+    </ul>
+    <div>
+      <p>Aditiva: los ciclos suman una cantidad fija.</p>
+      <p style="font-size: 0.85em;">$$y_t = T_t + S_t + R_t$$</p>
+      <p>Multiplicativa: los ciclos son un porcentaje del nivel, y crecen cuando el nivel crece.</p>
+      <p style="font-size: 0.85em;">$$y_t = T_t \times S_t \times R_t$$</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">Las piezas de una serie</div>
+  <h2>Descomposición del total diario</h2>
+  <div data-demo="descomposicion"></div>
+  <div class="fuente">MSTL (statsmodels), períodos de 7 y 365 días, versión robusta. Días sin datos interpolados para el ajuste y omitidos en el gráfico.</div>
+</section>
+
+<section>
+  <div class="kicker">Las piezas de una serie</div>
+  <h2>Otra forma de estacionalidad</h2>
+  <div data-demo="perfiles"></div>
+  <div class="fuente">Fuente: SBASE y Ecobici, BA Data.</div>
+</section>
+
+<!-- BLOQUE 3: LA MEMORIA DE UNA SERIE -->
+<section class="divisor">
+  <div class="num">3</div>
+  <h1>La memoria de una serie</h1>
+  <p>Cuánto se parece cada valor a los anteriores: rezagos, autocorrelación, caminatas aleatorias y estacionariedad.</p>
+</section>
+
+<section>
+  <div class="kicker">Rezagos y autocorrelación</div>
+  <h2>Cada día contra el de hace k días</h2>
+  <div data-demo="rezagos"></div>
+  <div class="fuente">Total diario de pasajeros por molinetes, todas las líneas, 2023 a 2025 (se omiten los 3 días sin datos). Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Caminatas aleatorias</div>
+  <h2>¿Cuál es la serie real?</h2>
+  <div data-demo="cualReal"></div>
+  <div class="fuente">Dólar blue, cotización de venta de lunes a viernes, desde junio de 2020. Fuente: Bluelytics. Las otras tres series son simuladas.</div>
+</section>
+
+<section>
+  <div class="kicker">Correlación espuria</div>
+  <h2>Correlación entre caminatas independientes</h2>
+  <div data-demo="espuria"></div>
+  <div class="fuente">Caminatas aleatorias simuladas con pasos normales estándar independientes.</div>
+</section>
+
+<section>
+  <div class="kicker">Correlación espuria</div>
+  <h2>Pasajeros del subte y dólar blue, 2022 a 2025</h2>
+  <div data-demo="espuriaReal"></div>
+  <div class="fuente">Pasajeros: molinetes de subte, SBASE, BA Data. Dólar blue (venta): Bluelytics. Promedios mensuales de valores diarios; variaciones porcentuales respecto del mes anterior.</div>
+</section>
+
+<section>
+  <div class="kicker">Estacionariedad</div>
+  <h2>Media y variabilidad que no cambian con el tiempo</h2>
+  <div class="cols" style="grid-template-columns: 680px 640px; gap: 72px; margin-top: 0.8em;">
+    <ul class="b3-texto">
+      <li>Una serie es estacionaria si su media, su variabilidad y su autocorrelación no dependen del momento en que se la mire.</li>
+      <li>Los modelos clásicos (AR, ARMA) estiman esas cantidades con el pasado y las usan para pronosticar. Si cambian con el tiempo, lo estimado deja de describir el período que viene.</li>
+      <li>Diferenciar (restar a cada valor el del período anterior, o el del mismo día de la semana anterior) quita tendencias y ciclos fijos. Las diferencias de una caminata aleatoria son ruido blanco.</li>
+    </ul>
+    <div data-demo="estacionariedad"></div>
+  </div>
+  <div class="fuente">Series simuladas.</div>
+</section>
+
+<section>
+  <div class="kicker">Estacionariedad</div>
+  <h2>Diferenciar la serie del subte</h2>
+  <div data-demo="diferenciar"></div>
+  <div class="fuente">Total diario de pasajeros por molinetes, todas las líneas, 2022 a 2025. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Del ruido a la caminata</div>
+  <h2>Un proceso autorregresivo de orden 1</h2>
+  <div data-demo="ar1"></div>
+  <div class="fuente">Serie simulada: 400 shocks normales estándar, siempre los mismos.</div>
+</section>
+
+
+<!-- BLOQUE 4: PRONOSTICAR -->
+<section class="b4-apertura">
+  <div class="pie">
+    <div class="kicker">Bloque 4</div>
+    <h1>Pronosticar</h1>
+    <p class="muted">Un mismo ejercicio para todo el bloque: con los datos disponibles hasta el 31 de mayo de 2025, pronosticar los pasajeros de cada día entre el 1 y el 28 de junio.</p>
+    <div class="esquema">
+      <span>Entrenamiento</span><span>Prueba</span><span>Horizonte</span>
+      <b>1/1/2023 al 31/5/2025</b><b>1/6/2025 al 28/6/2025</b><b>28 días</b>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">Referencias</div>
+  <h2>Pronósticos de referencia</h2>
+  <div data-demo="referencias"></div>
+  <div class="fuente">Referencias calculadas con los datos hasta el 31/5/2025. Bandas grises: feriados y días no laborables. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Suavizado exponencial</div>
+  <h2>Holt-Winters: nivel, tendencia y ciclo semanal</h2>
+  <div data-demo="holtWinters"></div>
+  <div class="fuente">Holt-Winters aditivo de período 7, calculado en el navegador con datos del 1/1/2023 al 31/5/2025. Con los parámetros de statsmodels el MAPE difiere en algunas décimas del de statsmodels, porque el estado inicial se calcula distinto.</div>
+</section>
+
+<section>
+  <div class="kicker">Entrenamiento y prueba</div>
+  <h2>Partición al azar y partición temporal</h2>
+  <div data-demo="particion"></div>
+  <div class="fuente">Arriba: 60 días de pasajeros del subte, del 5/8/2024 al 3/10/2024. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Métricas</div>
+  <h2>MAE, RMSE y MAPE</h2>
+  <div data-demo="metricas"></div>
+  <div class="fuente">Error = real − pronóstico, junio de 2025. Pronósticos precalculados con statsmodels y scikit-learn. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Febrero de 2020</div>
+  <h2>Pronóstico a seis semanas según la fecha de corte</h2>
+  <div data-demo="febrero2020"></div>
+  <div class="fuente">Holt-Winters aditivo de período 7, con α, β y γ estimados en cada corte con los dos años anteriores. Aislamiento obligatorio: DNU 297/2020. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Comparación</div>
+  <h2>Seis modelos sobre los mismos 28 días</h2>
+  <div data-demo="comparacion"></div>
+  <div class="fuente">Entrenamiento del 1/1/2023 al 31/5/2025. Modelos ajustados con statsmodels (Holt-Winters, SARIMA, SARIMAX) y scikit-learn (gradient boosting). Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Intervalos de predicción</div>
+  <h2>Banda del 80 %</h2>
+  <div data-demo="intervalos"></div>
+  <div class="fuente">Intervalos de predicción del 80 % calculados por statsmodels. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">La serie como tabla</div>
+  <h2>Una fila por día, una columna por variable</h2>
+  <div data-demo="serieTabla"></div>
+  <div class="fuente">Variables con las que se entrenó el gradient boosting (scikit-learn, HistGradientBoostingRegressor). Fuente: SBASE, BA Data; feriados: Ley 27.399 y decretos; clima: Open-Meteo.</div>
+</section>
+
+<section>
+  <div class="kicker">Importancia de variables</div>
+  <h2>Importancia por permutación</h2>
+  <div data-demo="importancia"></div>
+  <div class="fuente">Gradient boosting de la comparación, evaluado en los 28 días de junio de 2025 (scikit-learn, permutation_importance).</div>
+</section>
+
+<section>
+  <div class="kicker">Pronosticar</div>
+  <h2>Resultados en junio de 2025</h2>
+  <div data-demo="resultadosB4"></div>
+  <div class="fuente">Prueba: 1/6/2025 al 28/6/2025 (28 días, dos feriados). Entrenamiento: 1/1/2023 al 31/5/2025. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Contexto</div>
+  <h2>Un feriado que cae en domingo</h2>
+  <div data-demo="feriadoDomingo"></div>
+  <div class="fuente">SARIMAX (1,0,1)(1,1,1)₇ con feriado, puente, día no laborable y lluvia (statsmodels). Entrenamiento del 1/1/2023 al 31/5/2025. Fuente: SBASE, BA Data; feriados: Ley 27.399 y decretos.</div>
+</section>
+
+
+<!-- BLOQUE 5: VARIABLES EXTERNAS -->
+<section class="divisor">
+  <div class="num">5</div>
+  <h1>Variables externas</h1>
+  <p>Lo que la serie no sabe de sí misma: el calendario, el clima, las normas.</p>
+</section>
+
+
+<section>
+  <div class="kicker">Variables externas</div>
+  <h2>La misma lluvia, dos series</h2>
+  <div data-demo="lluvia"></div>
+  <div class="fuente">Mediana del cociente entre cada día y el mismo día de la semana en las semanas vecinas. Lluvia diaria: Open-Meteo (reanálisis ERA5). Fuente: SBASE y Ecobici, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Variables externas</div>
+  <h2>Un puente no es siempre lo mismo</h2>
+  <div data-demo="puentes"></div>
+  <div class="fuente">Días no laborables con fines turísticos según decreto de cada año. Fuente: SBASE, BA Data; Boletín Oficial.</div>
+</section>
+
+<section>
+  <div class="kicker">Variables externas</div>
+  <h2>El precio del boleto</h2>
+  <div data-demo="boleto"></div>
+  <div class="fuente">Tarifa del primer escalón con SUBE registrada, promedio ponderado por días de cada mes (resoluciones de SBASE, Boletín Oficial de la Ciudad). Deflactada con IPC (INDEC desde dic. 2016; IPCBA antes). Pasajeros: SBASE, BA Data.</div>
+</section>
+
+<!-- BLOQUE 6: LO QUE LOS NÚMEROS NO DICEN -->
+<section class="divisor">
+  <div class="num">6</div>
+  <h1>Lo que los números no dicen</h1>
+  <p>La red cambia, lo que se mide cambia, y los datos tienen errores.</p>
+</section>
+
+
+<section>
+  <div class="kicker">Lo que los números no dicen</div>
+  <h2>Doce hechos que cambian la serie</h2>
+  <div data-demo="lineaTiempo"></div>
+  <div class="fuente">Fechas verificadas en resoluciones, decretos y notas de prensa (ver datos/eventos/hechos_contexto.md). Fuente de la serie: SBASE, BA Data.</div>
+</section>
+
+<section>
+  <div class="kicker">Lo que se mide</div>
+  <h2>Qué cuenta un molinete</h2>
+  <div class="cols" style="margin-top: 0.8em;">
+    <ul>
+      <li>Cuenta <strong>pasadas registradas</strong> al entrar (pagas o con franquicia), no viajes. Cuando el subte fue gratis y los molinetes quedaron liberados, la serie casi desaparece: centenario del subte (1/12/2013), elecciones del 13/8/2023 y del 22/10/2023.</li>
+      <li>No cuenta salidas: a la mañana se ve dónde sube la gente, no adónde va.</li>
+      <li>Desde el 2/12/2024 se puede pagar con tarjetas y celulares sin contacto. Aparecen estaciones nuevas en los datos (con sufijos), pero el total no salta.</li>
+    </ul>
+    <ul>
+      <li>El Premetro aparece en los datos recién en junio de 2025, y solo en algunos meses. No encontramos documentación sobre el cambio.</li>
+      <li>Ecobici: en 2024 se incluyen viajes de menos de 60 segundos (9 % del año) que los otros años no traen.</li>
+      <li>Cada año viene en otro formato: separadores, comillas, nombres de columnas y fechas en cuatro órdenes distintos.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">Los datos tienen errores</div>
+  <h2>Un error encontrado preparando esta clase</h2>
+  <div data-demo="errorFechas"></div>
+  <div class="fuente">Total de la red cada 15 minutos. Fuente: SBASE, BA Data. El detalle del procesamiento está en el notebook 00.</div>
+</section>
+
+<section>
+  <div class="kicker">Ecobici</div>
+  <h2>El precio cambia la estacionalidad</h2>
+  <div data-demo="ecobiciCobro"></div>
+  <div class="fuente">Fuente: recorridos de Ecobici, BA Data. Cobro en fines de semana y feriados desde el 13/3/2021 (Infobae, Ámbito).</div>
+</section>
+
+<section class="escena" data-background-color="transparent">
+  <div data-demo="mapaAnios" style="position:absolute; inset:0;">
+    <div class="overlay">
+      <div class="kicker">Trece años</div>
+      <h2>La red, año por año</h2>
+      <p>Promedio diario de pasajeros de cada estación. Las estaciones aparecen el año en que empiezan a registrar molinetes.</p>
+    </div>
+    <div class="reloj"></div>
+    <div class="chart-mini"></div>
+    <div class="panel"></div>
+    <div class="fuente">Fuente: SBASE, molinetes de subte, BA Data.</div>
+  </div>
+</section>
+
+<section class="escena" data-background-color="transparent">
+  <div data-demo="redEcobici" style="position:absolute; inset:0;">
+    <div class="overlay">
+      <div class="kicker">Ecobici</div>
+      <h2>La red de estaciones, año por año</h2>
+      <p>Cada punto es una estación activa ese año; el tamaño es su uso diario. En 2019 cambió el sistema y cambiaron los identificadores de las estaciones.</p>
+    </div>
+    <div class="reloj"></div>
+    <div class="chart-mini"></div>
+    <div class="panel"></div>
+    <div class="fuente">Fuente: recorridos de Ecobici, BA Data.</div>
+  </div>
+</section>
+
+<section class="portada">
+  <h1>Hasta acá llegamos</h1>
+  <img class="logo" src="img/UdeSA.png" alt="Universidad de San Andrés">
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.js"></script>
+<script src="vendor/reveal/plugin/notes.js"></script>
+<script src="vendor/d3.min.js"></script>
+<script src="vendor/plot.umd.min.js"></script>
+<script src="vendor/deckgl.min.js"></script>
+<script src="vendor/katex/katex.min.js"></script>
+<script src="vendor/katex/contrib/auto-render.min.js"></script>
+
+<script src="data/mapa_base.js"></script>
+<script src="data/subte_diario.js"></script>
+<script src="data/subte_15min.js"></script>
+<script src="data/subte_dia_tipico.js"></script>
+<script src="data/subte_anual_estaciones.js"></script>
+<script src="data/feriados.js"></script>
+<script src="data/modelos.js"></script>
+<script src="data/dolar.js"></script>
+<script src="data/que_paso.js"></script>
+<script src="data/ecobici_dias.js"></script>
+<script src="data/ecobici_series.js"></script>
+<script src="data/ecobici_red.js"></script>
+<script src="data/boleto.js"></script>
+<script src="data/error_fechas.js"></script>
+
+<script src="js/app.js"></script>
+<script src="js/mapa.js"></script>
+<script src="js/demos/dia_subte.js"></script>
+<script src="js/demos/dia_ecobici.js"></script>
+<script src="js/demos/que_paso.js"></script>
+<script src="js/demos/zoom.js"></script>
+<script src="js/demos/media_movil.js"></script>
+<script src="js/demos/frecuencia.js"></script>
+<script src="js/demos/bloque3_util.js"></script>
+<script src="js/demos/rezagos.js"></script>
+<script src="js/demos/cual_real.js"></script>
+<script src="js/demos/espuria.js"></script>
+<script src="js/demos/estacionariedad.js"></script>
+<script src="js/demos/diferenciar.js"></script>
+<script src="js/demos/ar1.js"></script>
+<script src="js/demos/bloque4_util.js"></script>
+<script src="js/demos/referencias.js"></script>
+<script src="js/demos/holt_winters.js"></script>
+<script src="js/demos/particion.js"></script>
+<script src="js/demos/metricas.js"></script>
+<script src="js/demos/febrero2020.js"></script>
+<script src="js/demos/comparacion.js"></script>
+<script src="js/demos/intervalos.js"></script>
+<script src="js/demos/importancia.js"></script>
+<script src="js/demos/resultados_b4.js"></script>
+<script src="js/demos/feriado_domingo.js"></script>
+<script src="js/demos/calor.js"></script>
+<script src="js/demos/descomposicion.js"></script>
+<script src="js/demos/mapa_anios.js"></script>
+<script src="js/demos/contexto.js"></script>
+<script src="js/demos/ecobici_extra.js"></script>
+<script src="js/demos/boleto.js"></script>
+<script src="js/demos/bloque6.js"></script>
+
+<script>
+  Reveal.initialize({
+    width: 1600, height: 900, margin: 0, minScale: 0.2, maxScale: 2,
+    hash: true, slideNumber: "c/t", transition: "fade", transitionSpeed: "fast", backgroundTransition: "fade",
+    controls: true, progress: true, center: false, plugins: [RevealNotes],
+  });
+  U.iniciarDemos(Reveal);
+  renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }] });
+</script>
+</body>
+</html>
