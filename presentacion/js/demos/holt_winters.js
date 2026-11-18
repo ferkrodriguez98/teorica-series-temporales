@@ -83,7 +83,7 @@ DEMOS.holtWinters = {
       const datosS = ORDEN.map((d) => ({ nombre: NOMBRE[d], v: efectos.find((e) => e.dia === d).v }));
       U.reemplazar(graficoS, Plot.plot({
         width: 380, height: 130, marginLeft: 64, marginRight: 4, marginTop: 6, marginBottom: 22,
-        style: { fontFamily: "Inter, sans-serif", fontSize: "16px", color: U.COLORES.ink2, background: "transparent" },
+        style: { fontFamily: "IBM Plex Sans, sans-serif", fontSize: "16px", color: U.COLORES.ink2, background: "transparent" },
         x: { domain: datosS.map((d) => d.nombre), label: null, tickSize: 0, padding: 0.25 },
         y: { domain: [-5e5, 3e5], ticks: [-4e5, 0, 2e5], tickFormat: (d) => (d === 0 ? "0" : (d > 0 ? "+" : "−") + U.fmt(Math.abs(d) / 1e3) + " mil"), grid: true, label: null, tickSize: 0 },
         marks: [

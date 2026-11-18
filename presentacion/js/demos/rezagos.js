@@ -31,7 +31,7 @@ DEMOS.rezagos = {
     svg.append("line").attr("x1", sx(0)).attr("y1", sy(0)).attr("x2", sx(tope)).attr("y2", sy(tope))
       .attr("stroke", U.COLORES.ink3).attr("stroke-width", 1).attr("stroke-dasharray", "4 4");
     const etiq = (xx, yy, ancla, texto) => svg.append("text").attr("x", xx).attr("y", yy).attr("text-anchor", ancla)
-      .attr("fill", U.COLORES.ink2).attr("font-size", 18).attr("font-family", "Inter, sans-serif").text(texto);
+      .attr("fill", U.COLORES.ink2).attr("font-size", 18).attr("font-family", "IBM Plex Sans, sans-serif").text(texto);
     etiq(m.l - 58, m.t - 2, "start", "↑ Hoy");
     const etiqX = etiq(W - m.r, H - 6, "end", "");
     const gPuntos = svg.append("g");

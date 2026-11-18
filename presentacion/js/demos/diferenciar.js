@@ -32,7 +32,7 @@ DEMOS.diferenciar = {
       pS.titulo.textContent = M.titulo;
       U.reemplazar(pS.cuerpo, Plot.plot({
         width: 900, height: H, marginLeft: 72, marginRight: 14, marginTop: 12, marginBottom: 46,
-        style: { fontFamily: "Inter, sans-serif", fontSize: "15px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
+        style: { fontFamily: "IBM Plex Sans, sans-serif", fontSize: "15px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
         x: { label: null, ticks: "year", tickFormat: d3.utcFormat("%Y") },
         y: { label: null, grid: true, ticks: 6, tickFormat: U.tickM, domain: enNiv ? [0, Math.ceil(tope / 2.5e5) * 2.5e5] : [-tope * 1.04, tope * 1.04] },
         marks: [

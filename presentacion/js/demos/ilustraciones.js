@@ -1,11 +1,4 @@
-/* Gráficos chicos e íconos para las diapositivas de texto (portada, divisores, pregunta, definiciones).
-   Íconos: <span data-icono="nombre"></span> toma el SVG de ICONOS (vendor/lucide/iconos.js). */
-(function () {
-  document.querySelectorAll("[data-icono]").forEach((el) => {
-    const svg = window.ICONOS && ICONOS[el.dataset.icono];
-    if (svg) el.innerHTML = svg;
-  });
-})();
+/* Gráficos chicos para las diapositivas de texto (portada, cierre, pregunta, definiciones, bloque 4). */
 
 const ILUS = {
   diario() {
@@ -19,7 +12,7 @@ const ILUS = {
     return this._s;
   },
   base(extra) {
-    return U.plotBase({ marginLeft: 0, marginRight: 0, marginTop: 10, marginBottom: 30, style: { fontFamily: "Inter, sans-serif", fontSize: "15px", color: U.COLORES.ink3, background: "transparent", overflow: "visible" }, ...extra });
+    return U.plotBase({ marginLeft: 0, marginRight: 0, marginTop: 10, marginBottom: 30, style: { fontFamily: "IBM Plex Sans, sans-serif", fontSize: "15px", color: U.COLORES.ink3, background: "transparent", overflow: "visible" }, ...extra });
   },
   pintar(el, nodo) { el.replaceChildren(nodo); return {}; },
 };

@@ -68,30 +68,33 @@
 
 <section data-estrella>
   <div class="kicker">La pregunta</div>
-  <p class="lede">¿Cuántas personas van a viajar en subte el lunes que viene?</p>
-  <p class="muted" style="max-width: 40ch; margin-top: 1.4em;">Con esa cifra se programa la frecuencia de los trenes, el personal de cada estación y el mantenimiento. Para estimarla tenemos trece años de registros, cada quince minutos, de cada molinete de la red.</p>
-  <div class="ilus-derecha" style="top: 120px; transform: none;"><div data-demo="ilusPregunta"></div></div>
+  <div class="pregunta">
+    <div>
+      <p class="lede">¿Cuántas personas van a viajar en subte el lunes que viene?</p>
+      <p class="muted" style="max-width: 40ch; margin-top: 1.4em;">Con esa cifra se programa la frecuencia de los trenes, el personal de cada estación y el mantenimiento. Para estimarla tenemos trece años de registros, cada quince minutos, de cada molinete de la red.</p>
+    </div>
+    <div data-demo="ilusPregunta"></div>
+  </div>
 </section>
 
 <section data-estrella>
   <div class="kicker">Recorrido</div>
   <h2>Seis partes</h2>
   <ol class="recorrido">
-    <li><b>1</b><span class="ico-rec" data-icono="eye"></span>Mirar una serie</li>
-    <li><b>2</b><span class="ico-rec" data-icono="layers"></span>Las piezas de una serie</li>
-    <li><b>3</b><span class="ico-rec" data-icono="history"></span>La memoria de una serie</li>
-    <li><b>4</b><span class="ico-rec" data-icono="trending-up"></span>Pronosticar</li>
-    <li><b>5</b><span class="ico-rec" data-icono="cloud-rain"></span>Variables externas</li>
-    <li><b>6</b><span class="ico-rec" data-icono="triangle-alert"></span>Lo que los números no dicen</li>
+    <li><b>1</b>Mirar una serie</li>
+    <li><b>2</b>Las piezas de una serie</li>
+    <li><b>3</b>La memoria de una serie</li>
+    <li><b>4</b>Pronosticar</li>
+    <li><b>5</b>Variables externas</li>
+    <li><b>6</b>Lo que los números no dicen</li>
   </ol>
   <p class="muted" style="max-width: 62ch; margin-top: 1.2em;">Los bloques 1 a 4 son métodos para encontrar patrones en la serie. Los bloques 5 y 6 tratan de lo que explica esos patrones y no está en la serie: el calendario, el clima, los precios, las normas y la forma de medir.</p>
 </section>
 
 <section class="divisor">
-  <div class="num">1</div>
+  <div class="kicker">Bloque 1</div>
   <h1>Mirar una serie</h1>
   <p>Escalas, frecuencias, suavizado y los días que no siguen el patrón.</p>
-  <div class="ilus-derecha"><div data-demo="ilusSerie" data-ancho="640" data-alto="360"></div><div class="ilus-nota">Pasajeros del subte por día, promedio semanal, 2013 a 2026</div></div>
 </section>
 
 <section data-estrella>
@@ -149,10 +152,9 @@
 
 <!-- BLOQUE 2: LAS PIEZAS DE UNA SERIE -->
 <section class="divisor">
-  <div class="num">2</div>
+  <div class="kicker">Bloque 2</div>
   <h1>Las piezas de una serie</h1>
   <p>Tendencia, ciclos y residuo.</p>
-  <div class="ilus-derecha"><div data-demo="ilusPiezas"></div></div>
 </section>
 
 
@@ -191,10 +193,9 @@
 
 <!-- BLOQUE 3: LA MEMORIA DE UNA SERIE -->
 <section class="divisor">
-  <div class="num">3</div>
+  <div class="kicker">Bloque 3</div>
   <h1>La memoria de una serie</h1>
   <p>Cuánto se parece cada valor a los anteriores: rezagos, autocorrelación, caminatas aleatorias y estacionariedad.</p>
-  <div class="ilus-derecha"><div data-demo="ilusAcf"></div></div>
 </section>
 
 <section data-estrella>
@@ -348,10 +349,9 @@
 
 <!-- BLOQUE 5: VARIABLES EXTERNAS -->
 <section class="divisor">
-  <div class="num">5</div>
+  <div class="kicker">Bloque 5</div>
   <h1>Variables externas</h1>
   <p>Lo que la serie no sabe de sí misma: el calendario, el clima, las normas.</p>
-  <div class="ilus-derecha"><div class="fila-iconos"><div><span data-icono="calendar-days"></span><span>Calendario</span></div><div><span data-icono="cloud-rain"></span><span>Clima</span></div><div><span data-icono="banknote"></span><span>Precios</span></div><div><span data-icono="scale"></span><span>Normas</span></div></div></div>
 </section>
 
 
@@ -385,10 +385,9 @@
 
 <!-- BLOQUE 6: LO QUE LOS NÚMEROS NO DICEN -->
 <section class="divisor">
-  <div class="num">6</div>
+  <div class="kicker">Bloque 6</div>
   <h1>Lo que los números no dicen</h1>
   <p>La red cambia, lo que se mide cambia, y los datos tienen errores.</p>
-  <div class="ilus-derecha"><div class="fila-iconos"><div><span data-icono="tram-front"></span><span>La red</span></div><div><span data-icono="ruler"></span><span>La medición</span></div><div><span data-icono="file-warning"></span><span>Los errores</span></div></div></div>
 </section>
 
 
@@ -403,15 +402,15 @@
   <div class="kicker">Lo que se mide</div>
   <h2>Qué cuenta un molinete</h2>
   <div class="cols" style="margin-top: 0.8em;">
-    <ul class="lista-iconos">
-      <li><span data-icono="ticket"></span><span>Cuenta <strong>pasadas registradas</strong> al entrar (pagas o con franquicia), no viajes. Cuando el subte fue gratis y los molinetes quedaron liberados, la serie casi desaparece: centenario del subte (1/12/2013), elecciones del 13/8/2023 y del 22/10/2023.</span></li>
-      <li><span data-icono="log-in"></span><span>No cuenta salidas: a la mañana se ve dónde sube la gente, no adónde va.</span></li>
-      <li><span data-icono="credit-card"></span><span>Desde el 2/12/2024 se puede pagar con tarjetas y celulares sin contacto. Aparecen estaciones nuevas en los datos (con sufijos), pero el total no salta.</span></li>
+    <ul>
+      <li>Cuenta <strong>pasadas registradas</strong> al entrar (pagas o con franquicia), no viajes. Cuando el subte fue gratis y los molinetes quedaron liberados, la serie casi desaparece: centenario del subte (1/12/2013), elecciones del 13/8/2023 y del 22/10/2023.</li>
+      <li>No cuenta salidas: a la mañana se ve dónde sube la gente, no adónde va.</li>
+      <li>Desde el 2/12/2024 se puede pagar con tarjetas y celulares sin contacto. Aparecen estaciones nuevas en los datos (con sufijos), pero el total no salta.</li>
     </ul>
-    <ul class="lista-iconos">
-      <li><span data-icono="tram-front"></span><span>El Premetro aparece en los datos recién en junio de 2025, y solo en algunos meses. No encontramos documentación sobre el cambio.</span></li>
-      <li><span data-icono="bike"></span><span>Ecobici: en 2024 se incluyen viajes de menos de 60 segundos (9 % del año) que los otros años no traen.</span></li>
-      <li><span data-icono="file-warning"></span><span>Cada año viene en otro formato: separadores, comillas, nombres de columnas y fechas en cuatro órdenes distintos.</span></li>
+    <ul>
+      <li>El Premetro aparece en los datos recién en junio de 2025, y solo en algunos meses. No encontramos documentación sobre el cambio.</li>
+      <li>Ecobici: en 2024 se incluyen viajes de menos de 60 segundos (9 % del año) que los otros años no traen.</li>
+      <li>Cada año viene en otro formato: separadores, comillas, nombres de columnas y fechas en cuatro órdenes distintos.</li>
     </ul>
   </div>
 </section>
@@ -490,7 +489,6 @@
 <script src="data/boleto.js"></script>
 <script src="data/error_fechas.js"></script>
 
-<script src="vendor/lucide/iconos.js"></script>
 <script src="js/app.js"></script>
 <script src="js/mapa.js"></script>
 <script src="js/demos/dia_subte.js"></script>
@@ -528,6 +526,20 @@
 <script src="js/demos/ilustraciones.js"></script>
 
 <script>
+  /* Cuerpo: lo que sigue al rótulo y al título se agrupa y se centra en el alto disponible.
+     Quedan afuera la portada, los divisores, las escenas de mapa y la apertura del bloque 4. */
+  document.querySelectorAll(".reveal .slides > section:not(.portada):not(.divisor):not(.escena):not(.b4-apertura)").forEach((sec) => {
+    const hijos = [...sec.children];
+    let i = 0;
+    while (i < hijos.length && (hijos[i].matches(".kicker, h1, h2"))) i++;
+    const resto = hijos.slice(i).filter((h) => !h.matches(".fuente, aside, .ilus-b4"));
+    if (!resto.length) return;
+    const cuerpo = document.createElement("div");
+    cuerpo.className = "cuerpo";
+    resto[0].before(cuerpo);
+    resto.forEach((h) => cuerpo.append(h));
+    sec.classList.add("con-cuerpo");
+  });
   /* index.html?corto: solo el recorrido de 3 h (las diapositivas marcadas con ★ en el guion) */
   if (/[?&]corto\b/.test(location.search)) document.querySelectorAll(".reveal .slides > section:not([data-estrella])").forEach((s) => s.setAttribute("data-visibility", "hidden"));
   Reveal.initialize({

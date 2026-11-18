@@ -7,7 +7,7 @@ const U = (window.U = {});
 
 U.COLORES = {
   A: "#1a9fd0", B: "#d7182a", C: "#1d4f9c", D: "#008a57", E: "#6c2c87", H: "#e0a800", PM: "#8a6d3b",
-  ink: "#141414", ink2: "#55534e", ink3: "#8a877f", rule: "#e2e0da", grid: "#ecebe6", surface: "#fcfcfb",
+  ink: "#141414", ink2: "#55534e", ink3: "#8a877f", rule: "#dcd6c9", grid: "#e6e1d6", surface: "#f4f1ea",
   ecobici: "#d4a017", lluvia: "#3b7dd8", modelo: "#d7182a", real: "#141414",
 };
 U.LINEAS = ["A", "B", "C", "D", "E", "H"];
@@ -110,7 +110,7 @@ U.plotBase = (extra = {}) => ({
   height: 520,
   marginLeft: 70,
   marginBottom: 40,
-  style: { fontFamily: "Inter, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
+  style: { fontFamily: "IBM Plex Sans, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
   ...extra,
 });
 

@@ -5,7 +5,7 @@
 (function () {
   const N = 48, PARES = 500, SEMILLA = 20261120;
   const CORTES = d3.range(-1, 1.0001, 0.05).map((v) => Math.round(v * 100) / 100);
-  const estilo = { fontFamily: "Inter, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" };
+  const estilo = { fontFamily: "IBM Plex Sans, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" };
 
   /* Las 500 correlaciones se calculan una sola vez (con semilla, para que la lectura sea estable) */
   let cache = null;

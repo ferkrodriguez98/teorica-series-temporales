@@ -8,17 +8,22 @@
 @font-face { font-family: "Inter"; font-weight: 500; src: url("../vendor/fonts/inter-500.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-weight: 600; src: url("../vendor/fonts/inter-600.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-weight: 700; src: url("../vendor/fonts/inter-700.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; src: url("../vendor/fonts/plex-sans-400.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-style: italic; src: url("../vendor/fonts/plex-sans-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 500; src: url("../vendor/fonts/plex-sans-500.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 600; src: url("../vendor/fonts/plex-sans-600.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 700; src: url("../vendor/fonts/plex-sans-700.woff2") format("woff2"); }
 @font-face { font-family: "JetBrains Mono"; font-weight: 400; src: url("../vendor/fonts/jetbrains-mono-400.woff2") format("woff2"); }
 @font-face { font-family: "JetBrains Mono"; font-weight: 600; src: url("../vendor/fonts/jetbrains-mono-600.woff2") format("woff2"); }
 
 :root {
-  --surface: #fcfcfb;
-  --surface-2: #f3f2ee;
+  --surface: #f4f1ea;
+  --surface-2: #ebe7dd;
   --ink: #141414;
   --ink-2: #55534e;
   --ink-3: #8a877f;
-  --rule: #e2e0da;
-  --grid: #ecebe6;
+  --rule: #dcd6c9;
+  --grid: #e6e1d6;
   --accent: #1d4f9c;
 
   /* Colores de las líneas de subte (identidad, no rango) */
@@ -38,7 +43,7 @@
   --dark-ink-3: #7d7b74;
 
   --serif: "Fraunces", Georgia, serif;
-  --sans: "Inter", system-ui, sans-serif;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, monospace;
 
   --r-background-color: var(--surface);
@@ -185,20 +190,13 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .reveal .slides section.portada { display: flex !important; flex-direction: column; justify-content: flex-end; }
 
 /* Ilustraciones de las diapositivas de texto */
-.ilus-derecha { position: absolute; right: 72px; top: 50%; transform: translateY(-50%); width: 720px; }
 .ilus-portada { position: absolute; right: 72px; top: 110px; width: 760px; }
 .ilus-nota { font-size: 15px; color: var(--ink-3); margin-top: 6px; }
-.ilus-abajo { position: absolute; left: 72px; right: 72px; bottom: 70px; }
+.ilus-abajo { margin-top: 44px; }
 .ilus-b4 { position: absolute; left: 72px; right: 72px; top: 70px; }
-.ico-rec { display: inline-block; vertical-align: -4px; margin-right: 14px; color: var(--ink-3); }
-.ico-rec .icono { width: 28px; height: 28px; }
-.lista-iconos { list-style: none; padding-left: 0 !important; margin-left: 0 !important; }
-.lista-iconos li { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: start; }
-.lista-iconos li::marker { content: ""; }
-.lista-iconos .icono { width: 28px; height: 28px; color: var(--ink-2); margin-top: 2px; }
-.fila-iconos { display: flex; gap: 56px; justify-content: flex-start; }
-.fila-iconos > div { display: flex; flex-direction: column; align-items: center; gap: 14px; font-size: 18px; color: var(--ink-2); }
-.fila-iconos .icono { width: 84px; height: 84px; stroke-width: 1.4; color: var(--ink-3); }
-.divisor .ilus-derecha { width: 640px; }
-.divisor:has(.ilus-derecha) h1 { max-width: 780px; }
-.divisor:has(.ilus-derecha) p { max-width: 620px; }
+.pregunta { display: grid; grid-template-columns: 1fr 620px; gap: 64px; align-items: center; }
+
+/* Cuerpo de cada diapositiva: el título queda arriba y el contenido se centra en el alto que sobra */
+.reveal .slides section.con-cuerpo { display: flex !important; flex-direction: column; }
+.con-cuerpo > .cuerpo { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding-bottom: 36px; }
+.divisor .kicker { margin-bottom: 0.6em; }

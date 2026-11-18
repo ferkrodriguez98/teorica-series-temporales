@@ -26,7 +26,7 @@
       initialViewState: VISTA_CABA,
       controller: { dragRotate: true, touchRotate: true, scrollZoom: true },
       layers: capasBase,
-      getTooltip: ({ object, layer }) => (object && layer && layer.props.tooltip ? { html: layer.props.tooltip(object), style: { background: "#141414", color: "#f2f1ec", fontFamily: "Inter, sans-serif", fontSize: "14px", padding: "8px 10px", borderRadius: "8px" } } : null),
+      getTooltip: ({ object, layer }) => (object && layer && layer.props.tooltip ? { html: layer.props.tooltip(object), style: { background: "#141414", color: "#f2f1ec", fontFamily: "IBM Plex Sans, sans-serif", fontSize: "14px", padding: "8px 10px", borderRadius: "8px" } } : null),
       parameters: { clearColor: [14 / 255, 16 / 255, 19 / 255, 1] },
     });
     instancia = {
