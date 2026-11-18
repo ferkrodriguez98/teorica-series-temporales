@@ -82,6 +82,7 @@
     <li><b>5</b>Variables externas</li>
     <li><b>6</b>Lo que los números no dicen</li>
   </ol>
+  <p class="muted" style="max-width: 62ch; margin-top: 1.2em;">Los bloques 1 a 4 son métodos para encontrar patrones en la serie. Los bloques 5 y 6 tratan de lo que explica esos patrones y no está en la serie: el calendario, el clima, los precios, las normas y la forma de medir.</p>
 </section>
 
 <section class="divisor">
@@ -102,7 +103,7 @@
     <ul>
       <li>En los modelos de la materia, cada fila era un cliente independiente de los demás.</li>
       <li>Acá cada fila es un momento, y los momentos están encadenados.</li>
-      <li>Validar un modelo mezclando el pasado con el futuro es hacer trampa.</li>
+      <li>Validar un modelo mezclando el pasado con el futuro invalida la evaluación: el modelo aprende de días posteriores a los que pronostica.</li>
     </ul>
   </div>
 </section>
@@ -210,7 +211,7 @@
   <div class="fuente">Caminatas aleatorias simuladas con pasos normales estándar independientes.</div>
 </section>
 
-<section>
+<section data-estrella>
   <div class="kicker">Correlación espuria</div>
   <h2>Pasajeros del subte y dólar blue, 2022 a 2025</h2>
   <div data-demo="espuriaReal"></div>
@@ -238,7 +239,7 @@
   <div class="fuente">Total diario de pasajeros por molinetes, todas las líneas, 2022 a 2025. Fuente: SBASE, BA Data.</div>
 </section>
 
-<section data-estrella>
+<section>
   <div class="kicker">Del ruido a la caminata</div>
   <h2>Un proceso autorregresivo de orden 1</h2>
   <div data-demo="ar1"></div>
@@ -260,24 +261,17 @@
 </section>
 
 <section data-estrella>
-  <div class="kicker">Referencias</div>
-  <h2>Pronósticos de referencia</h2>
-  <div data-demo="referencias"></div>
-  <div class="fuente">Referencias calculadas con los datos hasta el 31/5/2025. Bandas grises: feriados y días no laborables. Fuente: SBASE, BA Data.</div>
-</section>
-
-<section data-estrella>
-  <div class="kicker">Suavizado exponencial</div>
-  <h2>Holt-Winters: nivel, tendencia y ciclo semanal</h2>
-  <div data-demo="holtWinters"></div>
-  <div class="fuente">Holt-Winters aditivo de período 7, calculado en el navegador con datos del 1/1/2023 al 31/5/2025. Con los parámetros de statsmodels el MAPE difiere en algunas décimas del de statsmodels, porque el estado inicial se calcula distinto.</div>
-</section>
-
-<section data-estrella>
   <div class="kicker">Entrenamiento y prueba</div>
   <h2>Partición al azar y partición temporal</h2>
   <div data-demo="particion"></div>
   <div class="fuente">Arriba: 60 días de pasajeros del subte, del 5/8/2024 al 3/10/2024. Fuente: SBASE, BA Data.</div>
+</section>
+
+<section data-estrella>
+  <div class="kicker">Referencias</div>
+  <h2>Pronósticos de referencia</h2>
+  <div data-demo="referencias"></div>
+  <div class="fuente">Referencias calculadas con los datos hasta el 31/5/2025. Bandas grises: feriados y días no laborables. Fuente: SBASE, BA Data.</div>
 </section>
 
 <section>
@@ -288,10 +282,10 @@
 </section>
 
 <section data-estrella>
-  <div class="kicker">Febrero de 2020</div>
-  <h2>Pronóstico a seis semanas según la fecha de corte</h2>
-  <div data-demo="febrero2020"></div>
-  <div class="fuente">Holt-Winters aditivo de período 7, con α, β y γ estimados en cada corte con los dos años anteriores. Aislamiento obligatorio: DNU 297/2020. Fuente: SBASE, BA Data.</div>
+  <div class="kicker">Suavizado exponencial</div>
+  <h2>Holt-Winters: nivel, tendencia y ciclo semanal</h2>
+  <div data-demo="holtWinters"></div>
+  <div class="fuente">Holt-Winters aditivo de período 7, calculado en el navegador con datos del 1/1/2023 al 31/5/2025. Con los parámetros de statsmodels el MAPE difiere en algunas décimas del de statsmodels, porque el estado inicial se calcula distinto.</div>
 </section>
 
 <section data-estrella>
@@ -308,7 +302,7 @@
   <div class="fuente">Intervalos de predicción del 80 % calculados por statsmodels. Fuente: SBASE, BA Data.</div>
 </section>
 
-<section>
+<section data-estrella>
   <div class="kicker">La serie como tabla</div>
   <h2>Una fila por día, una columna por variable</h2>
   <div data-demo="serieTabla"></div>
@@ -337,6 +331,13 @@
 </section>
 
 
+<section data-estrella>
+  <div class="kicker">Febrero de 2020</div>
+  <h2>Pronóstico a seis semanas según la fecha de corte</h2>
+  <div data-demo="febrero2020"></div>
+  <div class="fuente">Holt-Winters aditivo de período 7, con α, β y γ estimados en cada corte con los dos años anteriores. Aislamiento obligatorio: DNU 297/2020. Fuente: SBASE, BA Data.</div>
+</section>
+
 <!-- BLOQUE 5: VARIABLES EXTERNAS -->
 <section class="divisor">
   <div class="num">5</div>
@@ -364,6 +365,13 @@
   <h2>El precio del boleto</h2>
   <div data-demo="boleto"></div>
   <div class="fuente">Tarifa del primer escalón con SUBE registrada, promedio ponderado por días de cada mes (resoluciones de SBASE, Boletín Oficial de la Ciudad). Deflactada con IPC (INDEC desde dic. 2016; IPCBA antes). Pasajeros: SBASE, BA Data.</div>
+</section>
+
+<section data-estrella>
+  <div class="kicker">Variables externas</div>
+  <h2>El precio cambia la estacionalidad</h2>
+  <div data-demo="ecobiciCobro"></div>
+  <div class="fuente">Fuente: recorridos de Ecobici, BA Data. Cobro en fines de semana y feriados desde el 13/3/2021 (Infobae, Ámbito).</div>
 </section>
 
 <!-- BLOQUE 6: LO QUE LOS NÚMEROS NO DICEN -->
@@ -405,13 +413,6 @@
   <div class="fuente">Total de la red cada 15 minutos. Fuente: SBASE, BA Data. El detalle del procesamiento está en el notebook 00.</div>
 </section>
 
-<section data-estrella>
-  <div class="kicker">Ecobici</div>
-  <h2>El precio cambia la estacionalidad</h2>
-  <div data-demo="ecobiciCobro"></div>
-  <div class="fuente">Fuente: recorridos de Ecobici, BA Data. Cobro en fines de semana y feriados desde el 13/3/2021 (Infobae, Ámbito).</div>
-</section>
-
 <section class="escena" data-background-color="transparent">
   <div data-demo="mapaAnios" style="position:absolute; inset:0;">
     <div class="overlay">
@@ -440,6 +441,13 @@
   </div>
 </section>
 
+
+<section data-estrella>
+  <div class="kicker">La pregunta</div>
+  <h2>El lunes que viene</h2>
+  <div data-demo="lunesQueViene"></div>
+  <div class="fuente">Lunes desde enero de 2025. Fuente: SBASE, BA Data; feriados: Ley 27.399 y decretos.</div>
+</section>
 <section data-estrella class="portada">
   <h1>Hasta acá llegamos</h1>
   <img class="logo" src="img/UdeSA.png" alt="Universidad de San Andrés">
@@ -504,6 +512,7 @@
 <script src="js/demos/ecobici_extra.js"></script>
 <script src="js/demos/boleto.js"></script>
 <script src="js/demos/bloque6.js"></script>
+<script src="js/demos/lunes.js"></script>
 
 <script>
   /* index.html?corto: solo el recorrido de 3 h (las diapositivas marcadas con ★ en el guion) */
