@@ -22,7 +22,7 @@ DEMOS.ar1 = {
     grafico.append(fila);
     const pS = B3.panel(fila, "", 900);
     const pA = B3.panel(fila, "ACF de la serie simulada, rezagos 1 a 40", 500);
-    const H = 470;
+    const H = 530;
     const g = B3.graficoACF(pA.cuerpo, { ancho: 500, alto: H, K, dominio: [-1, 1], ticks: [1, 10, 20, 30, 40] });
 
     function dibujar() {
@@ -31,7 +31,7 @@ DEMOS.ar1 = {
       pS.titulo.innerHTML = phi === 0 ? "Ruido blanco (φ = 0), 400 períodos" : phi === 1 ? "Caminata aleatoria (φ = 1), 400 períodos" : `AR(1) con φ = ${U.fmt(phi, 2)}, 400 períodos`;
       U.reemplazar(pS.cuerpo, Plot.plot({
         width: 900, height: H, marginLeft: 50, marginRight: 14, marginTop: 12, marginBottom: 46,
-        style: { fontFamily: "Inter, sans-serif", fontSize: "15px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
+        style: { fontFamily: "Inter, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
         x: { label: "t →", labelAnchor: "right", domain: [0, N - 1], ticks: 8 },
         y: { label: null, domain: dominioY, grid: true, ticks: 6 },
         marks: [

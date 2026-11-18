@@ -31,7 +31,7 @@
       const res = d3.rollups(filas, (v) => ({ med: d3.median(v, (d) => d.r), n: v.length }), (d) => d.serie, (d) => d.bin)
         .flatMap(([serie, bins]) => bins.map(([bin, o]) => ({ serie, bin, ...o })));
       const plot = Plot.plot(U.plotBase({
-        height: 470, marginLeft: 70,
+        height: 520, marginLeft: 70,
         fx: { domain: BINS.map((b) => b[2]), label: null, padding: 0.12 },
         x: { domain: ["Subte", "Ecobici"], axis: null, padding: 0.12 },
         y: { domain: [0, 1.15], grid: true, tickFormat: (d) => `${Math.round(d * 100)} %`, label: "respecto de un día normal" },
@@ -39,7 +39,7 @@
         marks: [
           Plot.barY(res, { fx: "bin", x: "serie", y: "med", fill: "serie", rx: 4, insetLeft: 2, insetRight: 2 }),
           Plot.ruleY([1], { stroke: U.COLORES.ink, strokeDasharray: "4 4" }),
-          Plot.text(res, { fx: "bin", x: "serie", y: "med", text: (d) => `${Math.round(d.med * 100)} %`, dy: -10, fill: U.COLORES.ink2, fontSize: 14 }),
+          Plot.text(res, { fx: "bin", x: "serie", y: "med", text: (d) => `${Math.round(d.med * 100)} %`, dy: -10, fill: U.COLORES.ink2, fontSize: 17 }),
           Plot.tip(res, Plot.pointer({ fx: "bin", x: "serie", y: "med", title: (d) => `${d.serie}, ${d.bin}\nmediana: ${Math.round(d.med * 100)} % de un día normal\n${d.n} días hábiles` })),
         ],
       }));
@@ -61,9 +61,9 @@
       }).filter((p) => p.r != null && !(p.fecha >= U.dia("2020-03-01") && p.fecha < U.dia("2020-12-01")));
       const COL = { "Feriado (descanso obligatorio)": U.COLORES.C, "No laborable (decide el empleador)": U.COLORES.B };
       const plot = Plot.plot(U.plotBase({
-        height: 470,
+        height: 520, marginTop: 44,
         x: { label: null, tickFormat: "d", domain: [2013, 2027] },
-        y: { domain: [0, 0.7], grid: true, tickFormat: (d) => `${Math.round(d * 100)} %`, label: "pasajeros respecto de un día normal" },
+        y: { domain: [0, 0.7], grid: true, ticks: 7, tickFormat: (d) => `${Math.round(d * 100)} %`, label: "pasajeros respecto de un día normal" },
         color: { domain: Object.keys(COL), range: Object.values(COL), legend: true },
         marks: [
           Plot.dot(puentes, { x: (d) => d.fecha.getUTCFullYear() + d.fecha.getUTCMonth() / 12, y: "r", fill: "caracter", r: 8, stroke: U.COLORES.surface, strokeWidth: 2 }),

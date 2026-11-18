@@ -61,7 +61,7 @@ DEMOS.holtWinters = {
         marks: [
           ...B4.marcasFeriados(ferJ, { alto: 1.15e6 }),
           Plot.ruleX([U.sumarDias(jun[0].fecha, -0.5)], { stroke: U.COLORES.ink3, strokeDasharray: "3,3" }),
-          Plot.text([U.sumarDias(jun[0].fecha, -0.5)], { x: (d) => d, y: 1.15e6, text: () => "pronóstico →", dx: 6, dy: -8, textAnchor: "start", fontSize: 13, fill: U.COLORES.ink2 }),
+          Plot.text([U.sumarDias(jun[0].fecha, -0.5)], { x: (d) => d, y: 1.15e6, text: () => "pronóstico →", dx: 6, dy: -8, textAnchor: "start", fontSize: 16, fill: U.COLORES.ink2 }),
           Plot.lineY(hist, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.2 }),
           Plot.dot(hist, { x: "fecha", y: "valor", r: 2, fill: U.COLORES.ink3 }),
           Plot.lineY(ajuste, { x: "fecha", y: "v", stroke: U.COLORES.modelo, strokeWidth: 1.2, strokeOpacity: 0.45, clip: true }),
@@ -83,7 +83,7 @@ DEMOS.holtWinters = {
       const datosS = ORDEN.map((d) => ({ nombre: NOMBRE[d], v: efectos.find((e) => e.dia === d).v }));
       U.reemplazar(graficoS, Plot.plot({
         width: 380, height: 130, marginLeft: 64, marginRight: 4, marginTop: 6, marginBottom: 22,
-        style: { fontFamily: "Inter, sans-serif", fontSize: "13px", color: U.COLORES.ink2, background: "transparent" },
+        style: { fontFamily: "Inter, sans-serif", fontSize: "16px", color: U.COLORES.ink2, background: "transparent" },
         x: { domain: datosS.map((d) => d.nombre), label: null, tickSize: 0, padding: 0.25 },
         y: { domain: [-5e5, 3e5], ticks: [-4e5, 0, 2e5], tickFormat: (d) => (d === 0 ? "0" : (d > 0 ? "+" : "−") + U.fmt(Math.abs(d) / 1e3) + " mil"), grid: true, label: null, tickSize: 0 },
         marks: [

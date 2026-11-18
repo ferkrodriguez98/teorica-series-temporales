@@ -144,7 +144,7 @@
 
   /* Leyenda en línea. items: [[tipo ("linea" | "punteada" | "punto" | "banda"), color, texto]] */
   B4.leyenda = (items, estilo = "") => {
-    const l = U.el("div", { class: "b4-leyenda", style: "font-size:0.5em; justify-content:flex-end; width:100%;" + estilo });
+    const l = U.el("div", { class: "b4-leyenda", style: "font-size:18px; justify-content:flex-end; width:100%;" + estilo });
     items.forEach(([tipo, color, texto]) => {
       const fondo = tipo === "punteada" ? `repeating-linear-gradient(90deg, ${color} 0 2px, transparent 2px 6px)` : color;
       const clase = tipo === "punto" ? "b4-muestra punto" : "b4-muestra";
@@ -196,7 +196,7 @@
         if (g && (f - g[g.length - 1]) / 864e5 < 7) g.push(f); else grupos.push([f]);
       });
       const rot = grupos.map((g) => ({ x: new Date((+g[0] + +g[g.length - 1]) / 2), t: g.length > 1 ? "feriados" : "feriado" }));
-      marcas.push(Plot.text(rot, { x: "x", y: alto, text: "t", dy: -8, fontSize: 13, fill: U.COLORES.ink2 }));
+      marcas.push(Plot.text(rot, { x: "x", y: alto, text: "t", dy: -8, fontSize: 16, fill: U.COLORES.ink2 }));
     }
     return marcas;
   };

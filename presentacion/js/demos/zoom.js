@@ -26,7 +26,7 @@ DEMOS.zoom = {
     const estilarEjes = () => {
       svg.selectAll(".domain").attr("stroke", U.COLORES.rule);
       svg.selectAll(".tick line").attr("stroke", U.COLORES.rule);
-      svg.selectAll(".tick text").attr("fill", U.COLORES.ink2).attr("font-size", 15).attr("font-family", "Inter");
+      svg.selectAll(".tick text").attr("fill", U.COLORES.ink2).attr("font-size", 18).attr("font-family", "Inter");
     };
     const linea = d3.line().defined((d) => d.valor != null).x((d) => x(d.fecha)).y((d) => y(d.valor));
 

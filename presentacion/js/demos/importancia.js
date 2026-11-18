@@ -63,15 +63,15 @@
           y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 1.15e6], ticks: 3 },
           marks: [
             Plot.rectX([ventana], { x1: "a", x2: "b", y1: 0, y2: 1.15e6, fill: U.COLORES.ink3, fillOpacity: 0.1 }),
-            Plot.text([ventana], { x: (d) => new Date((+d.a + +d.b) / 2), y: 1.15e6, text: () => `media de 28 días: ${B4.num(f.media_28_hace_28)}`, dy: -8, fontSize: 13, fill: U.COLORES.ink2 }),
+            Plot.text([ventana], { x: (d) => new Date((+d.a + +d.b) / 2), y: 1.15e6, text: () => `media de 28 días: ${B4.num(f.media_28_hace_28)}`, dy: -8, fontSize: 16, fill: U.COLORES.ink2 }),
             Plot.ruleY([f.media_28_hace_28], { x1: ventana.a, x2: ventana.b, stroke: U.COLORES.ink2, strokeDasharray: "4,3" }),
             Plot.lineY(tramo, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.2 }),
             Plot.dot(tramo, { x: "fecha", y: "valor", r: 1.8, fill: U.COLORES.ink3 }),
             Plot.arrow(rez, { x1: "fecha", y1: "v", x2: () => f.d, y2: () => f.pax, bend: 14, stroke: U.COLORES.ink2, strokeWidth: 1.2, insetStart: 9, insetEnd: 10 }),
             Plot.dot(rez, { x: "fecha", y: "v", r: 6, fill: U.COLORES.real, stroke: U.COLORES.surface, strokeWidth: 2 }),
-            Plot.text(rez, { x: "fecha", y: "v", text: (d) => `hace ${d.k} días`, dy: 18, fontSize: 13, fill: U.COLORES.ink, fontWeight: 600 }),
+            Plot.text(rez, { x: "fecha", y: "v", text: (d) => `hace ${d.k} días`, dy: 18, fontSize: 16, fill: U.COLORES.ink, fontWeight: 600 }),
             Plot.dot([f], { x: "d", y: "pax", r: 7, fill: U.COLORES.modelo, stroke: U.COLORES.surface, strokeWidth: 2 }),
-            Plot.text([f], { x: "d", y: "pax", text: () => "objetivo", dy: -16, fontSize: 13, fill: U.COLORES.modelo, fontWeight: 600 }),
+            Plot.text([f], { x: "d", y: "pax", text: () => "objetivo", dy: -16, fontSize: 16, fill: U.COLORES.modelo, fontWeight: 600 }),
           ],
         }));
         U.reemplazar(mini, plot);
@@ -112,13 +112,13 @@
 
       const fmtS = (v) => (v > 0 ? "+" : v < 0 ? "−" : "") + U.fmt(Math.abs(v));
       const plot = Plot.plot(U.plotBase({
-        width: 1020, height: 480, marginLeft: 210, marginRight: 90, marginTop: 10, marginBottom: 40,
+        width: 1020, height: 560, marginLeft: 210, marginRight: 90, marginTop: 10, marginBottom: 40,
         x: { grid: true, label: "aumento del MAE al desordenar (pasajeros)", labelAnchor: "center", labelArrow: "none", tickFormat: (d) => (d < 0 ? "−" : d > 0 ? "+" : "") + U.tickM(Math.abs(d)), domain: [-2e4, 1.6e5] },
         y: { domain: datos.map((d) => d.etiqueta), label: null, tickSize: 0, padding: 0.28 },
         marks: [
           Plot.barX(datos, { y: "etiqueta", x: "aumento_MAE", fill: (d) => (d.aumento_MAE > 0 ? U.COLORES.ink2 : U.COLORES.ink3), fillOpacity: (d) => (d.aumento_MAE > 0 ? 1 : 0.5), rx: 2 }),
           Plot.ruleX([0], { stroke: U.COLORES.ink }),
-          Plot.text(datos, { y: "etiqueta", x: (d) => Math.max(0, d.aumento_MAE), text: (d) => fmtS(d.aumento_MAE), dx: 8, textAnchor: "start", fontSize: 14, fill: U.COLORES.ink }),
+          Plot.text(datos, { y: "etiqueta", x: (d) => Math.max(0, d.aumento_MAE), text: (d) => fmtS(d.aumento_MAE), dx: 8, textAnchor: "start", fontSize: 17, fill: U.COLORES.ink }),
           Plot.tip(datos, Plot.pointerY({ y: "etiqueta", x: "aumento_MAE", title: (d) => `${d.etiqueta} (${d.variable})\naumento del MAE: ${fmtS(d.aumento_MAE)}` + (NOTAS[d.variable] ? `\n${NOTAS[d.variable]}` : "") })),
         ],
       }));

@@ -49,15 +49,15 @@ DEMOS.febrero2020 = {
       const despuesDe = c >= AISLAMIENTO;
 
       const plot = Plot.plot(U.plotBase({
-        width: 1440, height: 340, marginLeft: 70, marginTop: 26, marginBottom: 30,
+        width: 1440, height: 390, marginLeft: 70, marginTop: 26, marginBottom: 30,
         x: xBase,
         y: { grid: true, tickFormat: (d) => (d < 0 ? "−" : "") + U.tickM(Math.abs(d)), label: null, domain: [-4.6e5, 1.35e6], ticks: [-4e5, 0, 4e5, 8e5, 1.2e6] },
         marks: [
           Plot.rectX([{ a: U.sumarDias(c, 0.5), b: U.sumarDias(fin, 0.5) }], { x1: "a", x2: "b", y1: -4.6e5, y2: 1.35e6, fill: U.COLORES.ink3, fillOpacity: 0.07 }),
           Plot.ruleX([AISLAMIENTO], { stroke: U.COLORES.ink2, strokeDasharray: "2,3" }),
-          Plot.text([AISLAMIENTO], { x: (d) => d, y: 1.35e6, text: () => "20/3/2020: aislamiento obligatorio", textAnchor: despuesDe ? "end" : "start", dx: despuesDe ? -6 : 6, dy: -8, fontSize: 13, fill: U.COLORES.ink2 }),
+          Plot.text([AISLAMIENTO], { x: (d) => d, y: 1.35e6, text: () => "20/3/2020: aislamiento obligatorio", textAnchor: despuesDe ? "end" : "start", dx: despuesDe ? -6 : 6, dy: -8, fontSize: 16, fill: U.COLORES.ink2 }),
           Plot.ruleX([U.sumarDias(c, 0.5)], { stroke: U.COLORES.ink, strokeWidth: 1.2 }),
-          Plot.text([U.sumarDias(c, 0.5)], { x: (d) => d, y: 1.35e6, text: () => "corte", textAnchor: despuesDe ? "start" : "end", dx: despuesDe ? 6 : -6, dy: -8, fontSize: 13, fill: U.COLORES.ink, fontWeight: 600 }),
+          Plot.text([U.sumarDias(c, 0.5)], { x: (d) => d, y: 1.35e6, text: () => "corte", textAnchor: despuesDe ? "start" : "end", dx: despuesDe ? 6 : -6, dy: -8, fontSize: 16, fill: U.COLORES.ink, fontWeight: 600 }),
           Plot.lineY(despues, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1, strokeOpacity: 0.3 }),
           Plot.lineY(entren, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.1 }),
           Plot.lineY(ventana, { x: "fecha", y: "valor", stroke: U.COLORES.real, strokeWidth: 1.6, strokeDasharray: "1.5,3.5", strokeLinecap: "round" }),
@@ -74,9 +74,9 @@ DEMOS.febrero2020 = {
         x: { ...xBase, axis: null },
         y: { type: "log", domain: [5, 6000], ticks: [10, 100, 1000], tickFormat: (d) => U.fmt(d) + " %", grid: true, label: null },
         marks: [
-          Plot.text(["MAPE de las 6 semanas siguientes a cada corte (escala logarítmica)"], { frameAnchor: "top-left", dy: -24, dx: 0, fontSize: 13, fill: U.COLORES.ink2 }),
+          Plot.text(["MAPE de las 6 semanas siguientes a cada corte (escala logarítmica)"], { frameAnchor: "top-left", dy: -24, dx: 0, fontSize: 16, fill: U.COLORES.ink2 }),
           Plot.rectY(barras, { x1: (d) => U.sumarDias(d.fecha, -2.6), x2: (d) => U.sumarDias(d.fecha, 2.6), y1: 5, y2: "MAPE", fill: (d) => (d.actual ? U.COLORES.modelo : U.COLORES.ink3), fillOpacity: (d) => (d.actual ? 1 : 0.55) }),
-          Plot.text(barras.filter((d) => d.actual), { x: "fecha", y: "MAPE", text: (d) => fmtMape(d.MAPE), dy: -9, fontSize: 13, fill: U.COLORES.ink, fontWeight: 600 }),
+          Plot.text(barras.filter((d) => d.actual), { x: "fecha", y: "MAPE", text: (d) => fmtMape(d.MAPE), dy: -9, fontSize: 16, fill: U.COLORES.ink, fontWeight: 600 }),
           Plot.ruleX([AISLAMIENTO], { stroke: U.COLORES.ink2, strokeDasharray: "2,3" }),
           Plot.tip(barras, Plot.pointerX({ x: "fecha", y: "MAPE", title: (d) => `corte ${U.fechaCorta(d.fecha)}\nMAPE: ${fmtMape(d.MAPE)}` })),
         ],

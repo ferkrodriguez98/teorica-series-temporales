@@ -19,7 +19,7 @@ DEMOS.particion = {
     const estilar = (g) => {
       g.selectAll(".domain").remove();
       g.selectAll(".tick line").attr("stroke", U.COLORES.grid);
-      g.selectAll(".tick text").attr("fill", U.COLORES.ink2).attr("font-size", 14).attr("font-family", "Inter");
+      g.selectAll(".tick text").attr("fill", U.COLORES.ink2).attr("font-size", 17).attr("font-family", "Inter");
     };
     svg1.append("g").attr("transform", `translate(${m.l},0)`)
       .call(d3.axisLeft(y).ticks(4).tickFormat(U.tickM).tickSize(-(W - m.l - m.r)).tickPadding(8)).call(estilar);
@@ -29,8 +29,8 @@ DEMOS.particion = {
       .attr("d", d3.line().x((d) => x(d.fecha)).y((d) => y(d.v)));
     const corte = svg1.append("g").attr("opacity", 0);
     corte.append("line").attr("y1", m1.t - 22).attr("y2", H1 - m1.b).attr("stroke", U.COLORES.ink2).attr("stroke-dasharray", "4,4");
-    const rotIzq = corte.append("text").attr("y", m1.t - 12).attr("text-anchor", "end").attr("font-size", 14).attr("fill", U.COLORES.ink2).attr("font-family", "Inter").text("entrenamiento ←");
-    const rotDer = corte.append("text").attr("y", m1.t - 12).attr("font-size", 14).attr("fill", U.COLORES.modelo).attr("font-family", "Inter").text("→ prueba");
+    const rotIzq = corte.append("text").attr("y", m1.t - 12).attr("text-anchor", "end").attr("font-size", 17).attr("fill", U.COLORES.ink2).attr("font-family", "Inter").text("entrenamiento ←");
+    const rotDer = corte.append("text").attr("y", m1.t - 12).attr("font-size", 17).attr("fill", U.COLORES.modelo).attr("font-family", "Inter").text("→ prueba");
     const puntos = svg1.append("g").selectAll("circle").data(datos).join("circle")
       .attr("cx", (d) => x(d.fecha)).attr("cy", (d) => y(d.v)).attr("r", 6)
       .attr("fill", C.train).attr("stroke", U.COLORES.surface).attr("stroke-width", 2);
@@ -46,7 +46,7 @@ DEMOS.particion = {
     const FH = 26, FG = 9, H2 = FOLDS.length * (FH + FG) + 4;
     const svg2 = d3.select(g2).append("svg").attr("width", W).attr("height", H2);
     const filas = svg2.selectAll("g").data(FOLDS).join("g").attr("transform", (_, k) => `translate(0,${k * (FH + FG)})`);
-    filas.append("text").attr("x", m.l - 14).attr("y", FH / 2 + 5).attr("text-anchor", "end").attr("font-size", 14).attr("font-family", "Inter").attr("fill", U.COLORES.ink2).text((_, k) => `Partición ${k + 1}`);
+    filas.append("text").attr("x", m.l - 14).attr("y", FH / 2 + 5).attr("text-anchor", "end").attr("font-size", 17).attr("font-family", "Inter").attr("fill", U.COLORES.ink2).text((_, k) => `Partición ${k + 1}`);
     const celdas = filas.selectAll("rect").data((f, k) => datos.map((d) => ({ ...d, k, f }))).join("rect")
       .attr("x", (d) => x(d.fecha) - paso / 2 + 1.5).attr("width", paso - 3).attr("y", 0).attr("height", FH).attr("rx", 3)
       .attr("fill", C.fuera);
@@ -118,8 +118,11 @@ DEMOS.particion = {
     /* Estado inicial: todas las particiones dibujadas, sin animación */
     celdas.attr("fill", (d) => C[rolCelda(d)]);
     aplicar(false);
+    let arranque = null;
     return {
-      salir() { if (corriendo) { clearTimeout(corriendo); corriendo = null; celdas.interrupt().attr("fill", (d) => C[rolCelda(d)]); } },
+      entrar() { arranque = setTimeout(reproducir, 800); },
+      alternar() { clearTimeout(arranque); if (corriendo) { clearTimeout(corriendo); corriendo = null; } else reproducir(); },
+      salir() { clearTimeout(arranque); if (corriendo) { clearTimeout(corriendo); corriendo = null; celdas.interrupt().attr("fill", (d) => C[rolCelda(d)]); } },
     };
   },
 };

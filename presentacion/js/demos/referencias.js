@@ -73,14 +73,14 @@ DEMOS.referencias = {
         })),
       ];
       const plot = Plot.plot(U.plotBase({
-        width: 1024, height: 500, marginLeft: 64, marginTop: 28,
+        width: 1024, height: 560, marginLeft: 64, marginTop: 28,
         x: { label: null, domain: [U.sumarDias(desde, -1), U.sumarDias(hasta, 1)], tickFormat: (d) => `${d.getUTCDate()}/${d.getUTCMonth() + 1}`, ticks: d3.utcWeek.every(1) },
         y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 1.15e6] },
         marks: [
           ...B4.marcasFeriados(ferResto, { alto: 1.15e6, rotulo: false }),
           ...B4.marcasFeriados(ferJunio, { alto: 1.15e6 }),
           Plot.ruleX([U.sumarDias(jun[0].fecha, -0.5)], { stroke: U.COLORES.ink3, strokeDasharray: "3,3" }),
-          Plot.text([U.sumarDias(jun[0].fecha, -0.5)], { x: (d) => d, y: 1.15e6, text: () => "pronóstico →", dx: 6, dy: -8, textAnchor: "start", fontSize: 13, fill: U.COLORES.ink2 }),
+          Plot.text([U.sumarDias(jun[0].fecha, -0.5)], { x: (d) => d, y: 1.15e6, text: () => "pronóstico →", dx: 6, dy: -8, textAnchor: "start", fontSize: 16, fill: U.COLORES.ink2 }),
           Plot.lineY(hist, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.2 }),
           Plot.dot(hist, { x: "fecha", y: "valor", r: 2, fill: U.COLORES.ink3 }),
           Plot.lineY(jun, { x: "fecha", y: "real", stroke: U.COLORES.real, strokeWidth: 1.8, strokeDasharray: "1.5,4", strokeLinecap: "round" }),

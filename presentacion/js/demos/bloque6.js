@@ -32,7 +32,7 @@
           Plot.lineY(serie, { x: "fecha", y: "valor", stroke: U.COLORES.ink, strokeWidth: 1.6 }),
           Plot.ruleX(hechos, { x: "fecha", stroke: "tipo", strokeWidth: 1.5, strokeDasharray: "3 3" }),
           Plot.dot(hechos, { x: "fecha", y: 1.2e6, fill: "tipo", r: 13, stroke: U.COLORES.surface, strokeWidth: 2 }),
-          Plot.text(hechos, { x: "fecha", y: 1.2e6, text: "n", fill: "white", fontWeight: 700, fontSize: 13 }),
+          Plot.text(hechos, { x: "fecha", y: 1.2e6, text: "n", fill: "white", fontWeight: 700, fontSize: 16 }),
           Plot.tip(hechos, Plot.pointerX({ x: "fecha", y: 1.2e6, title: (d) => `${U.fechaCorta(d.fecha)}\n${d.txt}`, maxRadius: 30 })),
         ],
       })));
@@ -64,13 +64,13 @@
       const antes = d3.median(filas.filter((d) => d.fecha < corte && d.fecha >= U.dia("2020-06-01")), (d) => d.r);
       const despues = d3.median(filas.filter((d) => d.fecha >= corte), (d) => d.r);
       U.reemplazar(grafico, Plot.plot(U.plotBase({
-        height: 500,
-        y: { grid: true, domain: [0, 1.4], tickFormat: (d) => `${Math.round(d * 100)} %`, label: "fin de semana respecto de los días hábiles" },
+        height: 550, marginTop: 44,
+        y: { grid: true, ticks: 8, domain: [0, Math.ceil(d3.max(filas, (d) => d.r) * 10) / 10], tickFormat: (d) => `${Math.round(d * 100)} %`, label: "fin de semana respecto de los días hábiles" },
         x: { label: null },
         marks: [
           Plot.ruleY([1], { stroke: U.COLORES.rule }),
           Plot.ruleX([corte], { stroke: U.COLORES.B, strokeWidth: 2 }),
-          Plot.text([corte], { x: (d) => d, y: 1.32, text: () => "13/3/2021: empieza el cobro en fines de semana y feriados", textAnchor: "start", dx: 8, fill: U.COLORES.B, fontSize: 15 }),
+          Plot.text([corte], { x: (d) => d, y: 1.32, text: () => "13/3/2021: empieza el cobro en fines de semana y feriados", textAnchor: "start", dx: 8, fill: U.COLORES.B, fontSize: 18 }),
           Plot.dot(filas, { x: "fecha", y: "r", r: 3, fill: U.COLORES.ecobici }),
           Plot.lineY(filas, Plot.windowY({ k: 8, anchor: "middle" }, { x: "fecha", y: "r", stroke: U.COLORES.ink, strokeWidth: 1.8 })),
           Plot.tip(filas, Plot.pointerX({ x: "fecha", y: "r", title: (d) => `semana del ${U.fechaCorta(d.fecha)}\nfin de semana: ${Math.round(d.r * 100)} % de un día hábil` })),
@@ -90,7 +90,7 @@
         const dias = vista === "antes" ? A.antes : A.despues;
         const filas = dias.flatMap((d) => d.perfil.map((v, s) => ({ fecha: d.etiqueta, hora: s / 4, valor: v }))).filter((p) => p.hora >= 5);
         U.reemplazar(grafico, Plot.plot(U.plotBase({
-          height: 470,
+          height: 520,
           x: { domain: [5, 24], ticks: d3.range(5, 25, 2), tickFormat: (h) => `${h} h`, label: null },
           y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 52000] },
           color: { domain: dias.map((d) => d.etiqueta), range: [U.COLORES.B, U.COLORES.ink3, U.COLORES.C, U.COLORES.ink2], legend: true },

@@ -28,7 +28,7 @@ DEMOS.feriadoDomingo = {
           Plot.lineY(hist, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.2 }),
           Plot.dot(hist, { x: "fecha", y: "valor", r: 2, fill: U.COLORES.ink3 }),
           Plot.dot([{ fecha: d25, valor: y25 }], { x: "fecha", y: "valor", r: 9, stroke: U.COLORES.B, strokeWidth: 2.2 }),
-          Plot.text([{ fecha: d25, valor: y25 }], { x: "fecha", y: "valor", text: () => "domingo 25/5, feriado", dy: 26, fill: U.COLORES.B, fontSize: 15 }),
+          Plot.text([{ fecha: d25, valor: y25 }], { x: "fecha", y: "valor", text: () => "domingo 25/5, feriado", dy: 26, fill: U.COLORES.B, fontSize: 18 }),
           Plot.lineY(jun, { x: "fecha", y: "real", stroke: U.COLORES.real, strokeWidth: 1.8, strokeDasharray: "1.5,4", strokeLinecap: "round" }),
           Plot.dot(jun, { x: "fecha", y: "real", r: 2.6, fill: U.COLORES.real }),
           Plot.lineY(filas, { x: "fecha", y: "p", stroke: U.COLORES.modelo, strokeWidth: 2.2 }),

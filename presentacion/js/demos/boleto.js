@@ -15,7 +15,7 @@ DEMOS.boleto = {
 
     function dibujar() {
       const arriba = Plot.plot(U.plotBase({
-        height: 250, marginBottom: 8, marginTop: 24, marginLeft: 80, marginRight: 30,
+        height: 275, marginBottom: 8, marginTop: 24, marginLeft: 80, marginRight: 30,
         x: { domain: dom, axis: null },
         y: vista === "real"
           ? { grid: true, label: `pesos de ${baseTxt}`, tickFormat: (d) => `$${U.locale.format(",.0f")(d)}`, domain: [0, 1900] }
@@ -27,12 +27,12 @@ DEMOS.boleto = {
         ],
       }));
       const abajo = Plot.plot(U.plotBase({
-        height: 250, marginTop: 24, marginLeft: 80, marginRight: 30,
+        height: 275, marginTop: 40, marginLeft: 80, marginRight: 30,
         x: { domain: dom, label: null },
         y: { grid: true, label: "pasajeros por día (promedio del mes)", tickFormat: U.tickM, domain: [0, 1.2e6] },
         marks: [
           Plot.rectY(marcas, { x1: "desde", x2: "hasta", y1: 0, y2: 1.2e6, fill: U.COLORES.ink3, fillOpacity: 0.1 }),
-          Plot.text(marcas, { x: (d) => new Date((+d.desde + +d.hasta) / 2), y: 1.15e6, text: "texto", fill: U.COLORES.ink2, fontSize: 14 }),
+          Plot.text(marcas, { x: (d) => new Date((+d.desde + +d.hasta) / 2), y: 1.15e6, text: "texto", fill: U.COLORES.ink2, fontSize: 17 }),
           Plot.lineY(filas.filter((d) => d.pax != null), { x: "fecha", y: "pax", stroke: U.COLORES.ink, strokeWidth: 1.8 }),
           Plot.tip(filas.filter((d) => d.pax != null), Plot.pointerX({ x: "fecha", y: "pax", title: (d) => `${U.MESES[d.fecha.getUTCMonth()]} ${d.fecha.getUTCFullYear()}\n${U.fmtK(d.pax)} pasajeros por día` })),
         ],

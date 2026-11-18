@@ -6,7 +6,7 @@ DEMOS.diferenciar = {
     const S = DATA.subteDiario;
     const serie = U.recortar(U.serie(S.inicio, S.total), "2022-01-01", "2025-12-31");
     const x = serie.map((d) => d.valor);
-    const K = 60, H = 470;
+    const K = 60, H = 530;
     const MODOS = {
       orig: { valores: x, titulo: "Total diario de pasajeros, 2022 a 2025" },
       d1: { valores: B3.dif(x, 1), titulo: "Diferencia de 1 día: cada día menos el día anterior" },

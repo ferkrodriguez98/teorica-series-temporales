@@ -11,7 +11,7 @@ DEMOS.mediaMovil = {
       const suav = serie.map((d, i) => ({ fecha: d.fecha, valor: mm[i] }));
       const plot = Plot.plot(U.plotBase({
         height: 540,
-        y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 1.45e6] },
+        y: { grid: true, ticks: 8, tickFormat: U.tickM, label: null, domain: [0, 1.45e6] },
         x: { label: null },
         marks: [
           Plot.lineY(serie, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 0.8, strokeOpacity: 0.55 }),

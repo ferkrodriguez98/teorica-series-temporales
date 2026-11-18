@@ -31,7 +31,7 @@ DEMOS.frecuencia = {
           : Plot.lineY(datos, { x: "fecha", y: "valor", stroke: U.COLORES.C, strokeWidth: frec === "15min" ? 0.8 : 1.4 }),
         Plot.tip(datos, Plot.pointerX({ x: "fecha", y: "valor", title: (d) => `${d3.utcFormat(frec === "dia" || frec === "semana" ? "%a %d/%m" : "%a %d/%m %H:%M")(d.fecha)}\n${U.fmt(Math.round(d.valor))}` })),
       ];
-      U.reemplazar(grafico, Plot.plot(U.plotBase({ height: 500, y: { grid: true, tickFormat: U.tickM, label: null }, x: { label: null, domain: [U.dia(DESDE), U.dia("2019-06-01")] }, marks: marcas })));
+      U.reemplazar(grafico, Plot.plot(U.plotBase({ height: 560, y: { grid: true, ticks: 8, tickFormat: U.tickM, label: null }, x: { label: null, domain: [U.dia(DESDE), U.dia("2019-06-01")] }, marks: marcas })));
       lectura.innerHTML = `<b>${datos.length}</b> observaciones de ${REGLAS[frec].texto}${frec === "15min" ? "" : `, agregadas con ${agg === "suma" ? "la suma" : "el promedio"}`}. ` +
         (frec === "15min" ? "Se ve el ciclo dentro del día y se pierde de vista el mes."
           : frec === "semana" ? "Las semanas que empiezan antes del 1 o terminan después del 31 quedan incompletas: con la suma parecen semanas flojas."

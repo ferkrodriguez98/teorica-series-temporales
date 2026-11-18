@@ -17,7 +17,7 @@ DEMOS.rezagos = {
     const pA = B3.panel(fila, "Autocorrelación (ACF): la misma correlación para cada rezago, de 1 a 60 días", 920);
 
     /* ---------- Diagrama de dispersión ---------- */
-    const W = 480, H = 470, m = { t: 14, r: 16, b: 46, l: 66 };
+    const W = 480, H = 530, m = { t: 14, r: 16, b: 46, l: 66 };
     const tope = Math.ceil((d3.max(x) * 1.03) / 1e5) * 1e5;
     const sx = d3.scaleLinear([0, tope], [m.l, W - m.r]);
     const sy = d3.scaleLinear([0, tope], [H - m.b, m.t]);
@@ -31,7 +31,7 @@ DEMOS.rezagos = {
     svg.append("line").attr("x1", sx(0)).attr("y1", sy(0)).attr("x2", sx(tope)).attr("y2", sy(tope))
       .attr("stroke", U.COLORES.ink3).attr("stroke-width", 1).attr("stroke-dasharray", "4 4");
     const etiq = (xx, yy, ancla, texto) => svg.append("text").attr("x", xx).attr("y", yy).attr("text-anchor", ancla)
-      .attr("fill", U.COLORES.ink2).attr("font-size", 15).attr("font-family", "Inter, sans-serif").text(texto);
+      .attr("fill", U.COLORES.ink2).attr("font-size", 18).attr("font-family", "Inter, sans-serif").text(texto);
     etiq(m.l - 58, m.t - 2, "start", "↑ Hoy");
     const etiqX = etiq(W - m.r, H - 6, "end", "");
     const gPuntos = svg.append("g");

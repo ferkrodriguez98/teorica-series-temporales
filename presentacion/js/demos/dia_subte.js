@@ -3,8 +3,8 @@ DEMOS.diaSubte = {
   montar(el) {
     const datos = DATA.subteDiaTipico;
     const est = DATA.mapaBase.estaciones.filter((e) => datos.perfiles.habil[e.clave]);
-    let tipo = "habil", t = 33, play = false, ultimo = null, raf = null;
-    const SLOTS_POR_SEG = 2.2;
+    let tipo = "habil", t = 33, play = false, ultimo = null, raf = null, arranque = null;
+    const SLOTS_POR_SEG = 4.8;
 
     const reloj = el.querySelector(".reloj");
     const hora = U.el("span");
@@ -26,7 +26,7 @@ DEMOS.diaSubte = {
     const area = svg.append("path").attr("fill", "rgba(242,241,236,0.16)");
     const linea = svg.append("path").attr("fill", "none").attr("stroke", "#f2f1ec").attr("stroke-width", 2);
     const cursor = svg.append("line").attr("y1", 0).attr("y2", H).attr("stroke", "#f2f1ec").attr("stroke-width", 1.5).attr("stroke-dasharray", "3 3");
-    [0, 24, 48, 72, 95].forEach((s) => svg.append("text").attr("x", x(s)).attr("y", H + 18).attr("fill", "#7d7b74").attr("font-size", 13).attr("text-anchor", s === 0 ? "start" : s === 95 ? "end" : "middle").text(s === 95 ? "24 h" : `${s / 4} h`));
+    [0, 24, 48, 72, 95].forEach((s) => svg.append("text").attr("x", x(s)).attr("y", H + 18).attr("fill", "#7d7b74").attr("font-size", 15).attr("text-anchor", s === 0 ? "start" : s === 95 ? "end" : "middle").text(s === 95 ? "24 h" : `${s / 4} h`));
     let totales = [];
     function dibujarCurva() {
       const p = datos.perfiles[tipo];
@@ -72,12 +72,13 @@ DEMOS.diaSubte = {
       if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf);
     };
     btn.addEventListener("click", () => reproducir(!play));
-    rango.addEventListener("input", () => { t = +rango.value; render(); });
+    rango.addEventListener("input", () => { reproducir(false); t = +rango.value; render(); });
 
     dibujarCurva();
     return {
-      entrar() { U.mapa().volar(U.mapa().vistaCABA, 1200); render(); },
-      salir() { reproducir(false); },
+      entrar() { U.mapa().volar(U.mapa().vistaCABA, 1200); render(); arranque = setTimeout(() => reproducir(true), 1200); },
+      salir() { clearTimeout(arranque); reproducir(false); },
+      alternar() { clearTimeout(arranque); reproducir(!play); },
     };
   },
 };

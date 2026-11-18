@@ -5,7 +5,7 @@
 (function () {
   const N = 48, PARES = 500, SEMILLA = 20261120;
   const CORTES = d3.range(-1, 1.0001, 0.05).map((v) => Math.round(v * 100) / 100);
-  const estilo = { fontFamily: "Inter, sans-serif", fontSize: "15px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" };
+  const estilo = { fontFamily: "Inter, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" };
 
   /* Las 500 correlaciones se calculan una sola vez (con semilla, para que la lectura sea estable) */
   let cache = null;
@@ -59,7 +59,7 @@
         pS.titulo.innerHTML = enNiv ? `Dos caminatas aleatorias independientes, ${N} pasos` : "Sus diferencias: el paso de cada período";
         const ult = filas[filas.length - 1];
         U.reemplazar(pS.cuerpo, Plot.plot({
-          width: 520, height: 450, marginLeft: 46, marginRight: 28, marginBottom: 40, marginTop: 30, style: estilo,
+          width: 520, height: 510, marginLeft: 46, marginRight: 28, marginBottom: 40, marginTop: 30, style: estilo,
           x: { label: "Período →", labelAnchor: "right", domain: [0, N - 1], ticks: 6 },
           y: { label: null, grid: true, ticks: 6 },
           marks: [
@@ -74,7 +74,7 @@
         // Dispersión
         pD.titulo.innerHTML = `${enNiv ? "B contra A" : "Paso de B contra paso de A"} <span class="b3-r">r = ${B3.fmtR(r)}</span>`;
         U.reemplazar(pD.cuerpo, Plot.plot({
-          width: 420, height: 450, marginLeft: 46, marginBottom: 40, marginTop: 30, marginRight: 10, style: estilo,
+          width: 420, height: 510, marginLeft: 46, marginBottom: 40, marginTop: 30, marginRight: 10, style: estilo,
           x: { label: enNiv ? "A →" : "Paso de A →", labelAnchor: "right", grid: true, ticks: 5 },
           y: { label: enNiv ? "↑ B" : "↑ Paso de B", labelAnchor: "top", grid: true, ticks: 5 },
           marks: [
@@ -88,7 +88,7 @@
         const hist = (clave, titulo, rPar) => {
           const activo = clave === modo;
           return Plot.plot({
-            width: 420, height: 211, marginLeft: 46, marginBottom: clave === "dif" ? 36 : 22, marginTop: 10, marginRight: 10, style: estilo,
+            width: 420, height: 241, marginLeft: 46, marginBottom: clave === "dif" ? 36 : 22, marginTop: 10, marginRight: 10, style: estilo,
             x: { domain: [-1, 1], ticks: 5, tickFormat: (d) => U.fmt(d, 1), label: clave === "dif" ? "r →" : null, labelAnchor: "right", axis: clave === "dif" ? "bottom" : null },
             y: { domain: [0, yMax], ticks: 3, grid: true, label: null },
             marks: [
@@ -152,7 +152,7 @@
       const p4 = B3.panel(fila, `Variaciones mensuales <span class="b3-r">r = ${B3.fmtR(rVar)}</span>`, 370);
 
       const serieT = (campo, fmt) => Plot.plot({
-        width: 640, height: 220, marginLeft: 66, marginBottom: 30, marginTop: 10, marginRight: 14, style: estilo,
+        width: 640, height: 250, marginLeft: 66, marginBottom: 30, marginTop: 10, marginRight: 14, style: estilo,
         x: { label: null, ticks: "year", tickFormat: d3.utcFormat("%Y") },
         y: { label: null, grid: true, ticks: 4, tickFormat: fmt, zero: true },
         marks: [
@@ -167,7 +167,7 @@
 
       const pct = (d) => U.fmt(100 * d) + " %";
       const disp = (datos, fx, fy, lx, ly, tit, tx) => Plot.plot({
-        width: 370, height: 470, marginLeft: 66, marginBottom: 40, marginTop: 30, marginRight: 14, style: estilo,
+        width: 370, height: 530, marginLeft: 66, marginBottom: 40, marginTop: 30, marginRight: 14, style: estilo,
         x: { label: lx, labelAnchor: "right", grid: true, ticks: tx, tickFormat: fx },
         y: { label: ly, labelAnchor: "top", grid: true, ticks: 6, tickFormat: fy },
         marks: [

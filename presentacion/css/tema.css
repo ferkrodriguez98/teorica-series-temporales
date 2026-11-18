@@ -78,7 +78,7 @@
 .lede { font-family: var(--serif); font-size: 1.45em; line-height: 1.25; max-width: 28ch; }
 .muted { color: var(--ink-2); }
 .small { font-size: 0.7em; }
-.fuente { position: absolute; left: 72px; bottom: 22px; font-size: 0.42em; color: var(--ink-3); letter-spacing: 0.01em; }
+.fuente { position: absolute; left: 72px; right: 190px; bottom: 22px; font-size: 0.48em; color: var(--ink-3); letter-spacing: 0.01em; }
 
 /* Columnas */
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
@@ -98,13 +98,13 @@
 
 /* Demos */
 .demo { position: relative; width: 100%; }
-.demo .controles { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; font-size: 0.52em; color: var(--ink-2); margin-bottom: 12px; min-height: 40px; }
+.demo .controles { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; font-size: 0.6em; color: var(--ink-2); margin-bottom: 12px; min-height: 40px; }
 .demo .controles label { display: inline-flex; align-items: center; gap: 10px; }
 .demo .controles output { font-family: var(--mono); color: var(--ink); min-width: 4.5ch; display: inline-block; font-variant-numeric: tabular-nums; }
 .demo .grafico { width: 100%; }
 .demo .grafico svg { overflow: visible; }
 .demo .grafico figure { margin: 0; }
-.demo .lectura { font-size: 0.55em; color: var(--ink-2); margin-top: 10px; min-height: 1.4em; }
+.demo .lectura { font-size: 0.64em; color: var(--ink-2); margin-top: 10px; min-height: 1.4em; }
 .demo .lectura b { color: var(--ink); font-weight: 600; }
 
 input[type="range"] { -webkit-appearance: none; appearance: none; width: 260px; height: 4px; background: var(--rule); border-radius: 2px; outline: none; }
@@ -118,7 +118,7 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .boton.secundario { color: var(--ink); background: transparent; border: 1px solid var(--rule); }
 
 /* Tooltip de los gráficos */
-.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--surface); font-size: 15px; line-height: 1.35; padding: 8px 11px; border-radius: 8px; white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity 0.12s; z-index: 10; font-variant-numeric: tabular-nums; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--surface); font-size: 18px; line-height: 1.35; padding: 8px 11px; border-radius: 8px; white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity 0.12s; z-index: 10; font-variant-numeric: tabular-nums; }
 .tip.on { opacity: 1; }
 .tip .t2 { color: #c9c7bf; }
 
@@ -129,9 +129,10 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .escena .overlay h2 { color: var(--dark-ink); }
 .escena .overlay .kicker { color: var(--dark-ink-3); }
 .escena .overlay p { color: var(--dark-ink-2); font-size: 0.7em; }
+.escena .overlay h2, .escena .overlay p { text-shadow: 0 0 14px rgba(14,16,19,0.95), 0 0 4px rgba(14,16,19,0.9); }
 .escena .reloj { position: absolute; right: 56px; top: 44px; font-family: var(--mono); font-size: 2.2em; color: var(--dark-ink); font-variant-numeric: tabular-nums; text-align: right; }
 .escena .reloj small { display: block; font-family: var(--sans); font-size: 0.26em; color: var(--dark-ink-3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 6px; }
-.escena .panel { position: absolute; left: 56px; right: 56px; bottom: 36px; display: flex; align-items: center; gap: 22px; font-size: 0.5em; color: var(--dark-ink-2); }
+.escena .panel { position: absolute; left: 56px; right: 170px; bottom: 36px; display: flex; align-items: center; gap: 22px; font-size: 0.5em; color: var(--dark-ink-2); }
 .escena .panel input[type="range"] { flex: 1; width: auto; background: #2a2e35; }
 .escena .panel input[type="range"]::-webkit-slider-thumb { background: var(--dark-ink); border-color: var(--dark-surface); box-shadow: 0 0 0 1px var(--dark-ink); }
 .escena .panel .boton { background: var(--dark-ink); color: var(--dark-surface); }
@@ -149,7 +150,8 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .revelado { font-size: 0.6em; padding: 14px 18px; border-left: 3px solid var(--ink); background: var(--surface-2); border-radius: 0 8px 8px 0; margin-top: 12px; }
 
 .reveal .progress { color: var(--ink); height: 3px; }
-.reveal .slide-number { font-family: var(--mono); font-size: 13px; background: transparent; color: var(--ink-3); right: 22px; bottom: 16px; }
+.reveal .slide-number { font-family: var(--mono); font-size: 13px; background: transparent; color: var(--ink-3); right: 22px; top: 14px; bottom: auto; }
+.reveal .slide-number a { text-decoration: none; color: inherit; }
 .reveal .controls { color: var(--ink-3); }
 
 /* ¿Qué pasó este día? */
@@ -159,14 +161,14 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .botones button:disabled, .boton:disabled { opacity: 0.35; cursor: default; }
 
 /* Velos para leer texto sobre los mapas */
-.escena [data-demo]::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 760px; background: linear-gradient(90deg, rgba(14,16,19,0.88) 0%, rgba(14,16,19,0.55) 55%, rgba(14,16,19,0) 100%); pointer-events: none; }
+.escena [data-demo]::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 900px; background: linear-gradient(90deg, rgba(14,16,19,0.94) 0%, rgba(14,16,19,0.8) 50%, rgba(14,16,19,0) 100%); pointer-events: none; }
 .escena [data-demo]::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 150px; background: linear-gradient(0deg, rgba(14,16,19,0.9), rgba(14,16,19,0)); pointer-events: none; }
 .escena .overlay, .escena .panel, .escena .reloj, .escena .fuente, .escena .chart-mini { z-index: 2; }
 .escena .chart-mini { background: rgba(14,16,19,0.78); padding: 14px 16px 6px; border-radius: 12px; }
 .escena .reloj { background: rgba(14,16,19,0.6); padding: 6px 14px 10px; border-radius: 12px; }
 
 /* Leyendas de Observable Plot: tamaño propio, no el de Reveal */
-.demo [class*="-swatches"] { font-size: 16px !important; font-family: var(--sans); color: var(--ink-2); margin-bottom: 6px; gap: 0 18px; }
+.demo [class*="-swatches"] { font-size: 18px !important; font-family: var(--sans); color: var(--ink-2); margin-bottom: 6px; gap: 0 18px; }
 .demo [class*="-swatch"] > svg { margin-right: 6px; }
 .demo figure { margin: 0; }
 

@@ -108,7 +108,7 @@
   B3.estilarEjes = (sel) => {
     sel.selectAll(".domain").attr("stroke", U.COLORES.rule);
     sel.selectAll(".tick line").attr("stroke", U.COLORES.rule);
-    sel.selectAll(".tick text").attr("fill", U.COLORES.ink2).attr("font-size", 15).attr("font-family", "Inter, sans-serif");
+    sel.selectAll(".tick text").attr("fill", U.COLORES.ink2).attr("font-size", 18).attr("font-family", "Inter, sans-serif");
   };
 
   /* Tooltip HTML dentro de un contenedor posicionado */
@@ -141,7 +141,7 @@
       .call(d3.axisBottom(x).tickValues(ticks || d3.range(5, K + 1, 5)).tickFormat((d) => d).tickSizeOuter(0).tickSize(5));
     B3.estilarEjes(gx);
     svg.append("text").attr("x", ancho - m.r).attr("y", alto - 6).attr("text-anchor", "end")
-      .attr("fill", U.COLORES.ink2).attr("font-size", 15).attr("font-family", "Inter, sans-serif").text(etiquetaX + " →");
+      .attr("fill", U.COLORES.ink2).attr("font-size", 18).attr("font-family", "Inter, sans-serif").text(etiquetaX + " →");
     svg.append("line").attr("x1", m.l).attr("x2", ancho - m.r).attr("y1", y(0)).attr("y2", y(0)).attr("stroke", U.COLORES.ink3).attr("stroke-width", 1);
 
     const gBarras = svg.append("g");

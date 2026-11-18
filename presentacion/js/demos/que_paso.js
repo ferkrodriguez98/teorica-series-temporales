@@ -20,14 +20,14 @@ DEMOS.quePaso = {
       const pts = (arr) => arr.map((v, s) => ({ hora: s / 4, valor: v })).filter((p) => p.hora >= 5);
       const dia = pts(c.perfil), ref = pts(c.referencia);
       const plot = Plot.plot(U.plotBase({
-        height: 470,
+        height: 510,
         x: { domain: [5, 24], ticks: d3.range(5, 25, 2), tickFormat: (h) => `${h} h`, label: null },
         y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, Math.max(d3.max(c.perfil), d3.max(c.referencia)) * 1.08] },
         marks: [
           Plot.areaY(ref, { x: "hora", y: "valor", fill: U.COLORES.ink3, fillOpacity: 0.16, curve: "step-after" }),
           Plot.lineY(ref, { x: "hora", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.4, curve: "step-after" }),
           Plot.lineY(dia, { x: "hora", y: "valor", stroke: U.COLORES.B, strokeWidth: 2.2, curve: "step-after" }),
-          Plot.text([{ hora: 5.2, valor: d3.max(c.referencia) }], { x: "hora", y: "valor", text: () => `${c.dia} normal`, fill: U.COLORES.ink3, textAnchor: "start", dy: -10, fontSize: 15 }),
+          Plot.text([{ hora: 5.2, valor: d3.max(c.referencia) }], { x: "hora", y: "valor", text: () => `${c.dia} normal`, fill: U.COLORES.ink3, textAnchor: "start", dy: -10, fontSize: 18 }),
           Plot.tip(dia, Plot.pointerX({ x: "hora", y: "valor", title: (p) => `${String(Math.floor(p.hora)).padStart(2, "0")}:${String((p.hora % 1) * 60).padStart(2, "0")}\neste día: ${U.fmt(p.valor)}\nnormal: ${U.fmt(c.referencia[p.hora * 4])}` })),
         ],
       }));

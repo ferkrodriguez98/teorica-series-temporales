@@ -4,7 +4,7 @@ DEMOS.mapaAnios = {
     const A = DATA.subteAnualEstaciones;
     const anios = Object.keys(A).map(Number).sort();
     const est = DATA.mapaBase.estaciones;
-    let i = anios.indexOf(2019), play = false, timer = null;
+    let i = anios.indexOf(2019), play = false, timer = null, arranque = null;
 
     const reloj = el.querySelector(".reloj");
     const grande = U.el("span");
@@ -25,7 +25,7 @@ DEMOS.mapaAnios = {
     const barras = svg.selectAll("rect").data(anios).join("rect")
       .attr("x", (a) => x(a)).attr("width", x.bandwidth()).attr("y", (a, k) => y(totales[k])).attr("height", (a, k) => H - y(totales[k])).attr("rx", 2);
     svg.selectAll("text").data(anios.filter((a) => a % 2 === 1 || a === 2026)).join("text")
-      .attr("x", (a) => x(a) + x.bandwidth() / 2).attr("y", H + 18).attr("text-anchor", "middle").attr("fill", "#7d7b74").attr("font-size", 12).text((a) => String(a).slice(2));
+      .attr("x", (a) => x(a) + x.bandwidth() / 2).attr("y", H + 18).attr("text-anchor", "middle").attr("fill", "#7d7b74").attr("font-size", 15).text((a) => String(a).slice(2));
 
     const parcial = { 2013: "junio a diciembre", 2026: "enero a agosto" };
     function render() {
@@ -48,14 +48,15 @@ DEMOS.mapaAnios = {
     }
     const reproducir = (on) => {
       play = on; btn.textContent = on ? "Pausa" : "Reproducir";
-      clearInterval(timer);
-      if (on) timer = setInterval(() => { i = (i + 1) % anios.length; render(); if (i === anios.length - 1) reproducir(false); }, 1400);
+      clearTimeout(timer);
+      if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }
     };
-    btn.addEventListener("click", () => { if (!play && i === anios.length - 1) i = 0; reproducir(!play); });
-    rango.addEventListener("input", () => { i = +rango.value; render(); });
+    btn.addEventListener("click", () => { clearTimeout(arranque); reproducir(!play); });
+    rango.addEventListener("input", () => { reproducir(false); i = +rango.value; render(); });
     return {
-      entrar() { U.mapa().volar({ ...U.mapa().vistaCABA, pitch: 45, bearing: -8 }, 1200); render(); },
-      salir() { reproducir(false); },
+      entrar() { U.mapa().volar({ ...U.mapa().vistaCABA, pitch: 45, bearing: -8 }, 1200); i = 0; render(); arranque = setTimeout(() => reproducir(true), 1200); },
+      salir() { clearTimeout(arranque); reproducir(false); },
+      alternar() { clearTimeout(arranque); reproducir(!play); },
     };
   },
 };

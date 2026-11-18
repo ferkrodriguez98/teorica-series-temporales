@@ -46,7 +46,7 @@ DEMOS.metricas = {
       const ferJ = jun.filter((d) => d.feriado).map((d) => d.fecha);
 
       const plot = Plot.plot(U.plotBase({
-        width: 1024, height: 470, marginLeft: 70, marginTop: 28,
+        width: 1024, height: 530, marginLeft: 70, marginTop: 28,
         x: { label: null, domain: [U.sumarDias(jun[0].fecha, -0.5), U.sumarDias(jun[jun.length - 1].fecha, 0.5)], tickFormat: (d) => `${B4.DIAS3[d.getUTCDay()]} ${d.getUTCDate()}`, ticks: d3.utcWeek.every(1) },
         y: { grid: true, tickFormat: (d) => (d > 0 ? "+" : d < 0 ? "−" : "") + U.tickM(Math.abs(d)), label: "error (real − pronóstico)", labelAnchor: "top", labelArrow: "none", domain: dom },
         marks: [
@@ -57,7 +57,7 @@ DEMOS.metricas = {
             stroke: (d) => (d.paro ? U.COLORES.ink : "none"), strokeWidth: 1.5,
           }),
           Plot.ruleY([0], { stroke: U.COLORES.ink3 }),
-          Plot.text(filas.filter((d) => d.paro), { x: "fecha", y: "e", text: () => "paro simulado", dy: 14, fontSize: 13, fill: U.COLORES.ink, fontWeight: 600 }),
+          Plot.text(filas.filter((d) => d.paro), { x: "fecha", y: "e", text: () => "paro simulado", dy: 14, fontSize: 16, fill: U.COLORES.ink, fontWeight: 600 }),
           Plot.tip(filas, Plot.pointerX({
             x: "fecha", y: "e",
             title: (d) => `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})${d.feriado ? ", feriado" : ""}${d.paro ? ", paro simulado" : ""}\nreal: ${B4.num(d.real)}\npronóstico: ${B4.num(d.pred)}\nerror: ${B4.signo(d.e)} (${U.fmt((100 * Math.abs(d.e)) / d.real, 1)} % del real)`,

@@ -31,10 +31,10 @@ DEMOS.calor = {
         celdas.push({ dia: DIAS[d], hora: h, valor: v });
       }
       const color = vista === "ratio"
-        ? { type: "diverging", pivot: 1, scheme: "RdBu", domain: [0.3, 1.7], legend: true, label: "2025 / 2019", tickFormat: (d) => `${Math.round(d * 100)} %` }
-        : { type: "linear", range: ["#f3f5fa", U.COLORES.C], domain: [0, d3.max([...P[2019].values()])], legend: true, label: "pasajeros por hora", tickFormat: U.tickM };
+        ? { type: "diverging", pivot: 1, scheme: "RdBu", domain: [0.3, 1.7], legend: true, label: "2025 / 2019", width: 420, style: { fontSize: "16px" }, tickFormat: (d) => `${Math.round(d * 100)} %` }
+        : { type: "linear", range: ["#f3f5fa", U.COLORES.C], domain: [0, d3.max([...P[2019].values()])], legend: true, label: "pasajeros por hora", width: 420, style: { fontSize: "16px" }, tickFormat: U.tickM };
       const plot = Plot.plot(U.plotBase({
-        height: 470, marginLeft: 110, padding: 0.06,
+        height: 520, marginLeft: 110, padding: 0.06,
         x: { label: "hora", tickFormat: (h) => `${h} h`, type: "band" },
         y: { label: null, domain: DIAS },
         color,

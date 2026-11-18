@@ -110,7 +110,7 @@ U.plotBase = (extra = {}) => ({
   height: 520,
   marginLeft: 70,
   marginBottom: 40,
-  style: { fontFamily: "Inter, sans-serif", fontSize: "15px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
+  style: { fontFamily: "Inter, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
   ...extra,
 });
 
@@ -149,11 +149,23 @@ U.iniciarDemos = (reveal) => {
       activas.add(inst);
     });
   };
+  /* Barra espaciadora: en las diapositivas con animación, pausa y reanuda en lugar de avanzar */
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== " " || e.shiftKey || reveal.isOverview()) return;
+    const anim = [...activas].find((d) => d.alternar);
+    if (!anim) return;
+    e.preventDefault(); e.stopPropagation();
+    if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+    anim.alternar();
+  }, true);
   reveal.on("ready", (e) => procesar(e.currentSlide));
   reveal.on("slidechanged", (e) => procesar(e.currentSlide));
 };
 
 /* Escape saca el foco de un control para volver a navegar con las flechas */
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && document.activeElement && document.activeElement.tagName === "INPUT") document.activeElement.blur();
+  if (e.key === "Escape" && document.activeElement && document.activeElement.tagName === "INPUT") {
+    document.activeElement.blur();
+    e.preventDefault(); e.stopPropagation();
+  }
 }, true);

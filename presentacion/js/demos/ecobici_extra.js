@@ -34,7 +34,7 @@ DEMOS.redEcobici = {
   montar(el) {
     const R = DATA.ecobiciRed.anios;
     const anios = Object.keys(R).map(Number).sort();
-    let i = anios.indexOf(2019), play = false, timer = null;
+    let i = anios.indexOf(2019), play = false, timer = null, arranque = null;
     const reloj = el.querySelector(".reloj");
     const grande = U.el("span"), sub = U.el("small");
     reloj.append(grande, sub);
@@ -47,13 +47,13 @@ DEMOS.redEcobici = {
     const W = 460, H = 120;
     const porDia = anios.map((a) => R[a].viajes / R[a].dias);
     const svg = d3.select(mini).append("svg").attr("width", W).attr("height", H + 40);
-    svg.append("text").attr("x", 0).attr("y", 11).attr("fill", "#7d7b74").attr("font-size", 12).text("viajes por día con datos");
+    svg.append("text").attr("x", 0).attr("y", 11).attr("fill", "#7d7b74").attr("font-size", 15).text("viajes por día con datos");
     const x = d3.scaleBand(anios, [0, W]).padding(0.18);
     const y = d3.scaleLinear([0, d3.max(porDia)], [H + 16, 22]);
     const barras = svg.selectAll("rect").data(anios).join("rect").attr("x", (a) => x(a)).attr("width", x.bandwidth())
       .attr("y", (a, k) => y(porDia[k])).attr("height", (a, k) => H + 16 - y(porDia[k])).attr("rx", 2);
     svg.selectAll(".t").data(anios.filter((a) => a % 2 === 0)).join("text").attr("x", (a) => x(a) + x.bandwidth() / 2).attr("y", H + 34)
-      .attr("text-anchor", "middle").attr("fill", "#7d7b74").attr("font-size", 12).text((a) => String(a).slice(2));
+      .attr("text-anchor", "middle").attr("fill", "#7d7b74").attr("font-size", 15).text((a) => String(a).slice(2));
 
     const SIS = { M: "sistema manual", A: "primer sistema automático", B: "sistema actual (desde 2019)" };
     function render() {
@@ -72,14 +72,15 @@ DEMOS.redEcobici = {
       ], { subte: 0.15 });
     }
     const reproducir = (on) => {
-      play = on; btn.textContent = on ? "Pausa" : "Reproducir"; clearInterval(timer);
-      if (on) timer = setInterval(() => { i = (i + 1) % anios.length; render(); if (i === anios.length - 1) reproducir(false); }, 1300);
+      play = on; btn.textContent = on ? "Pausa" : "Reproducir"; clearTimeout(timer);
+      if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }
     };
-    btn.addEventListener("click", () => { if (!play && i === anios.length - 1) i = 0; reproducir(!play); });
-    rango.addEventListener("input", () => { i = +rango.value; render(); });
+    btn.addEventListener("click", () => { clearTimeout(arranque); reproducir(!play); });
+    rango.addEventListener("input", () => { reproducir(false); i = +rango.value; render(); });
     return {
-      entrar() { U.mapa().volar({ longitude: -58.445, latitude: -34.605, zoom: 11.9, pitch: 0, bearing: 0 }, 1200); render(); },
-      salir() { reproducir(false); },
+      entrar() { U.mapa().volar({ longitude: -58.445, latitude: -34.605, zoom: 11.9, pitch: 0, bearing: 0 }, 1200); i = 0; render(); arranque = setTimeout(() => reproducir(true), 1200); },
+      salir() { clearTimeout(arranque); reproducir(false); },
+      alternar() { clearTimeout(arranque); reproducir(!play); },
     };
   },
 };

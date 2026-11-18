@@ -25,7 +25,7 @@ DEMOS.descomposicion = {
         const marcas = [
           ...(k === "tendencia" ? [] : [Plot.ruleY([0], { stroke: U.COLORES.rule })]),
           Plot.lineY(serie, { x: "fecha", y: "valor", stroke: color, strokeWidth: rango === "todo" ? 1 : 1.6 }),
-          Plot.text([nombre], { frameAnchor: "right", dx: 14, fill: U.COLORES.ink2, fontSize: 15, textAnchor: "start" }),
+          Plot.text([nombre], { frameAnchor: "right", dx: 14, fill: U.COLORES.ink2, fontSize: 18, textAnchor: "start" }),
           Plot.tip(serie, Plot.pointerX({ x: "fecha", y: "valor", title: (d) => `${U.fechaCorta(d.fecha)}\n${nombre}: ${U.fmtK(d.valor)}${d.feriado ? "\nferiado o no laborable" : ""}` })),
         ];
         if (k === "residuo") marcas.splice(2, 0, Plot.dot(serie.filter((d) => d.feriado), { x: "fecha", y: "valor", r: 3.5, fill: U.COLORES.B, stroke: U.COLORES.surface, strokeWidth: 1 }));

@@ -2,8 +2,8 @@
 DEMOS.diaEcobici = {
   montar(el) {
     const E = DATA.ecobiciDias;
-    let cual = E.seco, t = 8.5 * 60, play = false, ultimo = null, raf = null;
-    const MIN_POR_SEG = 22;
+    let cual = E.seco, t = 8.5 * 60, play = false, ultimo = null, raf = null, arranque = null;
+    const MIN_POR_SEG = 58;
     const AMARILLO = [245, 183, 0];
 
     const reloj = el.querySelector(".reloj");
@@ -23,9 +23,9 @@ DEMOS.diaEcobici = {
     const x = d3.scaleLinear([0, 24], [0, W]);
     const g1 = svg.append("g"), g2 = svg.append("g").attr("transform", `translate(0,${H1 + 12})`);
     const cursor = svg.append("line").attr("y1", 0).attr("y2", H1 + H2 + 12).attr("stroke", "#f2f1ec").attr("stroke-dasharray", "3 3");
-    svg.append("text").attr("x", 0).attr("y", 11).attr("fill", "#7d7b74").attr("font-size", 12).text("viajes que empiezan por hora");
-    svg.append("text").attr("x", 0).attr("y", H1 + 24).attr("fill", "#7d7b74").attr("font-size", 12).text("lluvia, mm por hora");
-    [0, 6, 12, 18, 24].forEach((h) => svg.append("text").attr("x", x(h)).attr("y", H1 + H2 + 34).attr("fill", "#7d7b74").attr("font-size", 12).attr("text-anchor", h === 0 ? "start" : h === 24 ? "end" : "middle").text(`${h} h`));
+    svg.append("text").attr("x", 0).attr("y", 11).attr("fill", "#7d7b74").attr("font-size", 15).text("viajes que empiezan por hora");
+    svg.append("text").attr("x", 0).attr("y", H1 + 24).attr("fill", "#7d7b74").attr("font-size", 15).text("lluvia, mm por hora");
+    [0, 6, 12, 18, 24].forEach((h) => svg.append("text").attr("x", x(h)).attr("y", H1 + H2 + 34).attr("fill", "#7d7b74").attr("font-size", 15).attr("text-anchor", h === 0 ? "start" : h === 24 ? "end" : "middle").text(`${h} h`));
     const porHora = (f) => { const c = new Array(24).fill(0); E.dias[f].viajes.forEach((v) => c[Math.min(23, Math.floor(v[6] / 60))]++); return c; };
     const maxV = d3.max([E.seco, E.lluvia].flatMap(porHora));
     function dibujarMini() {
@@ -64,11 +64,12 @@ DEMOS.diaEcobici = {
     }
     const reproducir = (on) => { play = on; ultimo = null; btn.textContent = on ? "Pausa" : "Reproducir"; if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf); };
     btn.addEventListener("click", () => reproducir(!play));
-    rango.addEventListener("input", () => { t = +rango.value; render(); });
+    rango.addEventListener("input", () => { reproducir(false); t = +rango.value; render(); });
     dibujarMini();
     return {
-      entrar() { U.mapa().volar({ longitude: -58.425, latitude: -34.603, zoom: 12.25, pitch: 38, bearing: -10 }, 1200); render(); },
-      salir() { reproducir(false); },
+      entrar() { U.mapa().volar({ longitude: -58.425, latitude: -34.603, zoom: 12.25, pitch: 38, bearing: -10 }, 1200); render(); arranque = setTimeout(() => reproducir(true), 1200); },
+      salir() { clearTimeout(arranque); reproducir(false); },
+      alternar() { clearTimeout(arranque); reproducir(!play); },
     };
   },
 };
