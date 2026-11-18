@@ -183,3 +183,22 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 
 /* Reveal pone display:block en la diapositiva activa: la portada necesita flex explícito */
 .reveal .slides section.portada { display: flex !important; flex-direction: column; justify-content: flex-end; }
+
+/* Ilustraciones de las diapositivas de texto */
+.ilus-derecha { position: absolute; right: 72px; top: 50%; transform: translateY(-50%); width: 720px; }
+.ilus-portada { position: absolute; right: 72px; top: 110px; width: 760px; }
+.ilus-nota { font-size: 15px; color: var(--ink-3); margin-top: 6px; }
+.ilus-abajo { position: absolute; left: 72px; right: 72px; bottom: 70px; }
+.ilus-b4 { position: absolute; left: 72px; right: 72px; top: 70px; }
+.ico-rec { display: inline-block; vertical-align: -4px; margin-right: 14px; color: var(--ink-3); }
+.ico-rec .icono { width: 28px; height: 28px; }
+.lista-iconos { list-style: none; padding-left: 0 !important; margin-left: 0 !important; }
+.lista-iconos li { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: start; }
+.lista-iconos li::marker { content: ""; }
+.lista-iconos .icono { width: 28px; height: 28px; color: var(--ink-2); margin-top: 2px; }
+.fila-iconos { display: flex; gap: 56px; justify-content: flex-start; }
+.fila-iconos > div { display: flex; flex-direction: column; align-items: center; gap: 14px; font-size: 18px; color: var(--ink-2); }
+.fila-iconos .icono { width: 84px; height: 84px; stroke-width: 1.4; color: var(--ink-3); }
+.divisor .ilus-derecha { width: 640px; }
+.divisor:has(.ilus-derecha) h1 { max-width: 780px; }
+.divisor:has(.ilus-derecha) p { max-width: 620px; }
