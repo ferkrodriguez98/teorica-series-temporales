@@ -95,8 +95,8 @@
               Plot.rectY(bins[clave], { x1: "x0", x2: "x1", y: (b) => b.length, fill: activo ? U.COLORES.B : U.COLORES.ink3, fillOpacity: activo ? 0.85 : 0.35, insetLeft: 1, insetRight: 1 }),
               Plot.ruleY([0], { stroke: U.COLORES.ink3 }),
               Plot.ruleX([rPar], { stroke: U.COLORES.ink, strokeWidth: 2, strokeOpacity: activo ? 1 : 0.35 }),
-              Plot.text([rPar], { x: (d) => d, frameAnchor: "top", dy: 2, dx: rPar > 0.4 ? -6 : 6, textAnchor: rPar > 0.4 ? "end" : "start", text: () => "este par", fill: U.COLORES.ink, fillOpacity: activo ? 1 : 0.45, stroke: U.COLORES.surface, strokeWidth: 4, paintOrder: "stroke" }),
-              Plot.text([titulo], { frameAnchor: "top-left", dx: 4, dy: 2, text: (d) => d, fill: U.COLORES.ink, fontWeight: 600, stroke: U.COLORES.surface, strokeWidth: 4, paintOrder: "stroke" }),
+              Plot.text([rPar], { x: (d) => d, frameAnchor: "top", dy: 30, dx: rPar > 0.4 ? -6 : 6, textAnchor: rPar > 0.4 ? "end" : "start", text: () => "este par", fill: U.COLORES.ink, fillOpacity: activo ? 1 : 0.45, stroke: U.COLORES.surface, strokeWidth: 4, paintOrder: "stroke" }),
+              Plot.text([titulo], { frameAnchor: "top-right", textAnchor: "end", dx: -4, dy: 2, text: (d) => d, fill: U.COLORES.ink, fontWeight: 600, stroke: U.COLORES.surface, strokeWidth: 4, paintOrder: "stroke" }),
             ],
           });
         };
