@@ -41,7 +41,20 @@ DEMOS.redEcobici = {
     const panel = el.querySelector(".panel");
     const btn = U.el("button", { class: "boton", type: "button" });
     U.iconoPlay(btn, false);
-    const rango = U.el("input", { type: "range", min: 0, max: anios.length - 1, step: 1, value: i });
+    const rango = U.el("input", { type: "range", min: 0, max: anios.length - 1, step: "any", value: i });
+    // La barra no salta de año en año: el círculo se desliza hasta el año nuevo mientras crecen las estaciones
+    let deslizar = null;
+    const moverRango = (hasta) => {
+      if (deslizar) deslizar.stop();
+      const desde = +rango.value;
+      if (Math.abs(desde - hasta) < 1e-3) { rango.value = hasta; return; }
+      deslizar = d3.timer((ms) => {
+        // Reproduciendo, a velocidad constante (dura lo mismo que un año); a mano, con freno al llegar
+        const dur = play && hasta > desde ? 1400 : 1100, k = Math.min(1, ms / dur);
+        rango.value = desde + (hasta - desde) * (play && hasta > desde ? k : d3.easeCubicInOut(k));
+        if (k >= 1) { deslizar.stop(); deslizar = null; }
+      });
+    };
     panel.append(btn, rango);
 
     const mini = el.querySelector(".chart-mini");
@@ -67,13 +80,13 @@ DEMOS.redEcobici = {
       const a = anios[i], D = R[a];
       grande.textContent = a;
       sub.textContent = `${D.estaciones.length} estaciones, ${U.fmt(Math.round(D.viajes / D.dias))} viajes por día`;
-      rango.value = i;
+      if (!arrastrando) moverRango(i);
       barras.transition().duration(600).attr("fill", (b) => (b === a ? "rgb(245,183,0)" : "rgba(242,241,236,0.25)"));
       U.mapa().capas([
         new deck.ScatterplotLayer({
           id: "eco-red", data: lista, getPosition: (d) => d.pos, getRadius: (d) => (d.uso[a] != null ? 30 + Math.sqrt(d.uso[a]) * 9 : 0),
           radiusUnits: "meters", getFillColor: [245, 183, 0, 200], stroked: true, getLineColor: [14, 16, 19, 255], lineWidthMinPixels: 0,
-          pickable: true, updateTriggers: { getRadius: [a] }, transitions: { getRadius: { duration: 1100, easing: d3.easeCubicInOut } },
+          pickable: true, updateTriggers: { getRadius: [a] }, transitions: { getRadius: { duration: 1400, easing: d3.easeCubicInOut } },
           tooltip: (d) => (d.uso[a] != null ? `${a}: ${U.fmt(d.uso[a], 1)} retiros más devoluciones por día` : null),
         }),
       ], { subte: 0.15 });
@@ -83,7 +96,10 @@ DEMOS.redEcobici = {
       if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1400); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1400); }
     };
     btn.addEventListener("click", () => { clearTimeout(arranque); reproducir(!play); });
-    rango.addEventListener("input", () => { reproducir(false); i = +rango.value; render(); });
+    let arrastrando = false;
+    rango.addEventListener("pointerdown", () => { arrastrando = true; if (deslizar) deslizar.stop(); });
+    window.addEventListener("pointerup", () => { if (arrastrando) { arrastrando = false; moverRango(i); } });
+    rango.addEventListener("input", () => { reproducir(false); const j = Math.round(+rango.value); if (j !== i) { i = j; render(); } });
     return {
       entrar() { U.mapa().volar({ longitude: -58.445, latitude: -34.605, zoom: 11.9, pitch: 0, bearing: 0 }, 1200); i = 0; render(); arranque = setTimeout(() => reproducir(true), 1200); },
       salir() { clearTimeout(arranque); reproducir(false); },

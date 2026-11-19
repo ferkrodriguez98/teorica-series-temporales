@@ -26,16 +26,15 @@ DEMOS.lunesQueViene = {
 
     // Al pasar a "Con el calendario", el pronóstico baja desde el seasonal naive hasta la mediana de los feriados,
     // los lunes feriados se destacan y los hábiles se apagan
-    const anim = {};
     function dibujar() {
-      U.animarDibujo(anim, { p: vista === "calendario" ? conCalendario : ingenuo, cal: vista === "calendario" ? 1 : 0 }, graficar, 1300);
+      graficar({ p: vista === "calendario" ? conCalendario : ingenuo, cal: vista === "calendario" ? 1 : 0 });
       textos();
     }
     function graficar(st) {
       const Y1 = 1e6, cal = st.cal;
       const pron = { fecha: objetivo, valor: st.p };
       const tramo = [ultimoLunes, pron];
-      U.reemplazar(grafico, Plot.plot(U.plotBase({
+      U.transicion(grafico, Plot.plot(U.plotBase({
         height: 470, marginLeft: 70, marginTop: 30, marginRight: 40,
         x: { label: null, domain: [desde, U.dia("2026-12-20")], ticks: d3.utcMonth.every(2), tickFormat: (d) => `${["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"][d.getUTCMonth()]} ${d.getUTCFullYear()}` },
         y: { grid: true, tickFormat: U.tickM, label: "pasajeros por día", domain: [0, Y1] },
@@ -61,7 +60,7 @@ DEMOS.lunesQueViene = {
             title: (d) => `lunes ${U.fechaCorta(d.fecha)}${d.nombre ? `\n${d.nombre}` : ""}\n${U.fmtK(d.valor)} pasajeros`,
           })),
         ],
-      })));
+      })), 1300);
     }
     function textos() {
       const sob = soberania.map((d) => `${U.fechaCorta(d.fecha)}: ${U.fmtK(d.valor)}`).join("; ");

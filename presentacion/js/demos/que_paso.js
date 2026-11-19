@@ -19,12 +19,11 @@ DEMOS.quePaso = {
     bQue.addEventListener("click", () => { etapa = 2; dibujar(); });
     controles.append(sel, bFecha, bQue);
 
-    const anim = {};
     function dibujar() {
       const c = casos[i];
       const d = U.dia(c.fecha);
-      // Al cambiar de día, las curvas y el eje pasan de un día al otro en lugar de redibujarse de cero
-      U.animarDibujo(anim, { perfil: c.perfil, referencia: c.referencia, tope: Math.max(d3.max(c.perfil), d3.max(c.referencia)) * 1.08 }, (e) => graficar(c, e), 700);
+      // Al cambiar de día, las curvas y el eje se desplazan de un día al otro
+      graficar(c, { perfil: c.perfil, referencia: c.referencia, tope: Math.max(d3.max(c.perfil), d3.max(c.referencia)) * 1.08 });
       textos(c, d);
     }
     function graficar(c, e) {
@@ -42,7 +41,7 @@ DEMOS.quePaso = {
           Plot.tip(dia, Plot.pointerX({ x: "hora", y: "valor", title: (p) => `${String(Math.floor(p.hora)).padStart(2, "0")}:${String((p.hora % 1) * 60).padStart(2, "0")}\neste día: ${U.fmt(p.valor)}\nnormal: ${U.fmt(c.referencia[p.hora * 4])}` })),
         ],
       }));
-      U.reemplazar(grafico, plot);
+      U.transicion(grafico, plot, 1000);
     }
     function textos(c, d) {
       const tot = d3.sum(c.perfil), totRef = d3.sum(c.referencia);

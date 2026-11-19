@@ -43,9 +43,15 @@ DEMOS.febrero2020 = {
       const R = res[k];
       const c = R.corte;
       const fin = U.sumarDias(c, H);
-      const entren = visible.filter((d) => d.fecha <= c);
-      const ventana = visible.filter((d) => d.fecha > c && d.fecha <= fin);
-      const despues = visible.filter((d) => d.fecha > fin);
+      // Cada tramo tiene siempre todos los días: los que no le tocan se apilan en su borde.
+      // Así, al mover el corte, los tramos se estiran y se encogen en lugar de redibujarse.
+      const tramo = (a, b) => {
+        let ia = visible.findIndex((d) => d.fecha >= a); if (ia < 0) ia = visible.length - 1; const ib = visible.findLastIndex((d) => d.fecha <= b);
+        return visible.map((d, i) => (i < ia ? visible[ia] : i > ib ? visible[ib] : d));
+      };
+      const entren = tramo(X0, c);
+      const ventana = tramo(U.sumarDias(c, 1), fin);
+      const despues = tramo(U.sumarDias(fin, 1), X1);
       const despuesDe = c >= AISLAMIENTO;
 
       const plot = Plot.plot(U.plotBase({
@@ -66,7 +72,7 @@ DEMOS.febrero2020 = {
           Plot.tip(R.pred, Plot.pointerX({ x: "fecha", y: "v", title: (d) => `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})\nreal: ${B4.num(d.real)}\npronóstico: ${B4.num(d.v)}` })),
         ],
       }));
-      U.reemplazar(g1, plot);
+      U.transicion(g1, plot, 650);
 
       const barras = res.map((r, i) => ({ fecha: r.corte, MAPE: r.MAPE, actual: i === k }));
       const plot2 = Plot.plot(U.plotBase({
@@ -81,7 +87,7 @@ DEMOS.febrero2020 = {
           Plot.tip(barras, Plot.pointerX({ x: "fecha", y: "MAPE", title: (d) => `corte ${U.fechaCorta(d.fecha)}\nMAPE: ${fmtMape(d.MAPE)}` })),
         ],
       }));
-      U.reemplazar(g2, plot2);
+      U.transicion(g2, plot2, 650);
 
       /* Lectura */
       const p = R.par;

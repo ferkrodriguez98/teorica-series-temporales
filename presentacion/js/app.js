@@ -95,6 +95,155 @@ U.animarDibujo = (anim, nuevo, dibujarCon, duracion = 650) => {
   anim.raf = requestAnimationFrame(paso);
 };
 
+/* Transición entre dos gráficos de Plot. En lugar de redibujar cuadro por cuadro, pone el gráfico nuevo
+   y lleva cada elemento desde donde estaba en el viejo hasta donde va: líneas, barras, puntos y textos se
+   desplazan, y las marcas de los ejes se corren con la escala (las que sobran se apagan, las nuevas aparecen). */
+U.transicion = (cont, nuevo, duracion = 900) => {
+  if (cont._trans) cont._trans();
+  const viejo = cont.firstElementChild;
+  const esSvg = (n) => n && n.tagName && n.tagName.toLowerCase() === "svg";
+  if (!esSvg(viejo) || !esSvg(nuevo) || typeof viejo.scale !== "function" || viejo.getAttribute("width") !== nuevo.getAttribute("width")) return U.reemplazar(cont, nuevo);
+  const escala = (svg, k) => { try { const s = svg.scale(k); return s && s.invert && s.apply ? s : null; } catch (e) { return null; } };
+  const ATTR = ["d", "x", "y", "x1", "x2", "y1", "y2", "cx", "cy", "r", "width", "height", "transform", "points", "fill", "stroke", "fill-opacity", "stroke-opacity", "opacity", "stroke-width"];
+  const nums = (s) => (s.match(/-?[\d.]+(?:e[-+]?\d+)?/gi) || []).length;
+  const tweens = [], salen = [], entran = [];
+  // Una línea hecha solo de M y L: si cambia la cantidad de puntos, las dos se remuestrean a la misma cantidad
+  const puntos = (d) => {
+    if (!/^[ML\d.,\-eZ\s]+$/i.test(d) || /[^MLZ\d.,\-e\s]/.test(d)) return null;
+    const v = (d.match(/-?[\d.]+(?:e[-+]?\d+)?/gi) || []).map(Number), p = [];
+    for (let i = 0; i + 1 < v.length; i += 2) p.push([v[i], v[i + 1]]);
+    return p.length > 1 ? p : null;
+  };
+  const remuestrear = (p, n) => d3.range(n).map((i) => {
+    const t = (i * (p.length - 1)) / (n - 1), a = Math.floor(t), b = Math.min(p.length - 1, a + 1), f = t - a;
+    return [p[a][0] + (p[b][0] - p[a][0]) * f, p[a][1] + (p[b][1] - p[a][1]) * f];
+  });
+  const OPACIDAD = new Set(["fill-opacity", "stroke-opacity", "opacity"]);
+  const transparente = (c) => { const k = d3.color(c); return k ? (k.opacity = 0, k.toString()) : null; };
+  const tween = (el, a, de, a2) => {
+    if (OPACIDAD.has(a)) { if (de == null && a2 != null) de = "1"; if (a2 == null && de != null) { a2 = "1"; } }
+    if ((a === "fill" || a === "stroke") && de !== a2) {
+      if (de === "none" && transparente(a2)) { const f = d3.interpolateRgb(transparente(a2), a2); tweens.push((t) => el.setAttribute(a, t >= 1 ? a2 : f(t))); return; }
+      if (a2 === "none" && transparente(de)) { const f = d3.interpolateRgb(de, transparente(de)); tweens.push((t) => el.setAttribute(a, t >= 1 ? "none" : f(t))); return; }
+    }
+    if (de == null || a2 == null || de === a2) return;
+    if ((a === "d" || a === "points" || a === "transform") && nums(de) !== nums(a2)) {
+      const p0 = a === "d" && puntos(de), p1 = a === "d" && puntos(a2);
+      if (!p0 || !p1) return false;
+      const n = Math.max(p0.length, p1.length), r0 = remuestrear(p0, n), r1 = remuestrear(p1, n);
+      tweens.push((t) => el.setAttribute("d", t >= 1 ? a2 : "M" + r0.map((q, i) => `${q[0] + (r1[i][0] - q[0]) * t},${q[1] + (r1[i][1] - q[1]) * t}`).join("L")));
+      return;
+    }
+    const f = d3.interpolate(de, a2);
+    tweens.push((t) => el.setAttribute(a, t >= 1 ? a2 : f(t)));
+  };
+  const copiasTexto = [];
+  const morfar = (o, n) => {
+    // Un texto que cambia de contenido: el viejo viaja con el nuevo y se apaga mientras el nuevo aparece
+    if (n.tagName === "text" && o.textContent !== n.textContent) {
+      const c = o.cloneNode(true); copiasTexto.push([c, n]);
+      ATTR.forEach((a) => tween(c, a, o.getAttribute(a), n.getAttribute(a)));
+      entran.push(n);
+    }
+    ATTR.forEach((a) => { if (tween(n, a, o.getAttribute(a), n.getAttribute(a)) === false) { salen.push(o); entran.push(n); } });
+    const oc = [...o.children], nc = [...n.children];
+    // Si los elementos traen una clave (data-k), se emparejan por clave; si no, por orden
+    if (nc.length && nc.every((c) => c.dataset && c.dataset.k != null) && oc.every((c) => c.dataset && c.dataset.k != null)) {
+      const porK = new Map(oc.map((c) => [c.dataset.k, c]));
+      nc.forEach((c) => { const v = porK.get(c.dataset.k); porK.delete(c.dataset.k); if (v && v.tagName === c.tagName) morfar(v, c); else entran.push(c); });
+      salen.push(...porK.values());
+      return;
+    }
+    const m = Math.min(oc.length, nc.length);
+    for (let i = 0; i < m; i++) {
+      if (oc[i].tagName === nc[i].tagName) morfar(oc[i], nc[i]); else { salen.push(oc[i]); entran.push(nc[i]); }
+    }
+    salen.push(...oc.slice(m)); entran.push(...nc.slice(m));
+  };
+  // Posición de una marca de eje: translate(x,y) en ticks y textos; x1/y1 en la grilla
+  const pos = (el, ax) => {
+    const tr = el.getAttribute("transform");
+    if (tr) { const m = tr.match(/translate\(([-\d.e]+)[ ,]+([-\d.e]+)\)/); if (m) return +m[ax === "x" ? 1 : 2]; }
+    return +el.getAttribute(ax + "1");
+  };
+  const ponerPos = (el, ax, v) => {
+    const tr = el.getAttribute("transform");
+    if (tr && /translate\(/.test(tr)) el.setAttribute("transform", tr.replace(/translate\(([-\d.e]+)[ ,]+([-\d.e]+)\)/, (m, a, b) => ax === "x" ? `translate(${v},${b})` : `translate(${a},${v})`));
+    else { el.setAttribute(ax + "1", v); el.setAttribute(ax + "2", v); }
+  };
+  const ejes = (go, gn, ax) => {
+    const so = escala(viejo, ax), sn = escala(nuevo, ax);
+    if (!so || !sn) { salen.push(go); entran.push(gn); return; }
+    const val = (s, el) => +s.invert(pos(el, ax));
+    const tol = Math.abs(sn.domain[1] - sn.domain[0]) * 1e-6 + 1e-9;
+    const oc = [...go.children], nc = [...gn.children], usados = new Set();
+    const [r0, r1] = d3.extent([...sn.range, ...so.range]);
+    const mover = (el, v) => { ponerPos(el, ax, v); el.style.visibility = v < r0 - 1 || v > r1 + 1 ? "hidden" : ""; };
+    nc.forEach((n) => {
+      const v = val(sn, n), p1 = pos(n, ax);
+      const k = oc.findIndex((o, i) => !usados.has(i) && Math.abs(val(so, o) - v) <= tol);
+      const p0 = k >= 0 ? pos(oc[k], ax) : so.apply(v);
+      if (k >= 0) usados.add(k); else entran.push(n);
+      if (isFinite(p0) && p0 !== p1) tweens.push((t) => mover(n, p0 + (p1 - p0) * t));
+    });
+    oc.forEach((o, i) => {
+      if (usados.has(i)) return;
+      const c = o.cloneNode(true), p0 = pos(o, ax), p1 = sn.apply(val(so, o));
+      gn.append(c); salen.push(c);
+      if (isFinite(p1)) tweens.push((t) => mover(c, p0 + (p1 - p0) * t));
+    });
+  };
+  // Empareja los grupos de primer nivel por su rótulo (y por orden entre los que se llaman igual)
+  const clave = (gs) => { const n = {}; return gs.map((g) => { const l = g.getAttribute("aria-label") || g.tagName; n[l] = (n[l] || 0) + 1; return l + "#" + n[l]; }); };
+  const gv = [...viejo.children].filter((g) => g.tagName === "g"), gn = [...nuevo.children].filter((g) => g.tagName === "g");
+  const kv = clave(gv), kn = clave(gn), porClave = new Map(kv.map((k, i) => [k, gv[i]]));
+  const fueraClonar = [];
+  kn.forEach((k, i) => {
+    const g = gn[i], o = porClave.get(k), l = g.getAttribute("aria-label") || "";
+    porClave.delete(k);
+    if (l === "tip") return;
+    if (!o) { entran.push(g); return; }
+    const ax = (l.match(/^([xy])-(axis|grid)/) || [])[1];
+    if (ax) ejes(o, g, ax);
+    else morfar(o, g);
+  });
+  porClave.forEach((o) => fueraClonar.push(o));
+  // Lo que sale se copia en el gráfico nuevo para apagarlo ahí
+  const copias = salen.filter((el) => !nuevo.contains(el)).map((el) => {
+    const c = el.cloneNode(true), padre = el.parentNode;
+    const destino = padre === viejo ? nuevo : nuevo.querySelector(`g[aria-label="${padre.getAttribute("aria-label")}"]`) || nuevo;
+    destino.append(c); return c;
+  });
+  fueraClonar.forEach((g) => { const c = g.cloneNode(true); nuevo.append(c); copias.push(c); });
+  copiasTexto.forEach(([c, n]) => { n.parentNode.insertBefore(c, n); copias.push(c); });
+  const apagar = [...salen.filter((el) => nuevo.contains(el)), ...copias];
+  // Estado inicial: todo en el lugar viejo
+  tweens.forEach((f) => f(0));
+  entran.forEach((el) => (el.style.opacity = 0));
+  U.reemplazar(cont, nuevo);
+  const ease = d3.easeCubicInOut;
+  const terminar = () => { timer.stop(); tweens.forEach((f) => f(1)); entran.forEach((el) => (el.style.opacity = "")); apagar.forEach((el) => el.remove()); cont._trans = null; };
+  // Si llega otra transición a mitad de camino, se frena donde está y la nueva arranca desde ahí
+  const frenar = () => { timer.stop(); entran.forEach((el) => (el.style.opacity = "")); apagar.forEach((el) => el.remove()); cont._trans = null; };
+  const timer = d3.timer((ms) => {
+    const k = Math.min(1, ms / duracion), e = ease(k);
+    tweens.forEach((f) => f(e));
+    entran.forEach((el) => (el.style.opacity = Math.max(0, (k - 0.35) / 0.65)));
+    apagar.forEach((el) => (el.style.opacity = Math.max(0, 1 - k / 0.5)));
+    if (k >= 1) terminar();
+  });
+  cont._trans = frenar;
+  return nuevo;
+};
+
+/* Pone una clave a cada elemento de una marca de Plot (en el orden de los datos), para que U.transicion
+   empareje por clave: grupo es el número de marca con ese rótulo (0 = la primera). */
+U.claves = (plot, rotulo, claves, grupo = 0) => {
+  const g = plot.querySelectorAll(`g[aria-label="${rotulo}"]`)[grupo];
+  if (g) [...g.children].forEach((el, i) => { if (claves[i] != null) el.dataset.k = claves[i]; });
+  return plot;
+};
+
 /* Grupo de botones excluyentes */
 U.botones = (opciones, inicial, alCambiar) => {
   const g = U.el("div", { class: "botones", role: "group" });

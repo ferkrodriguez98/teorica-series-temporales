@@ -66,6 +66,20 @@
   </div>
 </section>
 
+<section class="escena" data-background-color="transparent">
+  <div data-demo="redEcobici" style="position:absolute; inset:0;">
+    <div class="overlay">
+      <div class="kicker">Ecobici</div>
+      <h2>La red de estaciones, año por año</h2>
+      <p>Cada punto es una estación activa ese año; el tamaño es su uso diario. En 2019 cambió el sistema y cambiaron los identificadores de las estaciones.</p>
+    </div>
+    <div class="reloj"></div>
+    <div class="chart-mini"></div>
+    <div class="panel"></div>
+    <div class="fuente">Fuente: recorridos de Ecobici, BA Data.</div>
+  </div>
+</section>
+
 <section>
   <div class="kicker">La pregunta</div>
   <div class="pregunta">
@@ -164,7 +178,6 @@
   <p>Tendencia, ciclos y residuo.</p>
 </section>
 
-
 <section>
   <div class="kicker">Las piezas de una serie</div>
   <h2>Tendencia, ciclos y lo que sobra</h2>
@@ -254,8 +267,6 @@
   <div class="fuente">Series simuladas.</div>
 </section>
 
-
-
 <!-- BLOQUE 4: PRONOSTICAR -->
 <section class="b4-apertura">
   <div class="ilus-b4" data-demo="ilusParticion"></div>
@@ -340,7 +351,6 @@
   <div class="fuente">SARIMAX (1,0,1)(1,1,1)₇ con feriado, puente, día no laborable y lluvia (statsmodels). Train del 1/1/2023 al 31/5/2025. Fuente: SBASE, BA Data; feriados: Ley 27.399 y decretos.</div>
 </section>
 
-
 <section>
   <div class="kicker">Febrero de 2020</div>
   <h2>Pronóstico a seis semanas según la fecha de corte</h2>
@@ -354,7 +364,6 @@
   <h1>Variables externas</h1>
   <p>Lo que la serie no sabe de sí misma: el calendario, el clima, las normas.</p>
 </section>
-
 
 <section>
   <div class="kicker">Variables externas</div>
@@ -391,7 +400,6 @@
   <p>La red cambia, lo que se mide cambia, y los datos tienen errores.</p>
 </section>
 
-
 <section>
   <div class="kicker">Lo que los números no dicen</div>
   <h2>Doce hechos que cambian la serie</h2>
@@ -405,35 +413,6 @@
   <div data-demo="errorFechas"></div>
   <div class="fuente">Total diario de la red. Fuente: SBASE, BA Data. El detalle del procesamiento está en el notebook 00.</div>
 </section>
-
-<section class="escena" data-background-color="transparent">
-  <div data-demo="mapaAnios" style="position:absolute; inset:0;">
-    <div class="overlay">
-      <div class="kicker">Trece años</div>
-      <h2>La red, año por año</h2>
-      <p>Promedio diario de pasajeros de cada estación. Las estaciones aparecen el año en que empiezan a registrar molinetes.</p>
-    </div>
-    <div class="reloj"></div>
-    <div class="chart-mini"></div>
-    <div class="panel"></div>
-    <div class="fuente">Fuente: SBASE, molinetes de subte, BA Data.</div>
-  </div>
-</section>
-
-<section class="escena" data-background-color="transparent">
-  <div data-demo="redEcobici" style="position:absolute; inset:0;">
-    <div class="overlay">
-      <div class="kicker">Ecobici</div>
-      <h2>La red de estaciones, año por año</h2>
-      <p>Cada punto es una estación activa ese año; el tamaño es su uso diario. En 2019 cambió el sistema y cambiaron los identificadores de las estaciones.</p>
-    </div>
-    <div class="reloj"></div>
-    <div class="chart-mini"></div>
-    <div class="panel"></div>
-    <div class="fuente">Fuente: recorridos de Ecobici, BA Data.</div>
-  </div>
-</section>
-
 
 <section>
   <div class="kicker">La pregunta</div>
@@ -505,7 +484,6 @@
 <script src="js/demos/revisar.js"></script>
 <script src="js/demos/descomposicion.js"></script>
 <script src="js/demos/residuos.js"></script>
-<script src="js/demos/mapa_anios.js"></script>
 <script src="js/demos/contexto.js"></script>
 <script src="js/demos/feriados_modos.js"></script>
 <script src="js/demos/ecobici_extra.js"></script>

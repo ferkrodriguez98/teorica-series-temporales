@@ -9,7 +9,6 @@ DEMOS.metricas = {
     const DIA_PARO = jun.findIndex((d) => U.iso(d.fecha) === "2025-06-11");
     const FACTOR = 0.03;
     let modelo = "Seasonal naive", paro = false;
-    const anim = {};
 
     const grid = U.el("div", { class: "b4-grid" });
     const izq = U.el("div");
@@ -46,10 +45,8 @@ DEMOS.metricas = {
       const dom = [Math.min(-1e5, ext[0] * 1.08), Math.max(1e5, ext[1] * 1.08)];
       const ferJ = jun.filter((d) => d.feriado).map((d) => d.fecha);
 
-      // Al cambiar de modelo, las barras y el eje pasan de un modelo al otro
-      const filas0 = filas;
-      U.animarDibujo(anim, { e: filas.map((d) => d.e), dom }, (st) => {
-        const filas = filas0.map((d, i) => ({ ...d, e: st.e[i] })), dom = st.dom;
+      // Al cambiar de modelo, las barras y el eje se desplazan de un modelo al otro
+      {
         const plot = Plot.plot(U.plotBase({
         width: 1024, height: 530, marginLeft: 70, marginTop: 28,
         x: { label: null, domain: [U.sumarDias(jun[0].fecha, -0.5), U.sumarDias(jun[jun.length - 1].fecha, 0.5)], tickFormat: (d) => `${B4.DIAS3[d.getUTCDay()]} ${d.getUTCDate()}`, ticks: d3.utcWeek.every(1) },
@@ -69,8 +66,8 @@ DEMOS.metricas = {
           })),
         ],
       }));
-      U.reemplazar(grafico, plot);
-      }, 600);
+      U.transicion(grafico, plot, 1000);
+      }
 
       ["MAE", "RMSE", "MAPE"].forEach((k) => {
         tarjetas[k].valor.textContent = fmtM(k, m[k]);

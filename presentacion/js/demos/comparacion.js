@@ -10,7 +10,6 @@ DEMOS.comparacion = {
     const NOMBRES = Object.keys(P.modelos);
     const M = {};
     NOMBRES.forEach((n) => (M[n] = B4.metricas(P.real, P.modelos[n].pred)));
-    const anim = {};
     let modelo = "SARIMAX", orden = { col: "MAPE", asc: true };
 
     const hw = P.modelos["Holt-Winters"].params, cx = P.modelos.SARIMAX.coef;
@@ -59,7 +58,7 @@ DEMOS.comparacion = {
     function dibujar() {
       const md = P.modelos[modelo];
       // Al cambiar de modelo, el pronóstico y la banda pasan de uno al otro; sin intervalo, la banda se cierra sobre la línea
-      U.animarDibujo(anim, { p: md.pred, lo: md.lo || md.pred, hi: md.hi || md.pred, banda: md.lo ? 1 : 0 }, (st) => graficar(md, st), 650);
+      graficar(md, { p: md.pred, lo: md.lo || md.pred, hi: md.hi || md.pred, banda: md.lo ? 1 : 0 });
       dibujarTabla();
       textos(md);
     }
@@ -87,7 +86,7 @@ DEMOS.comparacion = {
           })),
         ].filter(Boolean),
       }));
-      U.reemplazar(grafico, plot);
+      U.transicion(grafico, plot, 1000);
     }
     function textos(md) {
       const filas = jun.map((d, i) => ({ ...d, lo: md.lo ? md.lo[i] : null, hi: md.hi ? md.hi[i] : null }));

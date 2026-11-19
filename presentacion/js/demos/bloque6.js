@@ -46,35 +46,30 @@
       controles.append(botones);
       const pctS = (v) => (v > 0 ? "+" : v < 0 ? "−" : "") + U.fmt(Math.abs(v * 100), 0) + " %";
 
-      // La vista se describe con el centro y el ancho (en escala log) del rango de fechas: al elegir un hecho
-      // la serie se acerca hasta él, entre hechos se desliza de costado y con "Toda la serie" se aleja.
-      const anim = {};
+      // Al elegir un hecho la serie se acerca hasta él, entre hechos se desliza de costado y con "Toda la serie"
+      // se aleja. Se dibuja siempre la serie entera (recortada al marco) para que cada punto viaje a su lugar nuevo.
       const T0 = +diario[0].fecha, T1 = +diario[diario.length - 1].fecha, ANCHO = 540 * 864e5;
       function dibujar() {
         const h = hechos[elegido - 1];
-        const meta = h ? { c: +h.fecha, w: Math.log(ANCHO), det: 1 } : { c: (T0 + T1) / 2, w: Math.log(T1 - T0), det: 0 };
-        U.animarDibujo(anim, meta, (st) => graficar(h, st), 1100);
+        const c = h ? +h.fecha : (T0 + T1) / 2, w = h ? ANCHO : T1 - T0;
+        graficar(h, [new Date(Math.max(T0 - 30 * 864e5, c - w / 2)), new Date(Math.min(T1 + 30 * 864e5, c + w / 2))]);
         textos(h);
       }
-      function graficar(h, st) {
-        const w = Math.exp(st.w);
-        const dom = [new Date(Math.max(T0 - 30 * 864e5, st.c - w / 2)), new Date(Math.min(T1 + 30 * 864e5, st.c + w / 2))];
-        const margen = 20 * 864e5;
-        const enRango = (d) => d.fecha >= dom[0] - margen && d.fecha <= +dom[1] + margen;
-        const vis = hechos.filter(enRango);
-        U.reemplazar(grafico, Plot.plot(U.plotBase({
+      function graficar(h, dom) {
+        const det = h ? 1 : 0;
+        U.transicion(grafico, Plot.plot(U.plotBase({
           width: 1040, height: 540, marginTop: 40,
           y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 1.4e6] },
           x: { label: null, domain: dom },
           marks: [
-            h ? Plot.rectX([[-28, 0], [0, 28]], { x1: (d) => U.sumarDias(h.fecha, d[0]), x2: (d) => U.sumarDias(h.fecha, d[1]), y1: 0, y2: 1.4e6, fill: (d, i) => (i ? h.color : U.COLORES.ink3), fillOpacity: 0.1 * st.det, clip: true }) : null,
-            st.det > 0.02 ? Plot.lineY(diario.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 0.8, strokeOpacity: 0.6 * st.det, clip: true }) : null,
-            Plot.lineY(serie.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink, strokeWidth: 1.8, clip: true }),
-            Plot.ruleX(vis, { x: "fecha", stroke: "color", strokeWidth: 1.5, strokeDasharray: "3 3", strokeOpacity: (d) => (!h || d === h ? 1 : 1 - 0.75 * st.det), clip: true }),
-            Plot.dot(vis, { x: "fecha", y: 1.33e6, fill: "color", r: 13, stroke: U.COLORES.surface, strokeWidth: 2, fillOpacity: (d) => (!h || d === h ? 1 : 1 - 0.75 * st.det), clip: true }),
-            Plot.text(vis, { x: "fecha", y: 1.33e6, text: "n", fill: "white", fontWeight: 700, fontSize: 16, clip: true }),
-          ].filter(Boolean),
-        })));
+            Plot.rectX([[-28, 0], [0, 28]], { x1: (d) => U.sumarDias((h || hechos[0]).fecha, d[0]), x2: (d) => U.sumarDias((h || hechos[0]).fecha, d[1]), y1: 0, y2: 1.4e6, fill: (d, i) => (i ? (h || hechos[0]).color : U.COLORES.ink3), fillOpacity: 0.1 * det, clip: true }),
+            Plot.lineY(diario, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 0.8, strokeOpacity: 0.6 * det, clip: true }),
+            Plot.lineY(serie, { x: "fecha", y: "valor", stroke: U.COLORES.ink, strokeWidth: 1.8, clip: true }),
+            Plot.ruleX(hechos, { x: "fecha", stroke: "color", strokeWidth: 1.5, strokeDasharray: "3 3", strokeOpacity: (d) => (!h || d === h ? 1 : 0.25), clip: true }),
+            Plot.dot(hechos, { x: "fecha", y: 1.33e6, fill: "color", r: 13, stroke: U.COLORES.surface, strokeWidth: 2, fillOpacity: (d) => (!h || d === h ? 1 : 0.25), clip: true }),
+            Plot.text(hechos, { x: "fecha", y: 1.33e6, text: "n", fill: "white", fontWeight: 700, fontSize: 16, clip: true }),
+          ],
+        })), 1300);
       }
       function textos(h) {
         if (!h) {

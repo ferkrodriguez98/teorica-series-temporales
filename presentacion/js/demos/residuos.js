@@ -24,7 +24,8 @@ DEMOS.residuos = {
       const S = SERIES[k];
       S.porClave = new Map(S.serie.map((d) => [d.clave, d]));
       S.top = [...S.serie].filter((d) => d.valor != null).sort((a, b) => Math.abs(b.valor) - Math.abs(a.valor)).slice(0, 40)
-        .map((d) => ({ ...d, cat: d.feriado ? "feriado" : d.lluvia >= LLUVIA ? "lluvia" : "otro" }));
+        .map((d) => ({ ...d, cat: d.feriado ? "feriado" : d.lluvia >= LLUVIA ? "lluvia" : "otro" })).sort((a, b) => a.fecha - b.fecha);
+      S.casos.sort((a, b) => a.f - b.f);
     }
     const conDatos = SERIES.subte.serie.filter((d) => d.valor != null);
     const pctFer = (100 * d3.mean(conDatos, (d) => d.feriado)).toFixed(1).replace(".", ",");
@@ -37,7 +38,6 @@ DEMOS.residuos = {
     const estado = {};
     for (const k in SERIES) estado[k] = { orden: d3.shuffle(d3.range(SERIES[k].casos.length)), pos: 0 };
 
-    const memoria = {};
     function dibujar() {
       actualizarAcciones();
       const S = SERIES[cual], E = estado[cual];
@@ -61,20 +61,22 @@ DEMOS.residuos = {
           Plot.text([c], { x: "f", y: "residuo", text: (d) => `${U.DIAS[d.f.getUTCDay()]} ${U.fechaCorta(d.f)}`, dx: der ? -18 : 18, textAnchor: der ? "end" : "start", fill: U.COLORES.B, stroke: U.COLORES.surface, strokeWidth: 5, fontSize: 18, fontWeight: 600 }),
         );
       }
-      U.reemplazar(grafico, Plot.plot(U.plotBase({
+      // Todo cambio (otra serie, otro día, los 40 juntos) se hace moviendo lo que ya está dibujado
+      const plot = Plot.plot(U.plotBase({
         height: 470, width: 1040, marginLeft: 80, marginTop: 30, marginBottom: 40,
         x: { label: null },
         y: { grid: true, tickFormat: U.tickM, label: `residuo (${S.unidad})` },
         marks: marcas,
-      })));
+      }));
+      // Cada punto lleva su fecha, así al pasar a "Los 40 juntos" cada día queda en su lugar
+      U.claves(plot, "dot", todos ? S.top.map((d) => d.clave) : S.casos.map((d) => d.fecha), 0);
+      U.transicion(grafico, plot, 1000);
       if (todos) {
         grafico.querySelectorAll("g.puntos40 circle").forEach((ci, i) => {
           ci.style.cursor = "pointer";
           ci.addEventListener("click", () => { elegido = S.top[i]; dibujar(); });
         });
       }
-      if (!todos && memoria.cual !== cual) { delete memoria["anim-caso"]; memoria.cual = cual; }
-      if (!todos) B4.animar(grafico, memoria, ["anim-caso"], 600); else delete memoria["anim-caso"];
       const vista = `${cual}|${todos}|${E.pos}|${revelado}`;
       const cambio = vista !== vistaPrevia, mismoDia = vistaPrevia.startsWith(`${cual}|false|${E.pos}|`);
       const vistaPreviaExistia = vistaPrevia !== "";
@@ -107,13 +109,9 @@ DEMOS.residuos = {
       return `<div class="revelado aparece"><b>${U.fechaLarga(elegido.fecha)}</b><br>Residuo: <b>${fmtR(elegido.valor)}</b>, ${pct(elegido.valor, elegido.obs)} respecto de lo esperado.<br>` +
         (c ? c.texto : "Para este día no tenemos una explicación revisada.") + `</div>`;
     }
-    // Cambio con fundido: el gráfico y el panel se apagan, se redibujan y vuelven
-    function fundir(fn) {
-      grafico.style.transition = "opacity 0.18s"; grafico.style.opacity = 0;
-      setTimeout(() => { fn(); dibujar(); grafico.style.opacity = 1; }, 180);
-    }
-    const bOtro = U.el("button", { type: "button", class: "boton" }, "Otro día al azar");
-    const bVer = U.el("button", { type: "button", class: "boton" }, "Mostrar qué pasó");
+    const fundir = (fn) => { fn(); dibujar(); };
+    const bOtro = U.el("button", { type: "button", class: "boton secundario" }, "Otro día al azar");
+    const bVer = U.el("button", { type: "button", class: "boton secundario" }, "Mostrar qué pasó");
     const acciones = U.el("div", { style: "display:flex; gap:10px;" });
     acciones.append(bOtro, bVer);
     const actualizarAcciones = () => {
