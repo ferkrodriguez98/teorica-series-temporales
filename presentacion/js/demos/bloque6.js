@@ -19,24 +19,66 @@
 
   DEMOS.lineaTiempo = {
     montar(el) {
-      const { grafico, lectura } = U.armar(el);
+      const { controles, grafico, lectura } = U.armar(el);
+      lectura.remove();
       const S = DATA.subteDiario;
+      const diario = U.serie(S.inicio, S.total);
       const serie = U.serie(S.inicio, U.mediaMovil(S.total, 28, true));
       const hechos = HECHOS.map(([f, t, txt], i) => ({ fecha: U.dia(f), tipo: TIPOS[t][0], color: TIPOS[t][1], txt, n: i + 1 }));
-      U.reemplazar(grafico, Plot.plot(U.plotBase({
-        height: 520, marginTop: 40,
-        y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 1.25e6] },
-        x: { label: null },
-        color: { domain: Object.values(TIPOS).map((t) => t[0]), range: Object.values(TIPOS).map((t) => t[1]), legend: true },
-        marks: [
-          Plot.lineY(serie, { x: "fecha", y: "valor", stroke: U.COLORES.ink, strokeWidth: 1.6 }),
-          Plot.ruleX(hechos, { x: "fecha", stroke: "tipo", strokeWidth: 1.5, strokeDasharray: "3 3" }),
-          Plot.dot(hechos, { x: "fecha", y: 1.2e6, fill: "tipo", r: 13, stroke: U.COLORES.surface, strokeWidth: 2 }),
-          Plot.text(hechos, { x: "fecha", y: 1.2e6, text: "n", fill: "white", fontWeight: 700, fontSize: 16 }),
-          Plot.tip(hechos, Plot.pointerX({ x: "fecha", y: 1.2e6, title: (d) => `${U.fechaCorta(d.fecha)}\n${d.txt}`, maxRadius: 30 })),
-        ],
-      })));
-      lectura.innerHTML = "Media móvil de 28 días del total diario. Pasá el mouse por los círculos: cada uno es un hecho verificado con fuente que cambia la serie sin que cambie la demanda de la misma manera.";
+      const i0 = U.dia(S.inicio);
+      const idx = (f) => Math.round((f - i0) / 864e5);
+      const prom = (a, b) => d3.mean(S.total.slice(Math.max(0, a), Math.max(0, b)).filter((v) => v != null));
+      // Cambio de los 28 días siguientes contra los 28 anteriores, descontando lo que pasó en las mismas fechas un año antes
+      hechos.forEach((h) => {
+        const k = idx(h.fecha);
+        h.antes = prom(k - 28, k); h.despues = prom(k, k + 28);
+        const a1 = prom(k - 365 - 28, k - 365), d1 = k - 365 - 28 >= 0 ? prom(k - 365, k - 365 + 28) : null;
+        h.bruto = h.despues / h.antes - 1;
+        h.ajustado = d1 ? (h.despues / h.antes) / (d1 / a1) - 1 : null;
+      });
+      const fila = U.el("div", { class: "fila-panel" });
+      const panel = U.el("div", { class: "panel-der" });
+      grafico.replaceWith(fila);
+      fila.append(grafico, panel);
+      let elegido = 0;
+      const opciones = [["0", "Toda la serie"], ...hechos.map((h) => [String(h.n), String(h.n)])];
+      const botones = U.botones(opciones, "0", (v) => { elegido = +v; dibujar(); });
+      controles.append(botones);
+      const pctS = (v) => (v > 0 ? "+" : v < 0 ? "−" : "") + U.fmt(Math.abs(v * 100), 0) + " %";
+
+      function dibujar() {
+        const h = hechos[elegido - 1];
+        const dom = h ? [U.sumarDias(h.fecha, -270), U.sumarDias(h.fecha, 270)] : [diario[0].fecha, diario[diario.length - 1].fecha];
+        const enRango = (d) => d.fecha >= dom[0] && d.fecha <= dom[1];
+        const vis = h ? [h] : hechos;
+        U.reemplazar(grafico, Plot.plot(U.plotBase({
+          width: 1040, height: 540, marginTop: 40,
+          y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 1.4e6] },
+          x: { label: null, domain: dom },
+          marks: [
+            h ? Plot.rectX([[-28, 0], [0, 28]], { x1: (d) => U.sumarDias(h.fecha, d[0]), x2: (d) => U.sumarDias(h.fecha, d[1]), y1: 0, y2: 1.4e6, fill: (d, i) => (i ? h.color : U.COLORES.ink3), fillOpacity: 0.1 }) : null,
+            h ? Plot.lineY(diario.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 0.8, strokeOpacity: 0.6 }) : null,
+            Plot.lineY(serie.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink, strokeWidth: 1.8 }),
+            Plot.ruleX(vis, { x: "fecha", stroke: "color", strokeWidth: 1.5, strokeDasharray: "3 3" }),
+            Plot.dot(vis, { x: "fecha", y: 1.33e6, fill: "color", r: 13, stroke: U.COLORES.surface, strokeWidth: 2 }),
+            Plot.text(vis, { x: "fecha", y: 1.33e6, text: "n", fill: "white", fontWeight: 700, fontSize: 16 }),
+          ].filter(Boolean),
+        })));
+        grafico.firstElementChild?.classList.add("aparece");
+        if (!h) {
+          panel.innerHTML = `<div class="panel-fecha">Doce hechos</div>` +
+            `<div>Cada línea vertical es un hecho con fecha verificada: <b style="color:${TIPOS.red[1]}">cambios en la red</b>, <b style="color:${TIPOS.norma[1]}">normas</b>, <b style="color:${TIPOS.precio[1]}">precio</b> y <b style="color:${TIPOS.medicion[1]}">cambios en lo que se mide</b>.</div>` +
+            `<div>La línea negra es la media móvil de 28 días del total diario. Con los números de arriba se ve cada hecho de cerca.</div>` +
+            `<div>Cualquiera de estos cambios mueve la serie sin que cambie la demanda de la misma manera. Quien mira la serie sin esta lista se los atribuye a la demanda.</div>`;
+          return;
+        }
+        panel.innerHTML = `<div class="panel-fecha aparece">${U.fechaLarga(h.fecha)}</div>` +
+          `<div class="aparece"><b style="color:${h.color}">${h.tipo}</b>. ${h.txt}.</div>` +
+          `<div class="aparece">Promedio diario de los 28 días anteriores: <b>${B4.mil(h.antes)}</b>; de los 28 siguientes: <b>${B4.mil(h.despues)}</b> (${pctS(h.bruto)}).</div>` +
+          (h.ajustado != null ? `<div class="aparece">Esas mismas fechas un año antes cambiaron por la época del año. Descontando eso, el cambio es de <b>${pctS(h.ajustado)}</b>.</div>` : `<div class="aparece">No hay datos del año anterior para descontar el efecto de la época del año.</div>`) +
+          `<div class="revelado aparece" style="color:var(--ink-3)">Gris: la serie diaria. Sombreado: las cuatro semanas antes y después.</div>`;
+      }
+      dibujar();
       return {};
     },
   };

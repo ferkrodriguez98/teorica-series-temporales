@@ -13,9 +13,18 @@ DEMOS.boleto = {
       { desde: U.dia("2024-01-08"), hasta: U.dia("2024-03-06"), texto: "línea D cerrada" },
     ];
 
+    // Promedio de los días hábiles sin feriado de un mes ("aaaa-mm"), para comparar meses con distinto calendario
+    const fer = new Set(DATA.feriados.map((f) => f.fecha));
+    const diario = U.serie(DATA.subteDiario.inicio, DATA.subteDiario.total);
+    const habil = (mes) => d3.mean(diario.filter((d) => {
+      const f = U.iso(d.fecha), w = d.fecha.getUTCDay();
+      return f.startsWith(mes) && w >= 1 && w <= 5 && !fer.has(f) && d.valor != null;
+    }), (d) => d.valor);
+    const cambio = (a, b) => { const c = habil(b) / habil(a) - 1; return (c > 0 ? "+" : "−") + U.fmt(Math.abs(c * 100), 0) + " %"; };
+
     function dibujar() {
       const arriba = Plot.plot(U.plotBase({
-        height: 275, marginBottom: 8, marginTop: 24, marginLeft: 80, marginRight: 30,
+        height: 262, marginBottom: 8, marginTop: 24, marginLeft: 80, marginRight: 30,
         x: { domain: dom, axis: null },
         y: vista === "real"
           ? { grid: true, label: `pesos de ${baseTxt}`, tickFormat: (d) => `$${U.locale.format(",.0f")(d)}`, domain: [0, 1900] }
@@ -27,7 +36,7 @@ DEMOS.boleto = {
         ],
       }));
       const abajo = Plot.plot(U.plotBase({
-        height: 275, marginTop: 40, marginLeft: 80, marginRight: 30,
+        height: 262, marginTop: 40, marginLeft: 80, marginRight: 30,
         x: { domain: dom, label: null },
         y: { grid: true, label: "pasajeros por día (promedio del mes)", tickFormat: U.tickM, domain: [0, 1.2e6] },
         marks: [
@@ -42,7 +51,8 @@ DEMOS.boleto = {
       U.reemplazar(grafico, cont);
       const v = (m, k) => filas[B.meses.indexOf(m)][k];
       lectura.innerHTML = vista === "real"
-        ? `A precios de ${baseTxt}: $${U.fmt(Math.round(v("2019-12", "real")))} en diciembre de 2019, $${U.fmt(Math.round(v("2023-12", "real")))} en diciembre de 2023 y $${U.fmt(Math.round(v("2024-06", "real")))} en junio de 2024. Pasajeros por día: ${U.fmtK(v("2023-12", "pax"))}, ${U.fmtK(v("2024-03", "pax"))} en marzo y ${U.fmtK(v("2024-06", "pax"))} en junio de 2024.`
+        ? `En días hábiles sin feriado viajaron ${B4.mil(habil("2024-04"))} por día en abril de 2024 y ${B4.mil(habil("2024-07"))} en julio (${cambio("2024-04", "2024-07")}); entre abril y julio de 2023, que también tiene vacaciones de invierno, ${cambio("2023-04", "2023-07")}. ` +
+          `La diferencia coincide con el aumento, pero en 2024 también cayó la actividad económica: la serie sola no separa una causa de la otra.`
         : "En pesos corrientes el boleto sube siempre: de $2,50 en 2013 a más de $1.800 en 2026. Sin deflactar, cualquier serie de precios argentina parece una tendencia.";
     }
     controles.append(U.botones([["real", `A precios de ${baseTxt}`], ["nominal", "Pesos corrientes"]], vista, (v) => { vista = v; dibujar(); }));

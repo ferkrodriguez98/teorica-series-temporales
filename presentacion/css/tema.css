@@ -213,3 +213,9 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .demo .panel-der .pendiente { color: var(--ink-3, #8a877f); font-style: italic; }
 .aparece { animation: aparecer 0.7s ease both; }
 @keyframes aparecer { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Diapositiva de aprendizajes sobre el dato: cuatro preguntas en una grilla */
+.aprendizajes { display: grid; grid-template-columns: 1fr 1fr; gap: 36px 72px; font-size: 0.7em; line-height: 1.4; color: var(--ink-2); margin-top: 0.6em; }
+.aprendizajes h3 { font: 600 1.25em var(--serif); color: var(--ink); margin: 0 0 8px; padding-top: 14px; border-top: 1px solid var(--rule); text-transform: none; letter-spacing: 0; }
+.aprendizajes p { margin: 0 0 8px; }
+.aprendizajes b { color: var(--ink); font-weight: 600; }
