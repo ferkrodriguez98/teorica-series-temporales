@@ -4,6 +4,12 @@
 DEMOS.residuos = {
   montar(el) {
     const { controles, grafico, lectura } = U.armar(el);
+    const fila = U.el("div", { class: "fila-panel" });
+    const panel = U.el("div", { class: "panel-der" });
+    el.insertBefore(fila, grafico);
+    fila.append(grafico, panel);
+    lectura.remove();
+    let vistaPrevia = "";
     const DS = DATA.modelos.descomposicion, DE = DATA.residuosEcobici;
     const LLUVIA = 10;
     function armarSerie(D, inicio) {
@@ -49,23 +55,32 @@ DEMOS.residuos = {
         );
       }
       U.reemplazar(grafico, Plot.plot(U.plotBase({
-        height: 420, marginLeft: 80, marginTop: 30, marginBottom: 40,
+        height: 470, width: 1040, marginLeft: 80, marginTop: 30, marginBottom: 40,
         x: { label: null },
         y: { grid: true, tickFormat: U.tickM, label: `residuo (${S.unidad})` },
         marks: marcas,
       })));
+      const vista = `${cual}|${todos}|${E.pos}|${revelado}`;
+      const cambio = vista !== vistaPrevia, mismoDia = vistaPrevia.startsWith(`${cual}|false|${E.pos}|`);
+      vistaPrevia = vista;
       if (todos) {
         const n = (cat) => S.top.filter((d) => d.cat === cat).length;
-        lectura.innerHTML = `${S.nombre}, los 40 residuos más grandes. <b style="color:${U.COLORES.B}">${n("feriado")}</b> caen en un feriado o día no laborable (el ${pctFer} % de los días); <b style="color:${U.COLORES.lluvia}">${n("lluvia")}</b>, en un día con ${LLUVIA} mm de lluvia o más (el ${pctLluvia} % de los días restantes); <b>${n("otro")}</b>, en otros días.`;
+        panel.innerHTML = `<div class="kicker" style="margin:0">${S.nombre}: los 40 residuos más grandes</div>` +
+          `<div class="${cambio ? "aparece" : ""}"><b style="color:${U.COLORES.B}">${n("feriado")}</b> caen en un feriado o día no laborable, que son el ${pctFer} % de los días.</div>` +
+          `<div class="${cambio ? "aparece" : ""}"><b style="color:${U.COLORES.lluvia}">${n("lluvia")}</b>, en un día con ${LLUVIA} mm de lluvia o más (el ${pctLluvia} % de los días restantes).</div>` +
+          `<div class="${cambio ? "aparece" : ""}"><b>${n("otro")}</b>, en otros días.</div>` +
+          `<div class="revelado${cambio ? " aparece" : ""}">Estos días no se borran. Para pronosticar, se le dice al modelo qué días son feriado o llueven, como variables; si no, los trata como ruido y le contaminan el ciclo semanal y la tendencia.</div>`;
       } else {
         const obs = c.observado < 1000 && cual === "subte" ? "No viajó casi nadie" : `${cual === "subte" ? "Viajaron" : "Hubo"} ${U.fmtK(c.observado)}${cual === "ecobici" ? " viajes" : ""}`;
-        const base = `${S.nombre}, día ${E.pos + 1} de ${S.casos.length}: <b>${U.fechaLarga(c.f)}</b>. ${obs}; el residuo es de ${fmtR(c.residuo)} (${pct(c.residuo, c.observado)} respecto de lo esperado).`;
         let extra = "";
         if (c.comparar !== false) {
           const otra = SERIES[cual === "subte" ? "ecobici" : "subte"].porClave.get(c.fecha);
-          if (otra && otra.valor != null) extra = ` <span class="muted">${S.otro}, el mismo día: ${fmtR(otra.valor)} ${cual === "subte" ? "viajes" : "pasajeros"}, ${pct(otra.valor, otra.obs)} respecto de lo esperado.</span>`;
+          if (otra && otra.valor != null) extra = `<div class="muted" style="margin-top:10px">${S.otro}, el mismo día: ${fmtR(otra.valor)} ${cual === "subte" ? "viajes" : "pasajeros"}, ${pct(otra.valor, otra.obs)} respecto de lo esperado.</div>`;
         }
-        lectura.innerHTML = revelado ? `${base}<div class="revelado">${c.texto}${extra}</div>` : `${base} ¿Qué pasó ese día?`;
+        panel.innerHTML = `<div class="kicker" style="margin:0">${S.nombre}, día ${E.pos + 1} de ${S.casos.length}</div>` +
+          `<div class="panel-fecha${cambio && !mismoDia ? " aparece" : ""}">${U.fechaLarga(c.f)}</div>` +
+          `<div>${obs}. Residuo: <b>${fmtR(c.residuo)}</b>, ${pct(c.residuo, c.observado)} respecto de lo esperado.</div>` +
+          (revelado ? `<div class="revelado${mismoDia ? " aparece" : ""}">${c.texto}${extra}</div>` : `<div class="pendiente">¿Qué pasó ese día?</div>`);
       }
     }
 

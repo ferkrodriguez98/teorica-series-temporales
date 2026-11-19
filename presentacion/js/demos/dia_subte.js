@@ -3,7 +3,7 @@ DEMOS.diaSubte = {
   montar(el) {
     const datos = DATA.subteDiaTipico;
     const est = DATA.mapaBase.estaciones.filter((e) => datos.perfiles.habil[e.clave]);
-    let tipo = "habil", t = 33, play = false, ultimo = null, raf = null, arranque = null;
+    let tipo = "habil", t = 33, play = false, ultimo = null, raf = null, arranque = null, rampa = null;
     const SLOTS_POR_SEG = 4.8;
 
     const reloj = el.querySelector(".reloj");
@@ -62,13 +62,15 @@ DEMOS.diaSubte = {
 
     function paso(ts) {
       if (!play) return;
-      if (ultimo != null) t = (t + ((ts - ultimo) / 1000) * SLOTS_POR_SEG) % 96;
+      if (rampa == null) rampa = ts;
+      const f = Math.min(1, (ts - rampa) / 2500), suave = f * f * (3 - 2 * f);
+      if (ultimo != null) t = (t + ((ts - ultimo) / 1000) * SLOTS_POR_SEG * suave) % 96;
       ultimo = ts;
       render();
       raf = requestAnimationFrame(paso);
     }
     const reproducir = (on) => {
-      play = on; ultimo = null; btn.textContent = on ? "Pausa" : "Reproducir";
+      play = on; ultimo = null; rampa = null; btn.textContent = on ? "Pausa" : "Reproducir";
       if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf);
     };
     btn.addEventListener("click", () => reproducir(!play));
@@ -76,7 +78,7 @@ DEMOS.diaSubte = {
 
     dibujarCurva();
     return {
-      entrar() { U.mapa().volar(U.mapa().vistaCABA, 1200); render(); arranque = setTimeout(() => reproducir(true), 1200); },
+      entrar() { clearTimeout(arranque); reproducir(false); t = 20; U.mapa().volar(U.mapa().vistaCABA, 1200); render(); arranque = setTimeout(() => reproducir(true), 1200); },
       salir() { clearTimeout(arranque); reproducir(false); },
       alternar() { clearTimeout(arranque); reproducir(!play); },
     };

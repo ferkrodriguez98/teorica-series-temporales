@@ -5,8 +5,13 @@ DEMOS.quePaso = {
     const casos = DATA.quePaso;
     let i = 0, etapa = 0; // 0: solo el día de la semana, 1: la fecha, 2: qué pasó
 
-    const tarjeta = U.el("div", { class: "que-paso-tarjeta" });
-    el.insertBefore(tarjeta, grafico);
+    // Gráfico a la izquierda y panel fijo a la derecha: revelar no mueve la diapositiva
+    const fila = U.el("div", { class: "fila-panel" });
+    const panel = U.el("div", { class: "panel-der" });
+    el.insertBefore(fila, grafico);
+    fila.append(grafico, panel);
+    lectura.remove();
+    let etapaPrevia = -1, casoPrevio = -1;
     const sel = U.botones(casos.map((c, k) => [k, String(k + 1)]), 0, (v) => { i = v; etapa = 0; dibujar(); });
     const bFecha = U.el("button", { class: "boton secundario", type: "button" }, "Mostrar la fecha");
     const bQue = U.el("button", { class: "boton", type: "button" }, "Qué pasó");
@@ -20,7 +25,7 @@ DEMOS.quePaso = {
       const pts = (arr) => arr.map((v, s) => ({ hora: s / 4, valor: v })).filter((p) => p.hora >= 5);
       const dia = pts(c.perfil), ref = pts(c.referencia);
       const plot = Plot.plot(U.plotBase({
-        height: 510,
+        height: 540, width: 1040,
         x: { domain: [5, 24], ticks: d3.range(5, 25, 2), tickFormat: (h) => `${h} h`, label: null },
         y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, Math.max(d3.max(c.perfil), d3.max(c.referencia)) * 1.08] },
         marks: [
@@ -33,10 +38,13 @@ DEMOS.quePaso = {
       }));
       U.reemplazar(grafico, plot);
       const tot = d3.sum(c.perfil), totRef = d3.sum(c.referencia);
-      const fecha = etapa >= 1 ? U.fechaLarga(d) : `Un ${c.dia}`;
-      tarjeta.innerHTML = `<div class="kicker" style="margin:0 0 4px">Caso ${i + 1} de ${casos.length}</div><div class="que-paso-fecha">${fecha}</div>`;
-      lectura.innerHTML = `Ese día: <b>${U.fmt(tot)}</b> pasajeros, el ${Math.round((100 * tot) / totRef)} % de un ${c.dia} normal.` +
-        (etapa === 2 ? `<div class="revelado">${c.descripcion} <span class="muted">Fuente: <a href="${c.fuente}" target="_blank">${new URL(c.fuente).hostname.replace("www.", "")}</a></span></div>` : "");
+      const nuevo = i !== casoPrevio;
+      const anim = (k) => (!nuevo && etapa >= k && etapaPrevia < k ? " aparece" : "");
+      const fecha = etapa >= 1 ? `<div class="panel-fecha${anim(1)}">${U.fechaLarga(d)}</div>` : `<div class="panel-fecha">Un ${c.dia}</div>`;
+      panel.innerHTML = `<div class="kicker" style="margin:0">Caso ${i + 1} de ${casos.length}</div>${fecha}` +
+        `<div>Ese día: <b>${U.fmt(tot)}</b> pasajeros, el ${Math.round((100 * tot) / totRef)} % de un ${c.dia} normal.</div>` +
+        (etapa === 2 ? `<div class="revelado${anim(2)}">${c.descripcion} <span class="muted">Fuente: <a href="${c.fuente}" target="_blank">${new URL(c.fuente).hostname.replace("www.", "")}</a></span></div>` : `<div class="pendiente">¿Qué pasó ese día?</div>`);
+      etapaPrevia = etapa; casoPrevio = i;
       bFecha.disabled = etapa >= 1;
     }
     dibujar();

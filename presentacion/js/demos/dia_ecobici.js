@@ -2,7 +2,7 @@
 DEMOS.diaEcobici = {
   montar(el) {
     const E = DATA.ecobiciDias;
-    let cual = E.seco, t = 8.5 * 60, play = false, ultimo = null, raf = null, arranque = null;
+    let cual = E.seco, t = 8.5 * 60, play = false, ultimo = null, raf = null, arranque = null, rampa = null;
     const MIN_POR_SEG = 58;
     const AMARILLO = [245, 183, 0];
 
@@ -57,17 +57,19 @@ DEMOS.diaEcobici = {
     }
     function paso(ts) {
       if (!play) return;
-      if (ultimo != null) t = (t + ((ts - ultimo) / 1000) * MIN_POR_SEG) % 1440;
+      if (rampa == null) rampa = ts;
+      const f = Math.min(1, (ts - rampa) / 2500), suave = f * f * (3 - 2 * f);
+      if (ultimo != null) t = (t + ((ts - ultimo) / 1000) * MIN_POR_SEG * suave) % 1440;
       ultimo = ts;
       render();
       raf = requestAnimationFrame(paso);
     }
-    const reproducir = (on) => { play = on; ultimo = null; btn.textContent = on ? "Pausa" : "Reproducir"; if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf); };
+    const reproducir = (on) => { play = on; ultimo = null; rampa = null; btn.textContent = on ? "Pausa" : "Reproducir"; if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf); };
     btn.addEventListener("click", () => reproducir(!play));
     rango.addEventListener("input", () => { reproducir(false); t = +rango.value; render(); });
     dibujarMini();
     return {
-      entrar() { U.mapa().volar({ longitude: -58.425, latitude: -34.603, zoom: 12.25, pitch: 38, bearing: -10 }, 1200); render(); arranque = setTimeout(() => reproducir(true), 1200); },
+      entrar() { clearTimeout(arranque); reproducir(false); t = 5 * 60; U.mapa().volar({ longitude: -58.425, latitude: -34.603, zoom: 12.25, pitch: 38, bearing: -10 }, 1200); render(); arranque = setTimeout(() => reproducir(true), 1200); },
       salir() { clearTimeout(arranque); reproducir(false); },
       alternar() { clearTimeout(arranque); reproducir(!play); },
     };

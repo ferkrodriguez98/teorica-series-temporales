@@ -201,3 +201,14 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .reveal .slides section.con-cuerpo { display: flex !important; flex-direction: column; }
 .con-cuerpo > .cuerpo { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding-bottom: 36px; }
 .divisor .kicker { margin-bottom: 0.6em; }
+
+/* Demos con panel de explicación a la derecha: el gráfico no se mueve al revelar */
+.demo .fila-panel { display: flex; gap: 36px; align-items: stretch; }
+.demo .fila-panel > .grafico { width: 1040px; flex: 0 0 1040px; }
+.demo .panel-der { flex: 1 1 0; min-width: 0; font-size: 0.6em; color: var(--ink-2); line-height: 1.4; display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+.demo .panel-der b { color: var(--ink); font-weight: 600; }
+.demo .panel-der .panel-fecha { font-family: var(--serif); font-size: 1.6em; line-height: 1.15; font-weight: 600; color: var(--ink); }
+.demo .panel-der .revelado { font-size: 1em; color: var(--ink); margin-top: 0; }
+.demo .panel-der .pendiente { color: var(--ink-3, #8a877f); font-style: italic; }
+.aparece { animation: aparecer 0.7s ease both; }
+@keyframes aparecer { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
