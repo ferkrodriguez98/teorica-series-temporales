@@ -38,9 +38,7 @@ DEMOS.particion = {
     /* ---------- Panel inferior: rolling origin ---------- */
     const FOLDS = [30, 36, 42, 48, 54].map((t) => ({ train: t, test: 6 }));
     const cab = U.el("div", { style: "display:flex; align-items:center; gap:22px; margin: 14px 0 6px; font-size: 0.52em; color: var(--ink-2);" });
-    const bPlay = U.el("button", { type: "button", class: "boton" });
-    U.iconoPlay(bPlay, false);
-    cab.append(U.el("b", { style: "color: var(--ink); font-weight:600;" }, "Validación con rolling origin"), bPlay,
+    cab.append(U.el("b", { style: "color: var(--ink); font-weight:600;" }, "Validación con rolling origin"),
       B4.leyenda([["banda", C.train, "train"], ["banda", C.test, "test"], ["banda", C.fuera, "sin usar"]], "width:auto; margin-left:auto; font-size:1em;"));
     const g2 = U.el("div");
     grafico.append(cab, g2);
@@ -101,7 +99,7 @@ DEMOS.particion = {
         lectura.innerHTML = `Partición ${k + 1} de ${FOLDS.length}: train con los primeros <b>${f.train} días</b> (hasta el ${fmtD(datos[f.train - 1].fecha)}), test con los <b>${f.test} siguientes</b>.` +
           (k === FOLDS.length - 1 ? ` El error de validación es el promedio de los errores de las ${FOLDS.length} tests.` : "");
         k++;
-        corriendo = k < FOLDS.length ? setTimeout(unaFold, 1500) : null;
+        corriendo = k < FOLDS.length ? setTimeout(unaFold, 1500) : setTimeout(reproducir, 3500); // en loop mientras la diapositiva está a la vista
       };
       unaFold();
     }
@@ -112,7 +110,6 @@ DEMOS.particion = {
     });
     const bSortear = U.el("button", { type: "button", class: "boton secundario" }, "Nuevo sorteo");
     bSortear.addEventListener("click", () => { if (modo !== "azar") return; sortear(); aplicar(); });
-    bPlay.addEventListener("click", reproducir);
     controles.remove();
 
     /* Estado inicial: todas las particiones dibujadas, sin animación */
