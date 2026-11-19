@@ -62,6 +62,7 @@
 .b4-cifras { display: flex; gap: 28px; }
 .b4-cifra .v { font: 600 1.9em var(--serif); color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1.05; letter-spacing: -0.01em; }
 .b4-cifra .e { font-size: 0.85em; color: var(--ink-3); margin-top: 2px; }
+.b4-panel .lectura.en-panel { font-size: 1.12em; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--rule); }
 .b4-nota { font-size: 0.85em; color: var(--ink-3); margin-top: 8px; line-height: 1.4; }
 
 /* Tabla de la serie como variables */

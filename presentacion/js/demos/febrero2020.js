@@ -89,7 +89,15 @@ DEMOS.febrero2020 = {
       let txt = `Corte: <b>${U.fechaLarga(c)}</b>. Parámetros estimados con los dos años anteriores: α = ${fmtPar(p.alfa)}, β = ${fmtPar(p.beta)}, γ = ${fmtPar(p.gamma)}. ` +
         `Pronóstico del ${U.fechaCorta(ini)} al ${U.fechaCorta(fin)}: MAPE <b>${fmtMape(R.MAPE)}</b>.`;
       const post = R.pred.filter((d) => d.fecha >= AISLAMIENTO);
-      if (c < AISLAMIENTO && post.length) {
+      const esFiesta = (f) => { const m = f.getUTCMonth(), d = f.getUTCDate(); return (m === 11 && [24, 25, 31].includes(d)) || (m === 0 && d === 1); };
+      const fiestas = R.pred.filter((d) => esFiesta(d.fecha));
+      if (c < AISLAMIENTO && !post.length && fiestas.length) {
+        const ape = (d) => (100 * Math.abs(d.real - d.v)) / d.real;
+        const resto = R.pred.filter((d) => !esFiesta(d.fecha));
+        const habEne = resto.filter((d) => d.fecha.getUTCMonth() === 0 && d.fecha.getUTCDay() % 6 !== 0);
+        txt += ` El modelo solo conoce el ciclo semanal: no sabe que vienen las fiestas ni las vacaciones de verano. En ${fiestas.length === 4 ? "los cuatro" : fiestas.length} días de fiestas (${fiestas.map((d) => `${d.fecha.getUTCDate()}/${d.fecha.getUTCMonth() + 1}`).join(", ").replace(/, ([^,]*)$/, " y $1")}) el error promedio es de <b>${fmtMape(d3.mean(fiestas, ape))}</b> del valor real, y sin esos días el MAPE baja a <b>${fmtMape(d3.mean(resto, ape))}</b>.` +
+          (habEne.length ? ` En los días hábiles de enero viajaron en promedio ${B4.mil(d3.mean(habEne, (d) => d.real))} por día, contra ${B4.mil(d3.mean(habEne, (d) => d.v))} pronosticados.` : "");
+      } else if (c < AISLAMIENTO && post.length) {
         txt += ` Desde el 20/3 viajaron en promedio <b>${B4.mil(d3.mean(post, (d) => d.real))}</b> por día; el pronóstico para esos ${post.length} días promedia <b>${B4.mil(d3.mean(post, (d) => d.v))}</b>.`;
       } else if (c >= AISLAMIENTO) {
         const neg = R.pred.filter((d) => d.v < 0).length;

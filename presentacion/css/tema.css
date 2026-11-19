@@ -200,6 +200,9 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 /* Cuerpo de cada diapositiva: el título queda arriba y el contenido se centra en el alto que sobra */
 .reveal .slides section.con-cuerpo { display: flex !important; flex-direction: column; }
 .con-cuerpo > .cuerpo { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding-bottom: 36px; }
+/* Con una demo, el contenido arranca arriba: si la lectura crece, no empuja el gráfico */
+.con-cuerpo > .cuerpo:has(.demo) { justify-content: flex-start; padding-top: 6px; }
+.demo .lectura.cambia { animation: aparecer 0.35s ease-out; }
 .divisor .kicker { margin-bottom: 0.6em; }
 
 /* Demos con panel de explicación a la derecha: el gráfico no se mueve al revelar */

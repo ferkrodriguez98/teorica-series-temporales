@@ -25,7 +25,12 @@ DEMOS.referencias = {
       {
         id: "prom", nombre: "Promedio de 4 semanas", color: U.COLORES.D,
         pred: jun.map((_, i) => [1, 2, 3, 4].reduce((s, w) => s + H[n - 7 * w + (i % 7)], 0) / 4),
-        texto: `<b>Promedio de 4 semanas</b>: para cada día de la semana, el promedio de ese día entre el ${B4.fechaDia(hist[n - 28].fecha)} y el ${B4.fechaDia(ult.fecha)}.`,
+        texto: (() => {
+          const i = jun.findIndex((d) => d.fecha.getUTCDay() === 1);
+          const dias = [4, 3, 2, 1].map((w) => hist[n - 7 * w + (i % 7)].fecha);
+          const lista = dias.slice(0, 3).map((d) => d.getUTCDate()).join(", ") + ` y ${dias[3].getUTCDate()} de mayo`;
+          return `<b>Promedio de 4 semanas</b>: cada día de junio se pronostica con el promedio del mismo día de la semana en las cuatro semanas anteriores al corte, del ${B4.fechaDia(hist[n - 28].fecha)} al ${B4.fechaDia(ult.fecha)}. Por ejemplo, todos los lunes de junio valen el promedio de los lunes ${lista}.`;
+        })(),
       },
     ];
     REFS.forEach((r) => (r.m = B4.metricas(P.real, r.pred)));
@@ -50,6 +55,8 @@ DEMOS.referencias = {
     const tabla = U.el("table", { class: "b4-tabla" });
     panel.append(U.el("h4", {}, "Junio de 2025, 28 días"), tabla,
       U.el("div", { class: "b4-nota" }, "MAE: error absoluto medio, en pasajeros por día. MAPE: error absoluto medio en porcentaje del valor real."));
+    panel.append(lectura);
+    lectura.classList.add("en-panel");
 
     function dibujarTabla() {
       tabla.innerHTML = "<thead><tr><th>Baseline</th><th>MAE</th><th>MAPE</th></tr></thead>";

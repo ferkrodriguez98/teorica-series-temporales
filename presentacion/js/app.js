@@ -101,6 +101,16 @@ U.armar = (el) => {
   const grafico = U.el("div", { class: "grafico" });
   const lectura = U.el("div", { class: "lectura" });
   el.append(controles, grafico, lectura);
+  // Cuando cambia el texto, aparece con un fundido corto (no en cada cuadro de una animación)
+  let previo = "", ultimoCambio = 0;
+  new MutationObserver(() => {
+    const txt = lectura.textContent;
+    if (txt === previo) return;
+    const habia = previo !== "", ahora = performance.now(), rapido = ahora - ultimoCambio < 400;
+    previo = txt; ultimoCambio = ahora;
+    if (!habia || rapido) return;
+    lectura.classList.remove("cambia"); void lectura.offsetWidth; lectura.classList.add("cambia");
+  }).observe(lectura, { childList: true, characterData: true, subtree: true });
   return { controles, grafico, lectura };
 };
 
