@@ -6,7 +6,7 @@ DEMOS.calor = {
     const noHabiles = new Set(DATA.feriados.map((f) => f.fecha));
     const DIAS = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"];
     const HORAS = d3.range(5, 24);
-    const CERRADO = 1000; // menos de mil pasajeros por hora en 2019: el subte estaba cerrado o cerrando
+    const CERRADO = 1000; // menos de mil pasajeros por hora en 2019: el subte estaba cerrado, abriendo o cerrando
 
     const promedio = (anio) => {
       const acc = new Map();
@@ -52,20 +52,22 @@ DEMOS.calor = {
         y: { label: null, domain: DIAS },
         color,
         marks: [
-          Plot.cell(celdas.filter((c) => c.cerrado), { x: "hora", y: "dia", fill: U.COLORES.grid, inset: 1, rx: 3, className: "cerradas" }),
+          Plot.cell(celdas.filter((c) => c.cerrado), { x: "hora", y: "dia", fill: U.COLORES.surface, stroke: U.COLORES.ink3, strokeDasharray: "3 3", inset: 2, rx: 3, className: "cerradas" }),
+          Plot.text(celdas.filter((c) => c.cerrado), { x: "hora", y: "dia", text: () => "?", fontSize: 20, fontWeight: 600, fill: U.COLORES.ink2, pointerEvents: "none" }),
           Plot.cell(validas, { x: "hora", y: "dia", fill: "valor", inset: 1, rx: 3, className: "celdas" }),
         ],
       }));
       U.reemplazar(grafico, plot);
       // Detalle al pasar el mouse: se muestra en el panel (los tooltips de Plot se desfasan con el escalado de Reveal)
-      const rects = plot.querySelectorAll("g.celdas rect");
+      const rectsV = [...plot.querySelectorAll("g.celdas rect")], rectsC = [...plot.querySelectorAll("g.cerradas rect")];
+      const rects = [...rectsV, ...rectsC], datos = [...validas, ...celdas.filter((c) => c.cerrado)];
       rects.forEach((r, i) => {
-        const c = validas[i];
+        const c = datos[i];
         r.style.cursor = "default";
         r.addEventListener("mouseenter", () => {
           rects.forEach((x) => (x.style.opacity = 0.55)); r.style.opacity = 1;
           detalle.innerHTML = `<b>${c.dia}, ${c.hora} h</b><br>2019: ${U.fmt(Math.round(c.a))} pasajeros por hora<br>2025: ${U.fmt(Math.round(c.b))}` +
-            (c.cerrado ? "<br>En 2019 el subte ya estaba cerrado a esa hora: no hay con qué comparar." : `<br>2025 es el ${pct(c.b / c.a)} de 2019.`);
+            (c.cerrado ? `<br>El cociente daría ${pct(c.b / c.a)}, pero sale de muy pocos pasajeros: es para revisar. Lo miramos en la que sigue.` : `<br>2025 es el ${pct(c.b / c.a)} de 2019.`);
         });
       });
       plot.addEventListener("mouseleave", () => { rects.forEach((x) => (x.style.opacity = 1)); detalle.innerHTML = "Pasá el mouse por una celda para ver los números."; });
@@ -75,7 +77,8 @@ DEMOS.calor = {
         texto.innerHTML = `<div class="panel-fecha">Se recuperó menos el día de trabajo</div>` +
           `<div>Cada celda compara 2025 con 2019 en la misma hora y el mismo día de la semana. Cuanto más rojo, más lejos de 2019.</div>` +
           `<div>De lunes a jueves viajó el <b>${pct(razonDia([0, 1, 2, 3]))}</b> de la gente de 2019; los viernes, el <b>${pct(razonDia([4]))}</b>. Los sábados, el <b>${pct(razonDia([5]))}</b>, y los domingos, el <b>${pct(razonDia([6]))}</b>.</div>` +
-          `<div>Es compatible con más trabajo remoto, que suele concentrarse los viernes. La serie muestra el cambio; la causa hay que buscarla afuera.</div>`;
+          `<div>¿Más trabajo remoto los viernes? La serie muestra el cambio, no la causa. Los viernes los miramos dos diapositivas más adelante.</div>` +
+          `<div>Las celdas con <b>?</b> son horas en que el subte estaba cerrado, abriendo o cerrando: el cociente sale de muy pocos pasajeros y no conviene leerlo. Las miramos de cerca en la que sigue.</div>`;
       } else {
         const rel = (d) => pct(total(vista, d) / d3.mean([0, 1, 2, 3], (x) => total(vista, x)));
         texto.innerHTML = `<div class="panel-fecha">Promedio de ${vista}</div>` +
