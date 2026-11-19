@@ -35,13 +35,16 @@ DEMOS.mapaAnios = {
       grande.textContent = a;
       sub.textContent = `promedio diario por estación${parcial[a] ? ` (${parcial[a]})` : ""}: ${U.fmtK(totales[i])} pasajeros por día en total`;
       rango.value = i;
-      barras.attr("fill", (b) => (b === a ? "#f2f1ec" : "rgba(242,241,236,0.25)"));
+      barras.transition().duration(600).attr("fill", (b) => (b === a ? "#f2f1ec" : "rgba(242,241,236,0.25)"));
       U.mapa().capas([
         new deck.ColumnLayer({
-          id: "anios", data: est.filter((e) => datos[e.clave] != null), diskResolution: 20, radius: 120, extruded: true,
-          getPosition: (e) => e.pos, getElevation: (e) => datos[e.clave] * 0.045,
-          getFillColor: (e) => U.rgb(U.COLORES[e.linea], 235),
-          updateTriggers: { getElevation: [a] }, transitions: { getElevation: { duration: 700, easing: d3.easeCubicInOut } },
+          // Todas las estaciones siempre: las que todavía no existen tienen altura cero y son transparentes,
+          // así al aparecer crecen en lugar de saltar
+          id: "anios", data: est, diskResolution: 20, radius: 120, extruded: true,
+          getPosition: (e) => e.pos, getElevation: (e) => (datos[e.clave] ?? 0) * 0.045,
+          getFillColor: (e) => U.rgb(U.COLORES[e.linea], datos[e.clave] != null ? 235 : 0),
+          updateTriggers: { getElevation: [a], getFillColor: [a] },
+          transitions: { getElevation: { duration: 1100, easing: d3.easeCubicInOut }, getFillColor: { duration: 900 } },
           pickable: true, material: { ambient: 0.55, diffuse: 0.6, shininess: 20 },
           tooltip: (e) => `<b>${e.nombre}</b> (línea ${e.linea})<br>${a}: ${U.fmt(datos[e.clave])} pasajeros por día`,
         }),
@@ -50,7 +53,7 @@ DEMOS.mapaAnios = {
     const reproducir = (on) => {
       play = on; U.iconoPlay(btn, on);
       clearTimeout(timer);
-      if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }
+      if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1400); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1400); }
     };
     btn.addEventListener("click", () => { clearTimeout(arranque); reproducir(!play); });
     rango.addEventListener("input", () => { reproducir(false); i = +rango.value; render(); });

@@ -56,25 +56,31 @@ DEMOS.redEcobici = {
     svg.selectAll(".t").data(anios.filter((a) => a % 2 === 0)).join("text").attr("x", (a) => x(a) + x.bandwidth() / 2).attr("y", H + 34)
       .attr("text-anchor", "middle").attr("fill", "#7d7b74").attr("font-size", 15).text((a) => String(a).slice(2));
 
+    // Todas las estaciones de todos los años, identificadas por su posición: las que no están activas ese año
+    // tienen radio cero, así crecen y se achican en lugar de aparecer de golpe
+    const clave = (d) => `${d[0].toFixed(4)},${d[1].toFixed(4)}`;
+    const todas = new Map();
+    anios.forEach((a) => R[a].estaciones.forEach((d) => { if (!todas.has(clave(d))) todas.set(clave(d), { pos: [d[0], d[1]], uso: {} }); todas.get(clave(d)).uso[a] = d[2]; }));
+    const lista = [...todas.values()];
     const SIS = { M: "sistema manual", A: "primer sistema automático", B: "sistema actual (desde 2019)" };
     function render() {
       const a = anios[i], D = R[a];
       grande.textContent = a;
       sub.textContent = `${D.estaciones.length} estaciones, ${U.fmt(Math.round(D.viajes / D.dias))} viajes por día`;
       rango.value = i;
-      barras.attr("fill", (b) => (b === a ? "rgb(245,183,0)" : "rgba(242,241,236,0.25)"));
+      barras.transition().duration(600).attr("fill", (b) => (b === a ? "rgb(245,183,0)" : "rgba(242,241,236,0.25)"));
       U.mapa().capas([
         new deck.ScatterplotLayer({
-          id: "eco-red", data: D.estaciones, getPosition: (d) => [d[0], d[1]], getRadius: (d) => 30 + Math.sqrt(d[2]) * 9,
-          radiusUnits: "meters", getFillColor: [245, 183, 0, 200], stroked: true, getLineColor: [14, 16, 19, 255], lineWidthMinPixels: 0.5,
-          pickable: true, updateTriggers: { getRadius: [a] }, transitions: { getRadius: 500 },
-          tooltip: (d) => `${a}: ${U.fmt(d[2], 1)} retiros más devoluciones por día`,
+          id: "eco-red", data: lista, getPosition: (d) => d.pos, getRadius: (d) => (d.uso[a] != null ? 30 + Math.sqrt(d.uso[a]) * 9 : 0),
+          radiusUnits: "meters", getFillColor: [245, 183, 0, 200], stroked: true, getLineColor: [14, 16, 19, 255], lineWidthMinPixels: 0,
+          pickable: true, updateTriggers: { getRadius: [a] }, transitions: { getRadius: { duration: 1100, easing: d3.easeCubicInOut } },
+          tooltip: (d) => (d.uso[a] != null ? `${a}: ${U.fmt(d.uso[a], 1)} retiros más devoluciones por día` : null),
         }),
       ], { subte: 0.15 });
     }
     const reproducir = (on) => {
       play = on; U.iconoPlay(btn, on); clearTimeout(timer);
-      if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }
+      if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1400); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1400); }
     };
     btn.addEventListener("click", () => { clearTimeout(arranque); reproducir(!play); });
     rango.addEventListener("input", () => { reproducir(false); i = +rango.value; render(); });
