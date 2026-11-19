@@ -114,7 +114,28 @@ DEMOS.febrero2020 = {
     s.input.style.width = "560px";
     controles.append(s, U.el("span", { class: "b4-sep" }),
       B4.leyenda([["linea", U.COLORES.ink3, "datos hasta el corte"], ["punteada", U.COLORES.real, "real, 6 semanas"], ["linea", U.COLORES.modelo, "pronóstico"]], "width:auto; font-size:1em;"));
+    // Se reproduce sola, en loop: tocar la barra la pausa en esa fecha; tocar el gráfico la vuelve a reproducir
+    const estado = U.el("span", { class: "muted", style: "font-size:0.8em; min-width:260px;" });
+    controles.insertBefore(estado, s.nextSibling);
+    let timer = null;
+    const pintarEstado = () => (estado.textContent = timer ? "en loop · tocá la barra para pausar" : "en pausa · tocá el gráfico para seguir");
+    const avanzar = () => {
+      if (k >= cortes.length - 1) { timer = setTimeout(() => { s.set(0); timer = setTimeout(avanzar, 900); }, 2500); return; }
+      s.set(k + 1);
+      timer = setTimeout(avanzar, k === cortes.length - 1 ? 0 : 700);
+    };
+    const play = () => { if (timer) return; timer = setTimeout(avanzar, 400); pintarEstado(); };
+    const pausa = () => { clearTimeout(timer); timer = null; pintarEstado(); };
+    s.input.addEventListener("pointerdown", pausa);
+    s.input.addEventListener("keydown", pausa);
+    grafico.addEventListener("click", play);
+    grafico.style.cursor = "pointer";
     dibujar();
-    return {};
+    pintarEstado();
+    return {
+      entrar() { play(); },
+      alternar() { timer ? pausa() : play(); },
+      salir() { pausa(); },
+    };
   },
 };

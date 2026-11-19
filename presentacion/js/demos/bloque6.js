@@ -106,7 +106,7 @@
       const antes = d3.median(filas.filter((d) => d.fecha < corte && d.fecha >= U.dia("2020-06-01")), (d) => d.r);
       const despues = d3.median(filas.filter((d) => d.fecha >= corte), (d) => d.r);
       U.reemplazar(grafico, Plot.plot(U.plotBase({
-        height: 550, marginTop: 44,
+        height: 470, marginTop: 44,
         y: { grid: true, ticks: 8, domain: [0, Math.ceil(d3.max(filas, (d) => d.r) * 10) / 10], tickFormat: (d) => `${Math.round(d * 100)} %`, label: "fin de semana respecto de los días hábiles" },
         x: { label: null },
         marks: [
@@ -118,7 +118,14 @@
           Plot.tip(filas, Plot.pointerX({ x: "fecha", y: "r", title: (d) => `semana del ${U.fechaCorta(d.fecha)}\nfin de semana: ${Math.round(d.r * 100)} % de un día hábil` })),
         ],
       })));
-      lectura.innerHTML = `Cada punto es una semana: viajes promedio de sábado y domingo dividido el promedio de lunes a viernes. Mediana de junio de 2020 al 12/3/2021: <b>${Math.round(antes * 100)} %</b>; desde el 13/3/2021: <b>${Math.round(despues * 100)} %</b>. Los residentes siguieron viajando gratis de lunes a viernes.`;
+      // Niveles: cuatro semanas antes y cuatro después del cambio, días sin lluvia ni feriado
+      const nivel = (desde, hasta, fds) => d3.mean(E.viajes.map((v, i) => ({ v, f: U.sumarDias(d0, i), ll: E.lluvia_mm[i] }))
+        .filter((d) => d.v != null && d.f >= U.dia(desde) && d.f < U.dia(hasta) && !nh.has(U.iso(d.f)) && (d.ll ?? 0) < 1 && (d.f.getUTCDay() % 6 === 0) === fds), (d) => d.v);
+      const habA = nivel("2021-02-13", "2021-03-13", false), habD = nivel("2021-03-13", "2021-04-10", false);
+      const fdsA = nivel("2021-02-13", "2021-03-13", true), fdsD = nivel("2021-03-13", "2021-04-10", true);
+      const cambio = (a, b) => `${b > a ? "+" : "−"}${Math.round(Math.abs(b / a - 1) * 100)} %`;
+      lectura.innerHTML = `Cada punto es una semana: viajes promedio de sábado y domingo dividido el promedio de lunes a viernes. Mediana de junio de 2020 al 12/3/2021: <b>${Math.round(antes * 100)} %</b>; desde el 13/3/2021: <b>${Math.round(despues * 100)} %</b>. ` +
+        `Lo que siguió gratis también bajó, pero mucho menos: comparando las cuatro semanas anteriores con las cuatro siguientes (días sin lluvia), un día hábil pasó de ${U.fmtK(habA)} a ${U.fmtK(habD)} viajes (${cambio(habA, habD)}) y un día de fin de semana, de ${U.fmtK(fdsA)} a ${U.fmtK(fdsD)} (${cambio(fdsA, fdsD)}). La caída de los días hábiles coincide con el fin del verano y la segunda ola de COVID.`;
       return {};
     },
   };
