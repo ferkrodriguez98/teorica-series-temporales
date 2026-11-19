@@ -214,13 +214,13 @@
           const d = nodo.getAttribute("d");
           if (d !== ant.d) sel.attr("d", ant.d).transition().duration(duracion).ease(d3.easeCubicOut).attr("d", d);
         } else if (nodo.tagName === "rect" && ant && ant.y != null) {
-          const y = nodo.getAttribute("y"), h = nodo.getAttribute("height");
-          sel.attr("y", ant.y).attr("height", ant.h).transition().duration(duracion).ease(d3.easeCubicOut).attr("y", y).attr("height", h);
+          const y = nodo.getAttribute("y"), h = nodo.getAttribute("height"), x = nodo.getAttribute("x");
+          sel.attr("y", ant.y).attr("height", ant.h).attr("x", ant.x ?? x).transition().duration(duracion).ease(d3.easeCubicInOut).attr("y", y).attr("height", h).attr("x", x);
         } else if (!ant) {
           sel.style("opacity", 0).transition().duration(duracion).style("opacity", 1);
         }
       });
-      memoria[c] = nuevos.map((n) => ({ d: n.getAttribute("d"), y: n.getAttribute("y"), h: n.getAttribute("height") }));
+      memoria[c] = nuevos.map((n) => ({ d: n.getAttribute("d"), y: n.getAttribute("y"), h: n.getAttribute("height"), x: n.getAttribute("x") }));
     });
   };
 })();

@@ -126,25 +126,48 @@
   DEMOS.errorFechas = {
     montar(el) {
       const { controles, grafico, lectura } = U.armar(el);
+      lectura.remove();
       const A = DATA.errorFechas;
+      const tot = (lista, et) => d3.sum(lista.find((d) => d.etiqueta.startsWith(et)).perfil);
+      const jun8 = tot(A.despues, "domingo 8/6"), ago6Mal = tot(A.antes, "miércoles 6/8");
+      const movido = tot(A.antes, "domingo 8/6") - jun8; // pasajeros del 6/8 que quedaron en el 8/6
+      const S = U.serie(DATA.subteDiario.inicio, DATA.subteDiario.total);
+      const tramo = (desde, n) => S.filter((d) => d.fecha >= U.dia(desde) && d.fecha < U.sumarDias(U.dia(desde), n));
+      const dias = [...tramo("2025-06-01", 14).map((d) => ({ ...d, mes: "junio" })), ...tramo("2025-07-31", 14).map((d) => ({ ...d, mes: "agosto" }))];
+      dias.forEach((d) => { d.etq = `${B4.DIAS3[d.fecha.getUTCDay()]} ${d.fecha.getUTCDate()}/${d.fecha.getUTCMonth() + 1}`; d.iso = U.iso(d.fecha); });
+      const fila = U.el("div", { class: "fila-panel" });
+      const panel = U.el("div", { class: "panel-der" });
+      grafico.replaceWith(fila);
+      fila.append(grafico, panel);
       let vista = "antes";
+      const memoria = {};
+
       function dibujar() {
-        const dias = vista === "antes" ? A.antes : A.despues;
-        const filas = dias.flatMap((d) => d.perfil.map((v, s) => ({ fecha: d.etiqueta, hora: s / 4, valor: v }))).filter((p) => p.hora >= 5);
+        const antes = vista === "antes";
+        // Barra base de cada día; el bloque rojo son los pasajeros del 6/8 que la lectura directa puso en el 8/6
+        const base = dias.map((d) => ({ ...d, v: d.iso === "2025-08-06" ? ago6Mal : d.valor }));
+        const bloque = [{ etq: antes ? base.find((d) => d.iso === "2025-06-08").etq : base.find((d) => d.iso === "2025-08-06").etq, y1: antes ? jun8 : ago6Mal, y2: (antes ? jun8 : ago6Mal) + movido }];
         U.reemplazar(grafico, Plot.plot(U.plotBase({
-          height: 520,
-          x: { domain: [5, 24], ticks: d3.range(5, 25, 2), tickFormat: (h) => `${h} h`, label: null },
-          y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 52000] },
-          color: { domain: dias.map((d) => d.etiqueta), range: [U.COLORES.B, U.COLORES.ink3, U.COLORES.C, U.COLORES.ink2], legend: true },
+          width: 1040, height: 520, marginTop: 30, marginBottom: 70, marginLeft: 70,
+          x: { domain: dias.map((d) => d.etq), label: null, tickRotate: -60, tickSize: 0 },
+          y: { grid: true, domain: [0, 900000], tickFormat: U.tickM, label: null },
           marks: [
-            Plot.lineY(filas, { x: "hora", y: "valor", stroke: "fecha", strokeWidth: 2, curve: "step-after" }),
-            Plot.tip(filas, Plot.pointerX({ x: "hora", y: "valor", stroke: "fecha", title: (p) => `${p.fecha}\n${U.fmt(p.valor)} pasajeros en 15 min` })),
+            Plot.barY(base, { x: "etq", y: "v", fill: (d) => (d.fecha.getUTCDay() === 0 ? U.COLORES.ink3 : U.COLORES.ink2), fillOpacity: (d) => (d.fecha.getUTCDay() === 0 ? 0.55 : 0.85), inset: 3 }),
+            Plot.rectY(bloque, { x: "etq", y1: "y1", y2: "y2", fill: U.COLORES.B, inset: 3, className: "anim-bloque" }),
+            Plot.text([{ etq: dias[6].etq, t: "junio de 2025" }, { etq: dias[20].etq, t: "agosto de 2025" }], { x: "etq", y: 900000, text: "t", dy: -8, fontSize: 17, fill: U.COLORES.ink2 }),
+            Plot.ruleY([0], { stroke: U.COLORES.ink3 }),
+            Plot.tip(base, Plot.pointerX({ x: "etq", y: "v", title: (d) => `${d.etq}: ${B4.mil(d.v + (bloque[0].etq === d.etq ? movido : 0))} pasajeros` })),
           ],
         })));
-        const t = (k) => U.fmtK(d3.sum(dias[k].perfil));
-        lectura.innerHTML = vista === "antes"
-          ? `Con el primer procesamiento, el domingo 8 de junio de 2025 sumaba ${t(0)} pasajeros y tenía forma de día hábil; el miércoles 6 de agosto, ${t(2)}. El archivo de agosto venía con las fechas en formato mes/día: "8/6/2025" es el 6 de agosto, no el 8 de junio.`
-          : `Leyendo cada fecha con el mes del archivo, el 8 de junio queda con ${t(0)} pasajeros, como cualquier domingo, y el 6 de agosto con ${t(2)}, como cualquier miércoles.`;
+        B4.animar(grafico, memoria, ["anim-bloque"], 700);
+        panel.innerHTML = antes
+          ? `<div class="panel-fecha">Un domingo con ${B4.mil(jun8 + movido)}</div>` +
+            `<div>Con el primer procesamiento, el domingo 8 de junio de 2025 tenía ${B4.mil(jun8 + movido)} pasajeros, más del doble que cualquier otro domingo. Y el miércoles 6 de agosto, ${B4.mil(ago6Mal)}, bastante menos que los otros miércoles.</div>` +
+            `<div>Ningún hecho lo explica. ¿Qué pasó?</div>`
+          : `<div class="panel-fecha aparece">Un error de fechas</div>` +
+            `<div class="aparece">El archivo de agosto escribe las fechas como mes/día. La línea que dice <b>"8/6/2025"</b> es el 6 de agosto. Leída como día/mes, como el resto de los archivos, queda en el 8 de junio.</div>` +
+            `<div class="aparece">El bloque rojo son los <b>${B4.mil(movido)}</b> pasajeros del 6 de agosto que habían quedado en el 8 de junio. Leyendo cada fecha con el mes del nombre del archivo, cada día vuelve a su lugar.</div>` +
+            `<div class="revelado aparece">El código corría sin errores y los totales del año daban bien. Se detectó mirando la serie y preguntando si un día tenía sentido. Leyendo los archivos de forma directa quedaban entre 76 y 132 días mal ubicados por año.</div>`;
       }
       controles.append(U.botones([["antes", "Primer procesamiento"], ["despues", "Corregido"]], vista, (v) => { vista = v; dibujar(); }));
       dibujar();
