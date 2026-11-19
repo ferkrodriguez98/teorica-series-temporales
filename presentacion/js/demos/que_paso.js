@@ -19,26 +19,32 @@ DEMOS.quePaso = {
     bQue.addEventListener("click", () => { etapa = 2; dibujar(); });
     controles.append(sel, bFecha, bQue);
 
-    const memoria = {};
+    const anim = {};
     function dibujar() {
       const c = casos[i];
       const d = U.dia(c.fecha);
+      // Al cambiar de día, las curvas y el eje pasan de un día al otro en lugar de redibujarse de cero
+      U.animarDibujo(anim, { perfil: c.perfil, referencia: c.referencia, tope: Math.max(d3.max(c.perfil), d3.max(c.referencia)) * 1.08 }, (e) => graficar(c, e), 700);
+      textos(c, d);
+    }
+    function graficar(c, e) {
       const pts = (arr) => arr.map((v, s) => ({ hora: s / 4, valor: v })).filter((p) => p.hora >= 5);
-      const dia = pts(c.perfil), ref = pts(c.referencia);
+      const dia = pts(e.perfil), ref = pts(e.referencia);
       const plot = Plot.plot(U.plotBase({
         height: 540, width: 1040,
         x: { domain: [5, 24], ticks: d3.range(5, 25, 2), tickFormat: (h) => `${h} h`, label: null },
-        y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, Math.max(d3.max(c.perfil), d3.max(c.referencia)) * 1.08] },
+        y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, e.tope] },
         marks: [
           Plot.areaY(ref, { x: "hora", y: "valor", fill: U.COLORES.ink3, fillOpacity: 0.16, curve: "step-after", className: "anim-area" }),
           Plot.lineY(ref, { x: "hora", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.4, curve: "step-after", className: "anim-ref" }),
           Plot.lineY(dia, { x: "hora", y: "valor", stroke: U.COLORES.B, strokeWidth: 2.2, curve: "step-after", className: "anim-dia" }),
-          Plot.text([{ hora: 5.2, valor: d3.max(c.referencia) }], { x: "hora", y: "valor", text: () => `${c.dia} normal`, fill: U.COLORES.ink3, textAnchor: "start", dy: -10, fontSize: 18 }),
+          Plot.text([{ hora: 5.2, valor: d3.max(e.referencia) }], { x: "hora", y: "valor", text: () => `${c.dia} normal`, fill: U.COLORES.ink3, textAnchor: "start", dy: -10, fontSize: 18 }),
           Plot.tip(dia, Plot.pointerX({ x: "hora", y: "valor", title: (p) => `${String(Math.floor(p.hora)).padStart(2, "0")}:${String((p.hora % 1) * 60).padStart(2, "0")}\neste día: ${U.fmt(p.valor)}\nnormal: ${U.fmt(c.referencia[p.hora * 4])}` })),
         ],
       }));
       U.reemplazar(grafico, plot);
-      B4.animar(grafico, memoria, ["anim-area", "anim-ref", "anim-dia"], 600);
+    }
+    function textos(c, d) {
       const tot = d3.sum(c.perfil), totRef = d3.sum(c.referencia);
       const nuevo = i !== casoPrevio;
       const anim = (k) => (!nuevo && etapa >= k && etapaPrevia < k ? " aparece" : "");

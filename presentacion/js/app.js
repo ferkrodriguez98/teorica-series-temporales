@@ -80,6 +80,21 @@ U.slider = ({ etiqueta, min, max, step = 1, valor, formato = (v) => v, alCambiar
 /* Alto de la diapositiva para un ancho fijo de 1600: 900 en 16:9, más en pantallas más altas */
 U.altoDiapositiva = () => Math.max(900, Math.min(1200, Math.round((1600 * window.innerHeight) / Math.max(1, window.innerWidth))));
 
+/* Anima un gráfico entre dos estados de datos (números, arrays u objetos de números): redibuja en cada cuadro
+   con los valores intermedios, así también se mueven los ejes. "anim" guarda el estado entre llamadas. */
+U.animarDibujo = (anim, nuevo, dibujarCon, duracion = 650) => {
+  cancelAnimationFrame(anim.raf);
+  if (!anim.estado) { anim.estado = structuredClone(nuevo); dibujarCon(nuevo, false); return; }
+  const interp = d3.interpolate(structuredClone(anim.estado), nuevo), t0 = performance.now();
+  const paso = (ahora) => {
+    const k = Math.min(1, (ahora - t0) / duracion), e = interp(d3.easeCubicInOut(k));
+    anim.estado = structuredClone(e);
+    dibujarCon(e, k < 1);
+    if (k < 1) anim.raf = requestAnimationFrame(paso);
+  };
+  anim.raf = requestAnimationFrame(paso);
+};
+
 /* Grupo de botones excluyentes */
 U.botones = (opciones, inicial, alCambiar) => {
   const g = U.el("div", { class: "botones", role: "group" });
@@ -149,7 +164,7 @@ U.plotBase = (extra = {}) => ({
 U.reemplazar = (cont, nodo) => { cont.replaceChildren(nodo); return nodo; };
 
 U.locale = d3.formatLocale({ decimal: ",", thousands: ".", grouping: [3], currency: ["$", ""] });
-U.tickM = (d) => (Math.abs(d) >= 1e6 ? U.locale.format(",.1~f")(d / 1e6) + " M" : Math.abs(d) >= 1e3 ? U.locale.format(",.0f")(d / 1e3) + " mil" : U.locale.format(",.0f")(d));
+U.tickM = (d) => (Math.abs(d) >= 1e6 ? U.locale.format(",.1~f")(d / 1e6) + " M" : Math.abs(d) >= 1e4 ? U.locale.format(",.0f")(d / 1e3) + " mil" : Math.abs(d) >= 1e3 ? U.locale.format(",.1~f")(d / 1e3) + " mil" : U.locale.format(",.0f")(d));
 U.tickFecha = d3.utcFormat("%Y");
 d3.timeFormatDefaultLocale({
   dateTime: "%A, %e de %B de %Y, %X", date: "%d/%m/%Y", time: "%H:%M:%S", periods: ["AM", "PM"],

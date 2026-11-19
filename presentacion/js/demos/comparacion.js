@@ -10,7 +10,7 @@ DEMOS.comparacion = {
     const NOMBRES = Object.keys(P.modelos);
     const M = {};
     NOMBRES.forEach((n) => (M[n] = B4.metricas(P.real, P.modelos[n].pred)));
-    const memoria = {};
+    const anim = {};
     let modelo = "SARIMAX", orden = { col: "MAPE", asc: true };
 
     const hw = P.modelos["Holt-Winters"].params, cx = P.modelos.SARIMAX.coef;
@@ -58,7 +58,13 @@ DEMOS.comparacion = {
 
     function dibujar() {
       const md = P.modelos[modelo];
-      const filas = jun.map((d, i) => ({ ...d, p: md.pred[i], lo: md.lo ? md.lo[i] : null, hi: md.hi ? md.hi[i] : null }));
+      // Al cambiar de modelo, el pronóstico y la banda pasan de uno al otro; sin intervalo, la banda se cierra sobre la línea
+      U.animarDibujo(anim, { p: md.pred, lo: md.lo || md.pred, hi: md.hi || md.pred, banda: md.lo ? 1 : 0 }, (st) => graficar(md, st), 650);
+      dibujarTabla();
+      textos(md);
+    }
+    function graficar(md, st) {
+      const filas = jun.map((d, i) => ({ ...d, p: st.p[i], lo: st.lo[i], hi: st.hi[i] }));
       const ferJ = jun.filter((d) => d.feriado).map((d) => d.fecha);
       const Y0 = -1.5e5, Y1 = 1.15e6;
       const plot = Plot.plot(U.plotBase({
@@ -68,7 +74,7 @@ DEMOS.comparacion = {
         marks: [
           ...B4.marcasFeriados(ferJ, { y1: Y0, alto: Y1 }),
           Plot.ruleX([U.sumarDias(jun[0].fecha, -0.5)], { stroke: U.COLORES.ink3, strokeDasharray: "3,3" }),
-          md.lo ? Plot.areaY(filas, { x: "fecha", y1: "lo", y2: "hi", fill: U.COLORES.modelo, fillOpacity: 0.13, curve: "linear", className: "anim-banda" }) : null,
+          Plot.areaY(filas, { x: "fecha", y1: "lo", y2: "hi", fill: U.COLORES.modelo, fillOpacity: 0.13 * st.banda, curve: "linear" }),
           Plot.lineY(hist, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.2 }),
           Plot.dot(hist, { x: "fecha", y: "valor", r: 2, fill: U.COLORES.ink3 }),
           Plot.lineY(jun, { x: "fecha", y: "real", stroke: U.COLORES.real, strokeWidth: 1.8, strokeDasharray: "1.5,4", strokeLinecap: "round" }),
@@ -77,15 +83,14 @@ DEMOS.comparacion = {
           Plot.ruleY([0], { stroke: U.COLORES.ink3 }),
           Plot.tip(filas, Plot.pointerX({
             x: "fecha", y: "real",
-            title: (d) => `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})${d.feriado ? ", feriado" : ""}\nreal: ${B4.num(d.real)}\n${modelo}: ${B4.num(d.p)}` + (d.lo != null ? `\nintervalo 80 %: ${B4.num(d.lo)} a ${B4.num(d.hi)}` : ""),
+            title: (d) => `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})${d.feriado ? ", feriado" : ""}\nreal: ${B4.num(d.real)}\n${modelo}: ${B4.num(d.p)}` + (md.lo ? `\nintervalo 80 %: ${B4.num(d.lo)} a ${B4.num(d.hi)}` : ""),
           })),
         ].filter(Boolean),
       }));
       U.reemplazar(grafico, plot);
-      if (!md.lo) delete memoria["anim-banda"];
-      B4.animar(grafico, memoria, ["anim-pron", "anim-banda"]);
-      dibujarTabla();
-
+    }
+    function textos(md) {
+      const filas = jun.map((d, i) => ({ ...d, lo: md.lo ? md.lo[i] : null, hi: md.hi ? md.hi[i] : null }));
       let txt = `<b>${modelo}</b>: ${DESC[modelo] || ""}`;
       if (md.lo) {
         const dentro = filas.filter((d) => d.real >= d.lo && d.real <= d.hi).length;
