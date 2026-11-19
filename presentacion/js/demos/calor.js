@@ -52,8 +52,8 @@ DEMOS.calor = {
         y: { label: null, domain: DIAS },
         color,
         marks: [
-          Plot.cell(celdas.filter((c) => c.cerrado), { x: "hora", y: "dia", fill: U.COLORES.surface, stroke: U.COLORES.ink3, strokeDasharray: "3 3", inset: 2, rx: 3, className: "cerradas" }),
-          Plot.text(celdas.filter((c) => c.cerrado), { x: "hora", y: "dia", text: () => "?", fontSize: 20, fontWeight: 600, fill: U.COLORES.ink2, pointerEvents: "none" }),
+          Plot.cell(celdas.filter((c) => c.cerrado), { x: "hora", y: "dia", fill: (c) => c.b / c.a, stroke: U.COLORES.ink, strokeDasharray: "3 3", inset: 2, rx: 3, className: "cerradas" }),
+          Plot.text(celdas.filter((c) => c.cerrado), { x: "hora", y: "dia", text: () => "?", fontSize: 20, fontWeight: 600, fill: U.COLORES.ink, pointerEvents: "none" }),
           Plot.cell(validas, { x: "hora", y: "dia", fill: "valor", inset: 1, rx: 3, className: "celdas" }),
         ],
       }));
@@ -76,8 +76,7 @@ DEMOS.calor = {
       if (vista === "ratio") {
         texto.innerHTML = `<div class="panel-fecha">Se recuperó menos el día de trabajo</div>` +
           `<div>Cada celda compara 2025 con 2019 en la misma hora y el mismo día de la semana. Cuanto más rojo, más lejos de 2019.</div>` +
-          `<div>De lunes a jueves viajó el <b>${pct(razonDia([0, 1, 2, 3]))}</b> de la gente de 2019; los viernes, el <b>${pct(razonDia([4]))}</b>. Los sábados, el <b>${pct(razonDia([5]))}</b>, y los domingos, el <b>${pct(razonDia([6]))}</b>.</div>` +
-          `<div>¿Más trabajo remoto los viernes? La serie muestra el cambio, no la causa. Los viernes los miramos dos diapositivas más adelante.</div>` +
+          `<div>Lo que bajó es la semana de trabajo entera: de lunes a viernes viajó el <b>${pct(razonDia([0, 1, 2, 3, 4]))}</b> de la gente de 2019, y el fin de semana, el <b>${pct(razonDia([5, 6]))}</b>. El viernes queda apenas abajo del resto (${pct(razonDia([4]))} contra ${pct(razonDia([0, 1, 2, 3]))} de lunes a jueves).</div>` +
           `<div>Las celdas con <b>?</b> son horas en que el subte estaba cerrado, abriendo o cerrando: el cociente sale de muy pocos pasajeros y no conviene leerlo. Las miramos de cerca en la que sigue.</div>`;
       } else {
         const rel = (d) => pct(total(vista, d) / d3.mean([0, 1, 2, 3], (x) => total(vista, x)));
