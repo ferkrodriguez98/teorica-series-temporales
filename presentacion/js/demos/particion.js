@@ -38,7 +38,8 @@ DEMOS.particion = {
     /* ---------- Panel inferior: rolling origin ---------- */
     const FOLDS = [30, 36, 42, 48, 54].map((t) => ({ train: t, test: 6 }));
     const cab = U.el("div", { style: "display:flex; align-items:center; gap:22px; margin: 14px 0 6px; font-size: 0.52em; color: var(--ink-2);" });
-    const bPlay = U.el("button", { type: "button", class: "boton" }, "▶ Reproducir");
+    const bPlay = U.el("button", { type: "button", class: "boton" });
+    U.iconoPlay(bPlay, false);
     cab.append(U.el("b", { style: "color: var(--ink); font-weight:600;" }, "Validación con rolling origin"), bPlay,
       B4.leyenda([["banda", C.train, "train"], ["banda", C.test, "test"], ["banda", C.fuera, "sin usar"]], "width:auto; margin-left:auto; font-size:1em;"));
     const g2 = U.el("div");

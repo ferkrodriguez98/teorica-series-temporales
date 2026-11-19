@@ -94,6 +94,16 @@ U.botones = (opciones, inicial, alCambiar) => {
   return g;
 };
 
+/* Ícono de reproducir o pausar para los botones de las animaciones */
+U.iconoPlay = (btn, enPausa) => {
+  btn.classList.add("boton-icono");
+  btn.setAttribute("aria-label", enPausa ? "Pausa" : "Reproducir");
+  btn.title = enPausa ? "Pausa (barra espaciadora)" : "Reproducir (barra espaciadora)";
+  btn.innerHTML = enPausa
+    ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'
+    : '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>';
+};
+
 /* Esqueleto estándar de una demo: controles arriba, gráfico, lectura abajo */
 U.armar = (el) => {
   el.classList.add("demo");

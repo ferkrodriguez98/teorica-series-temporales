@@ -225,3 +225,6 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 #pantalla-completa:hover { opacity: 1; color: var(--ink); }
 #pantalla-completa.oculto { display: none; }
 body.con-escena #pantalla-completa { background: rgba(20,20,20,0.6); color: #ddd; border-color: rgba(255,255,255,0.2); }
+
+/* Botón de reproducir o pausar con ícono */
+.boton.boton-icono { width: 48px; height: 40px; padding: 0; display: inline-grid; place-items: center; }

@@ -12,7 +12,8 @@ DEMOS.diaSubte = {
     reloj.append(hora, sub);
 
     const panel = el.querySelector(".panel");
-    const btn = U.el("button", { class: "boton", type: "button" }, "Reproducir");
+    const btn = U.el("button", { class: "boton", type: "button" });
+    U.iconoPlay(btn, false);
     const rango = U.el("input", { type: "range", min: 0, max: 95.99, step: 0.01, value: t });
     const tipos = U.botones([["habil", "Día hábil"], ["sabado", "Sábado"], ["domingo", "Domingo"]], tipo, (v) => { tipo = v; dibujarCurva(); render(); });
     panel.append(btn, tipos, rango);
@@ -70,7 +71,7 @@ DEMOS.diaSubte = {
       raf = requestAnimationFrame(paso);
     }
     const reproducir = (on) => {
-      play = on; ultimo = null; rampa = null; btn.textContent = on ? "Pausa" : "Reproducir";
+      play = on; ultimo = null; rampa = null; U.iconoPlay(btn, on);
       if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf);
     };
     btn.addEventListener("click", () => reproducir(!play));

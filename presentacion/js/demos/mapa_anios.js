@@ -11,7 +11,8 @@ DEMOS.mapaAnios = {
     const sub = U.el("small");
     reloj.append(grande, sub);
     const panel = el.querySelector(".panel");
-    const btn = U.el("button", { class: "boton", type: "button" }, "Reproducir");
+    const btn = U.el("button", { class: "boton", type: "button" });
+    U.iconoPlay(btn, false);
     const rango = U.el("input", { type: "range", min: 0, max: anios.length - 1, step: 1, value: i });
     panel.append(btn, rango);
 
@@ -47,7 +48,7 @@ DEMOS.mapaAnios = {
       ]);
     }
     const reproducir = (on) => {
-      play = on; btn.textContent = on ? "Pausa" : "Reproducir";
+      play = on; U.iconoPlay(btn, on);
       clearTimeout(timer);
       if (on) { const paso = () => { i = (i + 1) % anios.length; render(); timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }; timer = setTimeout(paso, i === anios.length - 1 ? 3000 : 1000); }
     };

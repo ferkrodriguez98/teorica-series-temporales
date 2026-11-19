@@ -10,7 +10,8 @@ DEMOS.diaEcobici = {
     const hora = U.el("span"), sub = U.el("small");
     reloj.append(hora, sub);
     const panel = el.querySelector(".panel");
-    const btn = U.el("button", { class: "boton", type: "button" }, "Reproducir");
+    const btn = U.el("button", { class: "boton", type: "button" });
+    U.iconoPlay(btn, false);
     const rango = U.el("input", { type: "range", min: 0, max: 1439, step: 1, value: t });
     const etiqueta = (f) => `${U.DIAS[U.dia(f).getUTCDay()]} ${U.dia(f).getUTCDate()}/${U.dia(f).getUTCMonth() + 1}`;
     const OPC = [[E.seco, `${etiqueta(E.seco)}, sin lluvia`], [E.lluvia, `${etiqueta(E.lluvia)}, con lluvia`]];
@@ -67,7 +68,7 @@ DEMOS.diaEcobici = {
       render();
       raf = requestAnimationFrame(paso);
     }
-    const reproducir = (on) => { play = on; ultimo = null; rampa = null; btn.textContent = on ? "Pausa" : "Reproducir"; if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf); };
+    const reproducir = (on) => { play = on; ultimo = null; rampa = null; U.iconoPlay(btn, on); if (on) raf = requestAnimationFrame(paso); else cancelAnimationFrame(raf); };
     btn.addEventListener("click", () => reproducir(!play));
     rango.addEventListener("input", () => { reproducir(false); t = +rango.value; render(); });
     dibujarMini();
