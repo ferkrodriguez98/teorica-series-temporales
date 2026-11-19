@@ -79,7 +79,7 @@ DEMOS.rezagos = {
       if (k === 1) t = `Con k = 1, r = ${r}: los pares de dos días hábiles quedan cerca de la diagonal; los de viernes a sábado, sábado a domingo y domingo a lunes quedan lejos.`;
       else if (k % 7 === 0) t = `Con k = ${k}, cada día queda contra el mismo día de la semana, ${k / 7} ${k === 7 ? "semana" : "semanas"} antes: r = ${r}.`;
       else t = `Con k = ${k}, r = ${r}. ${k} no es múltiplo de 7, así que parte de los pares junta un día hábil con un sábado o un domingo.`;
-      lectura.innerHTML = `${t} En la ACF, los picos están en los múltiplos de 7 (${picos}) por el ciclo semanal.`;
+      lectura.innerHTML = `${t} En la ACF, los picos están en los múltiplos de 7 (${picos}) por el ciclo semanal, y bajan de a poco porque el nivel de la serie se mueve: una semana se parece más a la anterior que a la de hace dos meses.`;
     }
 
     function cambiar(nuevo, animar = true) {

@@ -25,7 +25,7 @@ DEMOS.perfiles = {
         Plot.tip(filas, Plot.pointer({ fx: "tipo", x: "hora", y: "p", title: (d) => `${d.serie}, ${d.tipo.toLowerCase()}, ${d.hora} h\n${(d.p * 100).toFixed(1).replace(".", ",")} % del día` })),
       ],
     })));
-    lectura.innerHTML = "Promedio de 2025 sin feriados. El subte cuenta entradas por molinete; Ecobici, retiros de bicicletas. Cada curva es el porcentaje de los viajes del día en cada hora y suma 100 %, así se comparan formas y no volúmenes.";
+    lectura.innerHTML = "Cada curva es el porcentaje de los viajes del día en cada hora (promedio de 2025, sin feriados). Las formas se parecen: el pico más alto es a la tarde en las dos. Hay dos diferencias. En días hábiles, el pico de la mañana del subte es casi el doble que el de Ecobici (<b>9,0 %</b> contra <b>4,8 %</b> en la hora pico). Y de madrugada el subte está cerrado, mientras que Ecobici hace entre el <b>4 %</b> (hábiles) y el <b>10 %</b> (fines de semana) de sus viajes entre las 0 y las 5.";
     return {};
   },
 };
