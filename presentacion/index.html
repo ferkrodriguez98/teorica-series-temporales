@@ -571,5 +571,18 @@
   U.iniciarDemos(Reveal);
   renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }] });
 </script>
+<button id="pantalla-completa" type="button" title="Pantalla completa (F)" aria-label="Pantalla completa">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+</button>
+<script>
+  /* Botón de pantalla completa: se ve solo fuera de pantalla completa */
+  (function () {
+    const b = document.getElementById("pantalla-completa");
+    const raiz = document.documentElement;
+    b.addEventListener("click", () => { (raiz.requestFullscreen || raiz.webkitRequestFullscreen).call(raiz); b.blur(); });
+    const ver = () => b.classList.toggle("oculto", !!(document.fullscreenElement || document.webkitFullscreenElement));
+    document.addEventListener("fullscreenchange", ver); document.addEventListener("webkitfullscreenchange", ver);
+  })();
+</script>
 </body>
 </html>
