@@ -158,6 +158,22 @@ U.iniciarDemos = (reveal) => {
       inst.entrar && inst.entrar();
       activas.add(inst);
     });
+    fijarCuerpo(slide);
+  };
+  /* El contenido se centra en el alto la primera vez que se ve la diapositiva y después queda fijo:
+     si un botón cambia el largo de la lectura, crece hacia abajo en lugar de mover todo. */
+  const fijarCuerpo = (slide) => {
+    const cuerpo = slide.querySelector(":scope > .cuerpo");
+    if (!cuerpo || cuerpo._fijo || !slide.querySelector("[data-demo]")) return;
+    requestAnimationFrame(() => {
+      const primero = cuerpo.firstElementChild;
+      if (!primero || cuerpo._fijo) return;
+      const esc = reveal.getScale() || 1;
+      const arriba = (primero.getBoundingClientRect().top - cuerpo.getBoundingClientRect().top) / esc;
+      cuerpo.style.paddingTop = Math.max(0, Math.round(arriba)) + "px";
+      cuerpo.style.justifyContent = "flex-start";
+      cuerpo._fijo = true;
+    });
   };
   /* Barra espaciadora: en las diapositivas con animación, pausa y reanuda en lugar de avanzar */
   document.addEventListener("keydown", (e) => {
