@@ -17,7 +17,7 @@ DEMOS.rezagos = {
     const pA = B3.panel(fila, "Autocorrelación (ACF): la misma correlación para cada lag, de 1 a 60 días", 920);
 
     /* ---------- Diagrama de dispersión ---------- */
-    const W = 480, H = 530, m = { t: 14, r: 16, b: 46, l: 66 };
+    const W = 480, H = 500, m = { t: 14, r: 16, b: 46, l: 66 };
     const tope = Math.ceil((d3.max(x) * 1.03) / 1e5) * 1e5;
     const sx = d3.scaleLinear([0, tope], [m.l, W - m.r]);
     const sy = d3.scaleLinear([0, tope], [H - m.b, m.t]);
