@@ -23,10 +23,34 @@
   };
   const shareMasExtremo = (arr, r) => arr.filter((v) => Math.abs(v) >= Math.abs(r)).length / arr.length;
 
+  /* Pasajeros del subte y dólar blue, promedios mensuales de 2022 a 2025 (se usa en las dos demos) */
+  let cacheReal = null;
+  const real = () => {
+    if (cacheReal) return cacheReal;
+    const S = DATA.subteDiario, D = DATA.dolarBlue;
+    const acum = new Map();
+    const sumar = (clave, campo, v) => {
+      if (v == null) return;
+      const o = acum.get(clave) || { p: [], d: [] };
+      o[campo].push(v);
+      acum.set(clave, o);
+    };
+    U.serie(S.inicio, S.total).forEach((d) => sumar(U.iso(d.fecha).slice(0, 7), "p", d.valor));
+    D.fechas.forEach((f, i) => sumar(f.slice(0, 7), "d", D.venta[i]));
+    const meses = [];
+    for (let a = 2022; a <= 2025; a++) for (let m = 1; m <= 12; m++) meses.push(`${a}-${String(m).padStart(2, "0")}`);
+    const filas = meses.map((c) => ({ fecha: U.dia(c + "-01"), pas: B3.media(acum.get(c).p), dol: B3.media(acum.get(c).d) }));
+    const vari = filas.slice(1).map((f, i) => ({ fecha: f.fecha, pas: f.pas / filas[i].pas - 1, dol: f.dol / filas[i].dol - 1 }));
+    const rNiv = B3.pearson(filas.map((f) => f.pas), filas.map((f) => f.dol));
+    const rVar = B3.pearson(vari.map((f) => f.pas), vari.map((f) => f.dol));
+    cacheReal = { filas, vari, rNiv, rVar };
+    return cacheReal;
+  };
+
   DEMOS.espuria = {
     montar(el) {
       const { controles, grafico, lectura } = U.armar(el);
-      const sim = simulacion();
+      const sim = simulacion(), R = real();
       const binear = (arr) => d3.bin().domain([-1, 1]).thresholds(CORTES)(arr);
       const bins = { niv: binear(sim.niv), dif: binear(sim.dif) };
       const yMax = d3.max([...bins.niv, ...bins.dif], (b) => b.length) * 1.2;
@@ -105,8 +129,8 @@
         U.reemplazar(pH.cuerpo, caja);
 
         lectura.innerHTML = enNiv
-          ? `En niveles, este par tiene r = ${B3.fmtR(par.rNiv)}${Math.abs(par.rNiv) >= 0.4 ? ", aunque A y B se generaron por separado" : ""}. En los ${PARES} pares simulados, la mitad de las correlaciones de niveles supera ${B3.fmtR(medNiv)} en valor absoluto.`
-          : `En diferencias, este par tiene r = ${B3.fmtR(par.rDif)}. En los ${PARES} pares simulados, el 95 % de las correlaciones de las diferencias queda entre −${B3.fmtR(q95Dif)} y ${B3.fmtR(q95Dif)}.`;
+          ? `En niveles, este par tiene r = ${B3.fmtR(par.rNiv)}${Math.abs(par.rNiv) >= 0.4 ? ", aunque A y B se generaron por separado" : ""}. En los ${PARES} pares simulados, la mitad de las correlaciones de niveles supera ${B3.fmtR(medNiv)} en valor absoluto. Subte contra dólar blue dio ${B3.fmtR(R.rNiv)}: el ${B3.fmtPct(shareMasExtremo(sim.niv, R.rNiv))} de estos pares llega igual o más lejos de cero.`
+          : `En diferencias, este par tiene r = ${B3.fmtR(par.rDif)}. En los ${PARES} pares simulados, el 95 % de las correlaciones de las diferencias queda entre −${B3.fmtR(q95Dif)} y ${B3.fmtR(q95Dif)}. Subte contra dólar blue dio ${B3.fmtR(R.rVar)} en variaciones: solo el ${B3.fmtPct(shareMasExtremo(sim.dif, R.rVar))} de estos pares llega a eso. Esa sí es difícil de obtener por azar; lo que sigue es buscar el mecanismo.`;
       }
 
       const botones = U.botones([["niv", "Niveles"], ["dif", "Diferencias"]], modo, (v) => { modo = v; dibujar(); });
@@ -122,24 +146,7 @@
     montar(el) {
       const { controles, grafico, lectura } = U.armar(el);
       controles.remove();
-      const S = DATA.subteDiario, D = DATA.dolarBlue;
-
-      // Promedios mensuales de 2022-01 a 2025-12
-      const acum = new Map();
-      const sumar = (clave, campo, v) => {
-        if (v == null) return;
-        const o = acum.get(clave) || { p: [], d: [] };
-        o[campo].push(v);
-        acum.set(clave, o);
-      };
-      U.serie(S.inicio, S.total).forEach((d) => sumar(U.iso(d.fecha).slice(0, 7), "p", d.valor));
-      D.fechas.forEach((f, i) => sumar(f.slice(0, 7), "d", D.venta[i]));
-      const meses = [];
-      for (let a = 2022; a <= 2025; a++) for (let m = 1; m <= 12; m++) meses.push(`${a}-${String(m).padStart(2, "0")}`);
-      const filas = meses.map((c) => ({ fecha: U.dia(c + "-01"), pas: B3.media(acum.get(c).p), dol: B3.media(acum.get(c).d) }));
-      const vari = filas.slice(1).map((f, i) => ({ fecha: f.fecha, pas: f.pas / filas[i].pas - 1, dol: f.dol / filas[i].dol - 1 }));
-      const rNiv = B3.pearson(filas.map((f) => f.pas), filas.map((f) => f.dol));
-      const rVar = B3.pearson(vari.map((f) => f.pas), vari.map((f) => f.dol));
+      const { filas, vari, rNiv, rVar } = real();
       const mesAnio = d3.utcFormat("%b %Y");
 
       const fila = U.el("div", { class: "b3-fila" });
@@ -181,10 +188,8 @@
       p4.cuerpo.append(disp(vari, pct, pct, "Dólar blue →", "↑ Pasajeros",
         (d) => `${mesAnio(d.fecha)} contra el mes anterior\npasajeros ${d.pas > 0 ? "+" : ""}${U.fmt(100 * d.pas, 1)} %\ndólar ${d.dol > 0 ? "+" : ""}${U.fmt(100 * d.dol, 1)} %`, [-0.1, 0, 0.1, 0.2, 0.3]));
 
-      const sim = simulacion();
-      const pNiv = shareMasExtremo(sim.niv, rNiv), pVar = shareMasExtremo(sim.dif, rVar);
       const f0 = filas[0], f1 = filas[filas.length - 1];
-      lectura.innerHTML = `Entre enero de 2022 y diciembre de 2025 el dólar blue promedio pasó de $${U.fmt(f0.dol)} a $${U.fmt(f1.dol)}. Correlación de los niveles: <b>${B3.fmtR(rNiv)}</b>; de las variaciones mensuales: <b>${B3.fmtR(rVar)}</b>. Como referencia, en los ${PARES} pares de random walks independientes de ${N} pasos, el ${B3.fmtPct(pNiv)} de las correlaciones de niveles y el ${B3.fmtPct(pVar)} de las de diferencias quedan igual o más lejos de cero que estas.`;
+      lectura.innerHTML = `Entre enero de 2022 y diciembre de 2025 el dólar blue promedio pasó de $${U.fmt(f0.dol)} a $${U.fmt(f1.dol)}. Correlación de los niveles: <b>${B3.fmtR(rNiv)}</b>; de las variaciones mensuales: <b>${B3.fmtR(rVar)}</b>. ¿Alcanza para decir que el dólar le saca pasajeros al subte? Para saberlo hay que compararlo con lo que dan dos series sin ninguna relación.`;
       return {};
     },
   };
