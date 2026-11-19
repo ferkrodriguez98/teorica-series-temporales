@@ -55,7 +55,7 @@ DEMOS.ar1 = {
       else {
         const vida = Math.log(0.5) / Math.log(phi);
         const media = vida < 0.95 ? "en menos de un período" : vida < 1.05 ? "en un período" : `en unos ${U.fmt(vida, vida < 10 ? 1 : 0)} períodos`;
-        t = `Con φ = ${f}, un shock pierde la mitad de su efecto ${media}. ${phi >= 0.9 ? "La serie se aleja del cero y tarda en volver: es persistente." : "La serie vuelve rápido al cero."} ACF en el lag 1: ${r1}.${ref}`;
+        t = `Con φ = ${f}, un shock (una promoción, un paro, un día de lluvia) pierde la mitad de su efecto ${media}. ${phi >= 0.9 ? "La serie se aleja del cero y tarda en volver: es persistente." : "La serie vuelve rápido al cero."} ACF en el lag 1: ${r1}.${ref}`;
       }
       lectura.innerHTML = t;
     }

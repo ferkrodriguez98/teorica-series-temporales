@@ -239,7 +239,7 @@
   <div class="cols" style="grid-template-columns: 680px 640px; gap: 72px; margin-top: 0.8em;">
     <ul class="b3-texto">
       <li>Una serie es estacionaria si su media, su variabilidad y su autocorrelación no dependen del momento en que se la mire.</li>
-      <li>Los modelos clásicos (AR, ARMA) estiman esas cantidades con el pasado y las usan para pronosticar. Si cambian con el tiempo, lo estimado deja de describir el período que viene.</li>
+      <li>Los modelos clásicos, AR (autorregresivo: el valor de hoy depende de los anteriores) y ARMA (además, de los errores anteriores), estiman esas cantidades con el pasado y las usan para pronosticar. Si cambian con el tiempo, lo estimado deja de describir el período que viene.</li>
       <li>Diferenciar (restar a cada valor el del período anterior, o el del mismo día de la semana anterior) quita tendencias y ciclos fijos. Las diferencias de una random walk son white noise.</li>
     </ul>
     <div data-demo="estacionariedad"></div>
@@ -255,8 +255,8 @@
 </section>
 
 <section>
-  <div class="kicker">De white noise a random walk</div>
-  <h2>Un proceso autorregresivo de orden 1</h2>
+  <div class="kicker">AR(1): autorregresivo de orden 1</div>
+  <h2>Cuánto dura un shock</h2>
   <div data-demo="ar1"></div>
   <div class="fuente">Serie simulada: 400 shocks normales estándar, siempre los mismos.</div>
 </section>
@@ -278,7 +278,7 @@
 
 <section data-estrella>
   <div class="kicker">Train y test</div>
-  <h2>Partición al azar y partición temporal</h2>
+  <h2>Validar respetando el orden</h2>
   <div data-demo="particion"></div>
   <div class="fuente">Arriba: 60 días de pasajeros del subte, del 5/8/2024 al 3/10/2024. Fuente: SBASE, BA Data.</div>
 </section>

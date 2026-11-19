@@ -1,4 +1,4 @@
-/* Partición al azar contra partición temporal (60 días) y validación con rolling origin (animación). */
+/* Partición temporal (60 días) y validación con rolling origin (animación). */
 DEMOS.particion = {
   montar(el) {
     const { controles, grafico, lectura } = U.armar(el);
@@ -53,7 +53,7 @@ DEMOS.particion = {
     const rolCelda = (d) => (d.i < d.f.train ? "train" : d.i < d.f.train + d.f.test ? "test" : "fuera");
 
     /* ---------- Estados ---------- */
-    let modo = "azar", sorteo = [];
+    let modo = "temporal", sorteo = []; // la partición al azar ya no se muestra: la diapositiva arranca en la temporal
     const sortear = () => { sorteo = d3.shuffle(d3.range(N)).slice(0, NT).sort((a, b) => a - b); };
     sortear();
     const fmtD = (d) => `${d.getUTCDate()}/${d.getUTCMonth() + 1}`;
@@ -112,8 +112,7 @@ DEMOS.particion = {
     const bSortear = U.el("button", { type: "button", class: "boton secundario" }, "Nuevo sorteo");
     bSortear.addEventListener("click", () => { if (modo !== "azar") return; sortear(); aplicar(); });
     bPlay.addEventListener("click", reproducir);
-    controles.append(botones, bSortear, U.el("span", { class: "b4-sep" }),
-      B4.leyenda([["punto", C.train, "train"], ["punto", C.test, "test"]], "width:auto; font-size:1em;"));
+    controles.remove();
 
     /* Estado inicial: todas las particiones dibujadas, sin animación */
     celdas.attr("fill", (d) => C[rolCelda(d)]);
