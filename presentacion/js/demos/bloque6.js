@@ -46,25 +46,37 @@
       controles.append(botones);
       const pctS = (v) => (v > 0 ? "+" : v < 0 ? "−" : "") + U.fmt(Math.abs(v * 100), 0) + " %";
 
+      // La vista se describe con el centro y el ancho (en escala log) del rango de fechas: al elegir un hecho
+      // la serie se acerca hasta él, entre hechos se desliza de costado y con "Toda la serie" se aleja.
+      const anim = {};
+      const T0 = +diario[0].fecha, T1 = +diario[diario.length - 1].fecha, ANCHO = 540 * 864e5;
       function dibujar() {
         const h = hechos[elegido - 1];
-        const dom = h ? [U.sumarDias(h.fecha, -270), U.sumarDias(h.fecha, 270)] : [diario[0].fecha, diario[diario.length - 1].fecha];
-        const enRango = (d) => d.fecha >= dom[0] && d.fecha <= dom[1];
-        const vis = h ? [h] : hechos;
+        const meta = h ? { c: +h.fecha, w: Math.log(ANCHO), det: 1 } : { c: (T0 + T1) / 2, w: Math.log(T1 - T0), det: 0 };
+        U.animarDibujo(anim, meta, (st) => graficar(h, st), 1100);
+        textos(h);
+      }
+      function graficar(h, st) {
+        const w = Math.exp(st.w);
+        const dom = [new Date(Math.max(T0 - 30 * 864e5, st.c - w / 2)), new Date(Math.min(T1 + 30 * 864e5, st.c + w / 2))];
+        const margen = 20 * 864e5;
+        const enRango = (d) => d.fecha >= dom[0] - margen && d.fecha <= +dom[1] + margen;
+        const vis = hechos.filter(enRango);
         U.reemplazar(grafico, Plot.plot(U.plotBase({
           width: 1040, height: 540, marginTop: 40,
           y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, 1.4e6] },
           x: { label: null, domain: dom },
           marks: [
-            h ? Plot.rectX([[-28, 0], [0, 28]], { x1: (d) => U.sumarDias(h.fecha, d[0]), x2: (d) => U.sumarDias(h.fecha, d[1]), y1: 0, y2: 1.4e6, fill: (d, i) => (i ? h.color : U.COLORES.ink3), fillOpacity: 0.1 }) : null,
-            h ? Plot.lineY(diario.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 0.8, strokeOpacity: 0.6 }) : null,
-            Plot.lineY(serie.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink, strokeWidth: 1.8 }),
-            Plot.ruleX(vis, { x: "fecha", stroke: "color", strokeWidth: 1.5, strokeDasharray: "3 3" }),
-            Plot.dot(vis, { x: "fecha", y: 1.33e6, fill: "color", r: 13, stroke: U.COLORES.surface, strokeWidth: 2 }),
-            Plot.text(vis, { x: "fecha", y: 1.33e6, text: "n", fill: "white", fontWeight: 700, fontSize: 16 }),
+            h ? Plot.rectX([[-28, 0], [0, 28]], { x1: (d) => U.sumarDias(h.fecha, d[0]), x2: (d) => U.sumarDias(h.fecha, d[1]), y1: 0, y2: 1.4e6, fill: (d, i) => (i ? h.color : U.COLORES.ink3), fillOpacity: 0.1 * st.det, clip: true }) : null,
+            st.det > 0.02 ? Plot.lineY(diario.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 0.8, strokeOpacity: 0.6 * st.det, clip: true }) : null,
+            Plot.lineY(serie.filter(enRango), { x: "fecha", y: "valor", stroke: U.COLORES.ink, strokeWidth: 1.8, clip: true }),
+            Plot.ruleX(vis, { x: "fecha", stroke: "color", strokeWidth: 1.5, strokeDasharray: "3 3", strokeOpacity: (d) => (!h || d === h ? 1 : 1 - 0.75 * st.det), clip: true }),
+            Plot.dot(vis, { x: "fecha", y: 1.33e6, fill: "color", r: 13, stroke: U.COLORES.surface, strokeWidth: 2, fillOpacity: (d) => (!h || d === h ? 1 : 1 - 0.75 * st.det), clip: true }),
+            Plot.text(vis, { x: "fecha", y: 1.33e6, text: "n", fill: "white", fontWeight: 700, fontSize: 16, clip: true }),
           ].filter(Boolean),
         })));
-        grafico.firstElementChild?.classList.add("aparece");
+      }
+      function textos(h) {
         if (!h) {
           panel.innerHTML = `<div class="panel-fecha">Doce hechos</div>` +
             `<div>Cada línea vertical es un hecho con fecha verificada: <b style="color:${TIPOS.red[1]}">cambios en la red</b>, <b style="color:${TIPOS.norma[1]}">normas</b>, <b style="color:${TIPOS.precio[1]}">precio</b> y <b style="color:${TIPOS.medicion[1]}">cambios en lo que se mide</b>.</div>` +
@@ -72,11 +84,11 @@
             `<div>Cualquiera de estos cambios mueve la serie sin que cambie la demanda de la misma manera. Quien mira la serie sin esta lista se los atribuye a la demanda.</div>`;
           return;
         }
-        panel.innerHTML = `<div class="panel-fecha aparece">${U.fechaLarga(h.fecha)}</div>` +
+        U.panelFundido(panel, `<div class="panel-fecha aparece">${U.fechaLarga(h.fecha)}</div>` +
           `<div class="aparece"><b style="color:${h.color}">${h.tipo}</b>. ${h.txt}.</div>` +
           `<div class="aparece">Promedio diario de los 28 días anteriores: <b>${B4.mil(h.antes)}</b>; de los 28 siguientes: <b>${B4.mil(h.despues)}</b> (${pctS(h.bruto)}).</div>` +
           (h.ajustado != null ? `<div class="aparece">Esas mismas fechas un año antes cambiaron por la época del año. Descontando eso, el cambio es de <b>${pctS(h.ajustado)}</b>.</div>` : `<div class="aparece">No hay datos del año anterior para descontar el efecto de la época del año.</div>`) +
-          `<div class="revelado aparece" style="color:var(--ink-3)">Gris: la serie diaria. Sombreado: las cuatro semanas antes y después.</div>`;
+          `<div class="revelado aparece" style="color:var(--ink-3)">Gris: la serie diaria. Sombreado: las cuatro semanas antes y después.</div>`, true);
       }
       dibujar();
       return {};
