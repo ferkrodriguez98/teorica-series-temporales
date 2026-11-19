@@ -1,4 +1,4 @@
-/* Escena: los viajes de Ecobici de un día, animados de estación a estación. Viernes seco contra viernes de lluvia. */
+/* Escena: los viajes de Ecobici de un día, animados de estación a estación. Viernes seco, viernes de lluvia, sábado y domingo. */
 DEMOS.diaEcobici = {
   montar(el) {
     const E = DATA.ecobiciDias;
@@ -13,7 +13,10 @@ DEMOS.diaEcobici = {
     const btn = U.el("button", { class: "boton", type: "button" }, "Reproducir");
     const rango = U.el("input", { type: "range", min: 0, max: 1439, step: 1, value: t });
     const etiqueta = (f) => `${U.DIAS[U.dia(f).getUTCDay()]} ${U.dia(f).getUTCDate()}/${U.dia(f).getUTCMonth() + 1}`;
-    const dias = U.botones([[E.seco, `${etiqueta(E.seco)}, sin lluvia`], [E.lluvia, `${etiqueta(E.lluvia)}, con lluvia`]], cual, (v) => { cual = v; dibujarMini(); render(); });
+    const OPC = [[E.seco, `${etiqueta(E.seco)}, sin lluvia`], [E.lluvia, `${etiqueta(E.lluvia)}, con lluvia`]];
+    if (E.sabado) OPC.push([E.sabado, etiqueta(E.sabado)]);
+    if (E.domingo) OPC.push([E.domingo, etiqueta(E.domingo)]);
+    const dias = U.botones(OPC, cual, (v) => { cual = v; dibujarMini(); render(); });
     panel.append(btn, dias, rango);
 
     // Mini: viajes que empiezan por hora, y debajo la lluvia por hora (dos paneles, dos escalas)
@@ -27,7 +30,7 @@ DEMOS.diaEcobici = {
     svg.append("text").attr("x", 0).attr("y", H1 + 24).attr("fill", "#7d7b74").attr("font-size", 15).text("lluvia, mm por hora");
     [0, 6, 12, 18, 24].forEach((h) => svg.append("text").attr("x", x(h)).attr("y", H1 + H2 + 34).attr("fill", "#7d7b74").attr("font-size", 15).attr("text-anchor", h === 0 ? "start" : h === 24 ? "end" : "middle").text(`${h} h`));
     const porHora = (f) => { const c = new Array(24).fill(0); E.dias[f].viajes.forEach((v) => c[Math.min(23, Math.floor(v[6] / 60))]++); return c; };
-    const maxV = d3.max([E.seco, E.lluvia].flatMap(porHora));
+    const maxV = d3.max(Object.keys(E.dias).flatMap(porHora));
     function dibujarMini() {
       const c = porHora(cual), ll = E.dias[cual].lluvia_hora;
       const y1 = d3.scaleLinear([0, maxV], [H1, 16]);
