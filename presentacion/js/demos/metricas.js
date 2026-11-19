@@ -9,6 +9,7 @@ DEMOS.metricas = {
     const DIA_PARO = jun.findIndex((d) => U.iso(d.fecha) === "2025-06-11");
     const FACTOR = 0.03;
     let modelo = "Seasonal naive", paro = false;
+    const memoria = {};
 
     const grid = U.el("div", { class: "b4-grid" });
     const izq = U.el("div");
@@ -54,7 +55,7 @@ DEMOS.metricas = {
           Plot.rectY(filas, {
             x1: (d) => U.sumarDias(d.fecha, -0.5), x2: (d) => U.sumarDias(d.fecha, 0.5), y: "e", insetLeft: 4, insetRight: 4,
             fill: U.COLORES.modelo, fillOpacity: (d) => (d.paro ? 1 : 0.8),
-            stroke: (d) => (d.paro ? U.COLORES.ink : "none"), strokeWidth: 1.5,
+            stroke: (d) => (d.paro ? U.COLORES.ink : "none"), strokeWidth: 1.5, className: "anim-err",
           }),
           Plot.ruleY([0], { stroke: U.COLORES.ink3 }),
           Plot.text(filas.filter((d) => d.paro), { x: "fecha", y: "e", text: () => "paro simulado", dy: 14, fontSize: 16, fill: U.COLORES.ink, fontWeight: 600 }),
@@ -65,6 +66,7 @@ DEMOS.metricas = {
         ],
       }));
       U.reemplazar(grafico, plot);
+      B4.animar(grafico, memoria, ["anim-err"]);
 
       ["MAE", "RMSE", "MAPE"].forEach((k) => {
         tarjetas[k].valor.textContent = fmtM(k, m[k]);

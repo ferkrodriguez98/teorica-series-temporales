@@ -25,7 +25,7 @@ DEMOS.holtWinters = {
     grafico.replaceWith(grid);
     grid.append(izq, panel);
     izq.append(B4.leyenda([
-      ["linea", U.COLORES.ink3, "abril y mayo"], ["linea", U.COLORES.modelo + "73", "ajuste a un paso"],
+      ["linea", U.COLORES.ink3, "abril y mayo"], ["linea", U.COLORES.modelo + "73", "lo que esperaba cada día"],
       ["linea", U.COLORES.modelo, "pronóstico"], ["punteada", U.COLORES.real, "real de junio"]]), grafico);
 
     const formula = U.el("div", { class: "b4-formula" });
@@ -35,7 +35,7 @@ DEMOS.holtWinters = {
     const cifras = U.el("div", { class: "b4-cifras" });
     panel.append(
       U.el("div", { class: "b4-bloque" }, U.el("h4", {}, "Pronóstico"), formula,
-        U.el("div", { class: "b4-nota", style: "margin-top:0" }, "ℓ: nivel · b: tendencia por día · s: efecto del día de la semana")),
+        U.el("div", { class: "b4-nota", style: "margin-top:0" }, "En palabras: el nivel de hoy, más la tendencia por los días que faltan, más el efecto de ese día de la semana.")),
       U.el("div", { class: "b4-bloque" }, U.el("h4", {}, "Estado al 31/5/2025"), estado, graficoS),
       U.el("div", { class: "b4-bloque" }, U.el("h4", {}, "Junio de 2025"), cifras,
         U.el("div", { class: "b4-nota" }, `Seasonal naive: MAE ${B4.num(ref.MAE)}, MAPE ${B4.pct(ref.MAPE)}.`)),
@@ -69,7 +69,7 @@ DEMOS.holtWinters = {
           Plot.dot(jun, { x: "fecha", y: "real", r: 2.6, fill: U.COLORES.real }),
           Plot.lineY(pron, { x: "fecha", y: "v", stroke: U.COLORES.modelo, strokeWidth: 2.2, clip: true }),
           Plot.ruleY([0], { stroke: U.COLORES.rule }),
-          Plot.tip([...hist.map((d, i) => ({ fecha: d.fecha, v: d.valor, t: `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})\nreal: ${B4.num(d.valor)}\najuste a un paso: ${B4.num(ajuste[i].v)}` })),
+          Plot.tip([...hist.map((d, i) => ({ fecha: d.fecha, v: d.valor, t: `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})\nreal: ${B4.num(d.valor)}\nesperaba: ${B4.num(ajuste[i].v)}` })),
                     ...pron.map((d) => ({ fecha: d.fecha, v: d.real, t: `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})${d.feriado ? ", feriado" : ""}\nreal: ${B4.num(d.real)}\npronóstico: ${B4.num(d.v)}` }))],
             Plot.pointerX({ x: "fecha", y: "v", title: "t" })),
         ],
@@ -82,7 +82,7 @@ DEMOS.holtWinters = {
       const efectos = r.estacion.map((v, j) => ({ dia: (jun[0].fecha.getUTCDay() + j) % 7, v })); // j = 0 es el 1/6
       const datosS = ORDEN.map((d) => ({ nombre: NOMBRE[d], v: efectos.find((e) => e.dia === d).v }));
       U.reemplazar(graficoS, Plot.plot({
-        width: 380, height: 130, marginLeft: 64, marginRight: 4, marginTop: 6, marginBottom: 22,
+        width: 380, height: 130, marginLeft: 78, marginRight: 4, marginTop: 6, marginBottom: 22,
         style: { fontFamily: "IBM Plex Sans, sans-serif", fontSize: "16px", color: U.COLORES.ink2, background: "transparent" },
         x: { domain: datosS.map((d) => d.nombre), label: null, tickSize: 0, padding: 0.25 },
         y: { domain: [-5e5, 3e5], ticks: [-4e5, 0, 2e5], tickFormat: (d) => (d === 0 ? "0" : (d > 0 ? "+" : "−") + U.fmt(Math.abs(d) / 1e3) + " mil"), grid: true, label: null, tickSize: 0 },
@@ -97,14 +97,16 @@ DEMOS.holtWinters = {
         `<div class="b4-cifra"><div class="v">${B4.pct(m.MAPE)}</div><div class="e">MAPE</div></div>`;
 
       const a = par.alfa, b = par.beta, g = par.gamma;
-      lecA.innerHTML = `<b>α = ${fmtPar(a)}</b> · ` + (a === 0 ? "El nivel no se actualiza: queda en su valor inicial."
-        : a === 1 ? "El nivel es el último dato, descontado el efecto de su día de la semana."
-        : `El nivel toma ${pct(a)} del último dato (descontado el efecto de su día) y ${pct(1 - a)} de lo que traía.`);
-      lecB.innerHTML = `<b>β = ${fmtPar(b)}</b> · ` + (b === 0 ? "La tendencia no se actualiza: queda en su valor inicial, cero."
-        : `La tendencia toma ${pct(b)} de cada cambio del nivel y ${pct(1 - b)} de la pendiente que traía.`);
-      lecG.innerHTML = `<b>γ = ${fmtPar(g)}</b> · ` + (g === 0 ? "El efecto de cada día de la semana queda fijo en su valor inicial."
-        : g === 1 ? "El efecto de cada día de la semana es el último desvío observado ese día."
-        : `El efecto de cada día de la semana se corrige con ${pct(g)} del último desvío observado ese día.`);
+      lecA.innerHTML = `<b>α = ${fmtPar(a)}: cuánto le cree al último dato.</b> ` + (a === 0 ? "Nada: el nivel queda fijo en su valor inicial."
+        : a >= 0.7 ? `Mucho (${pct(a)}): reacciona rápido a un cambio, pero un día raro, como un feriado, lo arrastra.`
+        : a <= 0.2 ? `Poco (${pct(a)}): un día raro casi no lo mueve, pero tarda en ver un cambio real.`
+        : `El nivel nuevo es ${pct(a)} el último dato y ${pct(1 - a)} lo que traía.`);
+      lecB.innerHTML = `<b>β = ${fmtPar(b)}: si viene subiendo o bajando.</b> ` + (b === 0 ? "No aprende pendiente: pronostica alrededor de un nivel fijo."
+        : b >= 0.3 ? "Una racha de días buenos se vuelve una tendencia, y el pronóstico la estira hacia adelante."
+        : `Cada cambio del nivel corrige la pendiente en ${pct(b)}.`);
+      lecG.innerHTML = `<b>γ = ${fmtPar(g)}: cuánto corrige el patrón semanal.</b> ` + (g === 0 ? "Nada: el efecto de cada día de la semana queda fijo."
+        : g >= 0.7 ? "Mucho: si el último lunes fue raro, todos los lunes del pronóstico lo copian."
+        : `Si un lunes se aparta de lo esperado, el efecto del lunes se corrige ${pct(g)} de esa diferencia.`);
     }
 
     const sA = U.slider({ etiqueta: "α nivel", min: 0, max: 1, step: 0.001, valor: par.alfa, formato: fmtPar, alCambiar: (v) => { par.alfa = v; dibujar(); } });

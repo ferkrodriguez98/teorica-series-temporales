@@ -10,17 +10,18 @@ DEMOS.comparacion = {
     const NOMBRES = Object.keys(P.modelos);
     const M = {};
     NOMBRES.forEach((n) => (M[n] = B4.metricas(P.real, P.modelos[n].pred)));
+    const memoria = {};
     let modelo = "SARIMAX", orden = { col: "MAPE", asc: true };
 
     const hw = P.modelos["Holt-Winters"].params, cx = P.modelos.SARIMAX.coef;
     const ordenSar = (P.modelos.SARIMA.orden || "").replace(/7$/, "₇");
     const DESC = {
       "Naive": "repite el último dato de train (sábado 31/5) en los 28 días.",
-      "Seasonal naive": "repite la última semana de train, del 25 al 31/5.",
-      "Holt-Winters": `nivel, tendencia y ciclo semanal con suavizado exponencial; statsmodels estimó α = ${U.fmt(hw.smoothing_level, 3)}, β = ${U.fmt(hw.smoothing_trend, 0)} y γ = ${U.fmt(hw.smoothing_seasonal, 3)}.`,
-      "SARIMA": `orden ${ordenSar}, autorregresivo y de medias móviles con una diferencia estacional de 7 días.`,
-      "SARIMAX": `el mismo SARIMA con variables externas (feriados, puentes y no laborables de lunes a viernes, y lluvia). Coeficientes: feriado ${B4.signo(cx.feriado)}, puente ${B4.signo(cx.puente)}, lluvia ${B4.signo(cx.lluvia_mm)} por mm.`,
-      "Gradient boosting": "árboles de decisión en secuencia sobre la serie convertida en tabla: lags de 28 días o más, calendario, feriados, lluvia y temperatura.",
+      "Seasonal naive": "repite la última semana: cada lunes de junio vale lo que el último lunes de mayo, y así.",
+      "Holt-Winters": `el promedio que va olvidando de la diapositiva anterior, con los parámetros que estimó statsmodels (α = ${U.fmt(hw.smoothing_level, 3)}, β = ${U.fmt(hw.smoothing_trend, 0)}, γ = ${U.fmt(hw.smoothing_seasonal, 3)}).`,
+      "SARIMA": `estima con el pasado cuánto pesan los días anteriores y el mismo día de la semana anterior (orden ${ordenSar}). Solo mira la serie.`,
+      "SARIMAX": `el mismo SARIMA, más una columna que dice qué días son feriado, puente o no laborable, y otra con la lluvia. Aprende cuánto resta cada cosa: feriado ${B4.signo(cx.feriado)}, puente ${B4.signo(cx.puente)}, lluvia ${B4.signo(cx.lluvia_mm)} por mm.`,
+      "Gradient boosting": "árboles de decisión, el mismo tipo de modelo que vieron en la materia, sobre la serie convertida en tabla: lags de 28 días o más, calendario, feriados, lluvia y temperatura (lo vemos en dos diapositivas).",
     };
 
     const grid = U.el("div", { class: "b4-grid ancho-panel-420" });
@@ -67,12 +68,12 @@ DEMOS.comparacion = {
         marks: [
           ...B4.marcasFeriados(ferJ, { y1: Y0, alto: Y1 }),
           Plot.ruleX([U.sumarDias(jun[0].fecha, -0.5)], { stroke: U.COLORES.ink3, strokeDasharray: "3,3" }),
-          md.lo ? Plot.areaY(filas, { x: "fecha", y1: "lo", y2: "hi", fill: U.COLORES.modelo, fillOpacity: 0.13, curve: "linear" }) : null,
+          md.lo ? Plot.areaY(filas, { x: "fecha", y1: "lo", y2: "hi", fill: U.COLORES.modelo, fillOpacity: 0.13, curve: "linear", className: "anim-banda" }) : null,
           Plot.lineY(hist, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.2 }),
           Plot.dot(hist, { x: "fecha", y: "valor", r: 2, fill: U.COLORES.ink3 }),
           Plot.lineY(jun, { x: "fecha", y: "real", stroke: U.COLORES.real, strokeWidth: 1.8, strokeDasharray: "1.5,4", strokeLinecap: "round" }),
           Plot.dot(jun, { x: "fecha", y: "real", r: 2.6, fill: U.COLORES.real }),
-          Plot.lineY(filas, { x: "fecha", y: "p", stroke: U.COLORES.modelo, strokeWidth: 2.2 }),
+          Plot.lineY(filas, { x: "fecha", y: "p", stroke: U.COLORES.modelo, strokeWidth: 2.2, className: "anim-pron" }),
           Plot.ruleY([0], { stroke: U.COLORES.ink3 }),
           Plot.tip(filas, Plot.pointerX({
             x: "fecha", y: "real",
@@ -81,6 +82,8 @@ DEMOS.comparacion = {
         ].filter(Boolean),
       }));
       U.reemplazar(grafico, plot);
+      if (!md.lo) delete memoria["anim-banda"];
+      B4.animar(grafico, memoria, ["anim-pron", "anim-banda"]);
       dibujarTabla();
 
       let txt = `<b>${modelo}</b>: ${DESC[modelo] || ""}`;

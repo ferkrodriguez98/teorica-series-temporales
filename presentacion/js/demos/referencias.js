@@ -36,6 +36,7 @@ DEMOS.referencias = {
     REFS.forEach((r) => (r.m = B4.metricas(P.real, r.pred)));
 
     const activos = new Set(["ing"]);
+    const memoria = {};
     let ultimo = "ing";
 
     /* Feriados del período visible */
@@ -71,7 +72,7 @@ DEMOS.referencias = {
 
     function dibujar() {
       const vis = REFS.filter((r) => activos.has(r.id));
-      const lineas = vis.map((r) => Plot.lineY(jun.map((d, i) => ({ fecha: d.fecha, v: r.pred[i] })), { x: "fecha", y: "v", stroke: r.color, strokeWidth: 2.2 }));
+      const lineas = vis.map((r) => Plot.lineY(jun.map((d, i) => ({ fecha: d.fecha, v: r.pred[i] })), { x: "fecha", y: "v", stroke: r.color, strokeWidth: 2.2, className: "anim-" + r.id }));
       const filasTip = [
         ...hist.map((d) => ({ fecha: d.fecha, v: d.valor, titulo: `${U.fechaCorta(d.fecha)} (${B4.DIAS3[d.fecha.getUTCDay()]})\nreal: ${B4.num(d.valor)}` })),
         ...jun.map((d, i) => ({
@@ -98,6 +99,8 @@ DEMOS.referencias = {
         ],
       }));
       U.reemplazar(grafico, plot);
+      REFS.forEach((r) => { if (!activos.has(r.id)) delete memoria["anim-" + r.id]; });
+      B4.animar(grafico, memoria, REFS.map((r) => "anim-" + r.id));
       dibujarTabla();
 
       const r = REFS.find((x) => x.id === ultimo && activos.has(x.id)) || vis[vis.length - 1];
