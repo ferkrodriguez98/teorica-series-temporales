@@ -9,7 +9,7 @@ DEMOS.estacionariedad = {
       { titulo: "Estacionaria: media y variabilidad fijas", v: e, color: U.COLORES.B },
       { titulo: "No estacionaria: la media sube (tendencia)", v: e.map((z, t) => z + 0.03 * t), color: U.COLORES.ink2 },
       { titulo: "No estacionaria: la variabilidad crece", v: e.map((z, t) => z * (0.25 + (2.2 * t) / N)), color: U.COLORES.ink2 },
-      { titulo: "No estacionaria: caminata aleatoria", v: e.map((z) => (acum += z)), color: U.COLORES.ink2 },
+      { titulo: "No estacionaria: random walk", v: e.map((z) => (acum += z)), color: U.COLORES.ink2 },
     ];
     casos.forEach((c) => {
       const p = B3.panel(el, c.titulo, 640);

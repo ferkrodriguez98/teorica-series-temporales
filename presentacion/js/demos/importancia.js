@@ -1,4 +1,4 @@
-/* Gradient boosting: la serie convertida en tabla (una semana de junio de 2025) e importancia por permutación. */
+/* Gradient boosting: la serie convertida en tabla (una semana de junio de 2025) e permutation importance. */
 (function () {
   const ETIQUETAS = {
     dia_semana: "día de la semana", feriado: "feriado", rezago_364: "pasajeros hace 364 días",
@@ -75,14 +75,14 @@
           ],
         }));
         U.reemplazar(mini, plot);
-        lectura.innerHTML = `Fila elegida: <b>${U.fechaLarga(f.d)}</b> (clic en otra fila para cambiarla). Los rezagos son de 28 días o más: con los datos hasta el 31 de mayo se arman las filas de los 28 días de junio sin usar pronósticos propios como dato.`;
+        lectura.innerHTML = `Fila elegida: <b>${U.fechaLarga(f.d)}</b> (clic en otra fila para cambiarla). Los lags son de 28 días o más: con los datos hasta el 31 de mayo se arman las filas de los 28 días de junio sin usar pronósticos propios como dato.`;
       }
       dibujar();
       return {};
     },
   };
 
-  /* ---------- Importancia por permutación ---------- */
+  /* ---------- Permutation importance ---------- */
   DEMOS.importancia = {
     montar(el) {
       const { controles, grafico, lectura } = U.armar(el);
@@ -91,9 +91,9 @@
       const P = DATA.modelos.pronosticos;
       const base = B4.metricas(P.real, P.modelos["Gradient boosting"].pred).MAE;
       const NOTAS = {
-        mes: "constante en la prueba: los 28 días son de junio",
-        no_laborable: "vale 0 en los 28 días de prueba",
-        puente: "vale 0 en los 28 días de prueba",
+        mes: "constante en el test: los 28 días son de junio",
+        no_laborable: "vale 0 en los 28 días de test",
+        puente: "vale 0 en los 28 días de test",
       };
       const datos = P.importancia.map((d) => ({ ...d, etiqueta: ETIQUETAS[d.variable] || d.variable }));
 
@@ -105,8 +105,8 @@
       izq.append(grafico);
       panel.innerHTML = `<div class="b4-bloque"><h4>Cómo se calcula</h4>
         <ol style="margin:0 0 0 1.1em; padding:0; line-height:1.45;">
-          <li>MAE del modelo en los 28 días de prueba: <b style="color:var(--ink)">${B4.num(base)}</b>.</li>
-          <li>Se desordena una columna de la tabla de prueba y se vuelve a calcular el MAE.</li>
+          <li>MAE del modelo en los 28 días de test: <b style="color:var(--ink)">${B4.num(base)}</b>.</li>
+          <li>Se desordena una columna de la tabla de test y se vuelve a calcular el MAE.</li>
           <li>La diferencia, promediada en 30 desórdenes, es la importancia de esa variable.</li>
         </ol></div>`;
 

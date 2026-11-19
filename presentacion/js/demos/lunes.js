@@ -1,6 +1,6 @@
 /* El lunes que viene: el lunes siguiente a la clase (23/11/2026) es feriado.
    Lunes de 2025 y 2026, hábiles y feriados, y dos pronósticos para ese día:
-   el ingenuo estacional (el último lunes con datos) y la mediana de los lunes feriados. */
+   el seasonal naive (el último lunes con datos) y la mediana de los lunes feriados. */
 DEMOS.lunesQueViene = {
   montar(el) {
     const { controles, grafico, lectura } = U.armar(el);
@@ -50,8 +50,8 @@ DEMOS.lunesQueViene = {
       })));
       const sob = soberania.map((d) => `${U.fechaCorta(d.fecha)}: ${U.fmtK(d.valor)}`).join("; ");
       lectura.innerHTML = vista === "serie"
-        ? `Los datos llegan hasta el ${U.fechaCorta(ultimo)}. El ingenuo estacional repite el último lunes con datos (${U.fechaCorta(ultimoLunes.fecha)}): <b>${U.fmtK(ingenuo)}</b> pasajeros para el lunes 23/11/2026.`
-        : `El 23/11/2026 es feriado: ${fObj ? fObj.nombre : "Día de la Soberanía Nacional"} (Ley 27.399). La mediana de los ${feriados.length} lunes feriados desde enero de 2025 es <b>${U.fmtK(conCalendario)}</b>, un ${Math.round((conCalendario / ingenuo) * 100)} % del ingenuo estacional. El mismo feriado en años anteriores: ${sob}.`;
+        ? `Los datos llegan hasta el ${U.fechaCorta(ultimo)}. El seasonal naive repite el último lunes con datos (${U.fechaCorta(ultimoLunes.fecha)}): <b>${U.fmtK(ingenuo)}</b> pasajeros para el lunes 23/11/2026.`
+        : `El 23/11/2026 es feriado: ${fObj ? fObj.nombre : "Día de la Soberanía Nacional"} (Ley 27.399). La mediana de los ${feriados.length} lunes feriados desde enero de 2025 es <b>${U.fmtK(conCalendario)}</b>, un ${Math.round((conCalendario / ingenuo) * 100)} % del seasonal naive. El mismo feriado en años anteriores: ${sob}.`;
     }
 
     controles.append(U.botones([["serie", "Solo la serie"], ["calendario", "Con el calendario"]], vista, (v) => { vista = v; dibujar(); }));

@@ -155,7 +155,7 @@ DEMOS.ilusAcf = {
   },
 };
 
-/* Bloque 4: entrenamiento y prueba del ejercicio */
+/* Bloque 4: train y test del ejercicio */
 DEMOS.ilusParticion = {
   montar(el) {
     const d = U.recortar(ILUS.diario(), "2023-01-01", "2025-06-28");
@@ -169,8 +169,8 @@ DEMOS.ilusParticion = {
         Plot.ruleX([corte], { stroke: U.COLORES.ink, strokeDasharray: "3,3" }),
         Plot.lineY(ent, { x: "fecha", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 0.8 }),
         Plot.lineY(pru, { x: "fecha", y: "valor", stroke: U.COLORES.B, strokeWidth: 1.4 }),
-        Plot.text([{ x: U.dia("2024-03-15") }], { x: "x", y: 1.15e6, text: () => "entrenamiento", fill: U.COLORES.ink2, fontSize: 16 }),
-        Plot.text([{ x: corte }], { x: "x", y: 1.15e6, dx: 10, text: () => "prueba", textAnchor: "start", fill: U.COLORES.B, fontSize: 16 }),
+        Plot.text([{ x: U.dia("2024-03-15") }], { x: "x", y: 1.15e6, text: () => "train", fill: U.COLORES.ink2, fontSize: 16 }),
+        Plot.text([{ x: corte }], { x: "x", y: 1.15e6, dx: 10, text: () => "test", textAnchor: "start", fill: U.COLORES.B, fontSize: 16 }),
       ],
     })));
   },

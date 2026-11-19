@@ -1,5 +1,5 @@
 /* Correlación espuria.
-   DEMOS.espuria: dos caminatas aleatorias independientes de 48 pasos, su dispersión y la
+   DEMOS.espuria: dos random walks independientes de 48 pasos, su dispersión y la
    distribución de la correlación en 500 pares simulados, en niveles y en diferencias.
    DEMOS.espuriaReal: pasajeros del subte contra dólar blue, promedios mensuales de 2022 a 2025. */
 (function () {
@@ -56,7 +56,7 @@
         const filas = A.map((v, i) => ({ t: i + t0, a: v, b: Bs[i] }));
 
         // Series en el tiempo
-        pS.titulo.innerHTML = enNiv ? `Dos caminatas aleatorias independientes, ${N} pasos` : "Sus diferencias: el paso de cada período";
+        pS.titulo.innerHTML = enNiv ? `Dos random walks independientes, ${N} pasos` : "Sus diferencias: el paso de cada período";
         const ult = filas[filas.length - 1];
         U.reemplazar(pS.cuerpo, Plot.plot({
           width: 520, height: 510, marginLeft: 46, marginRight: 28, marginBottom: 40, marginTop: 30, style: estilo,
@@ -184,7 +184,7 @@
       const sim = simulacion();
       const pNiv = shareMasExtremo(sim.niv, rNiv), pVar = shareMasExtremo(sim.dif, rVar);
       const f0 = filas[0], f1 = filas[filas.length - 1];
-      lectura.innerHTML = `Entre enero de 2022 y diciembre de 2025 el dólar blue promedio pasó de $${U.fmt(f0.dol)} a $${U.fmt(f1.dol)}. Correlación de los niveles: <b>${B3.fmtR(rNiv)}</b>; de las variaciones mensuales: <b>${B3.fmtR(rVar)}</b>. Como referencia, en los ${PARES} pares de caminatas independientes de ${N} pasos, el ${B3.fmtPct(pNiv)} de las correlaciones de niveles y el ${B3.fmtPct(pVar)} de las de diferencias quedan igual o más lejos de cero que estas.`;
+      lectura.innerHTML = `Entre enero de 2022 y diciembre de 2025 el dólar blue promedio pasó de $${U.fmt(f0.dol)} a $${U.fmt(f1.dol)}. Correlación de los niveles: <b>${B3.fmtR(rNiv)}</b>; de las variaciones mensuales: <b>${B3.fmtR(rVar)}</b>. Como referencia, en los ${PARES} pares de random walks independientes de ${N} pasos, el ${B3.fmtPct(pNiv)} de las correlaciones de niveles y el ${B3.fmtPct(pVar)} de las de diferencias quedan igual o más lejos de cero que estas.`;
       return {};
     },
   };

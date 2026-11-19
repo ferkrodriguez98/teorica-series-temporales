@@ -22,7 +22,7 @@
     return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd());
   };
 
-  /* Caminata aleatoria de n puntos con pasos normales */
+  /* Random walk de n puntos con pasos normales */
   B3.caminata = (n, { media = 0, desvio = 1, inicio = 0, rnd = Math.random } = {}) => {
     const x = new Array(n);
     x[0] = inicio;
@@ -122,9 +122,9 @@
     };
   };
 
-  /* Gráfico de barras de la ACF (d3), con un rezago resaltado y una curva de referencia opcional.
+  /* Gráfico de barras de la ACF (d3), con un lag resaltado y una curva de referencia opcional.
      Devuelve { actualizar(datos, { resaltar, referencia }) } con datos = [{k, r}]. */
-  B3.graficoACF = (cont, { ancho, alto, K, dominio = [-0.5, 1], ticks, alClic, maxClic = K, etiquetaX = "Rezago" }) => {
+  B3.graficoACF = (cont, { ancho, alto, K, dominio = [-0.5, 1], ticks, alClic, maxClic = K, etiquetaX = "Lag" }) => {
     const m = { t: 12, r: 12, b: 46, l: 56 };
     const svg = d3.select(cont).append("svg").attr("width", ancho).attr("height", alto).style("display", "block");
     const x = d3.scaleLinear([0.5, K + 0.5], [m.l, ancho - m.r]);
@@ -172,7 +172,7 @@
       .on("mouseenter", (ev, k) => {
         const d = datos.find((z) => z.k === k);
         if (!d) return;
-        tip.mostrar(x(k), Math.min(yc(d.r), y(0)), `Rezago ${k}: <b>${B3.fmtR(d.r)}</b>`);
+        tip.mostrar(x(k), Math.min(yc(d.r), y(0)), `Lag ${k}: <b>${B3.fmtR(d.r)}</b>`);
       })
       .on("mouseleave", () => tip.ocultar())
       .on("click", (ev, k) => { if (alClic && k <= maxClic) alClic(k); });

@@ -8,7 +8,7 @@ DEMOS.metricas = {
     const NOMBRES = Object.keys(P.modelos);
     const DIA_PARO = jun.findIndex((d) => U.iso(d.fecha) === "2025-06-11");
     const FACTOR = 0.03;
-    let modelo = "Ingenuo estacional", paro = false;
+    let modelo = "Seasonal naive", paro = false;
 
     const grid = U.el("div", { class: "b4-grid" });
     const izq = U.el("div");

@@ -28,7 +28,6 @@ DEMOS.descomposicion = {
           Plot.text([nombre], { frameAnchor: "right", dx: 14, fill: U.COLORES.ink2, fontSize: 18, textAnchor: "start" }),
           Plot.tip(serie, Plot.pointerX({ x: "fecha", y: "valor", title: (d) => `${U.fechaCorta(d.fecha)}\n${nombre}: ${U.fmtK(d.valor)}${d.feriado ? "\nferiado o no laborable" : ""}` })),
         ];
-        if (k === "residuo") marcas.splice(2, 0, Plot.dot(serie.filter((d) => d.feriado), { x: "fecha", y: "valor", r: 3.5, fill: U.COLORES.B, stroke: U.COLORES.surface, strokeWidth: 1 }));
         cont.append(Plot.plot(U.plotBase({
           height: ultimo ? 128 : 100, marginTop: 8, marginBottom: ultimo ? 34 : 6, marginLeft: 76, marginRight: 150,
           x: { domain: xDom, axis: ultimo ? "bottom" : null, label: null },
@@ -38,12 +37,7 @@ DEMOS.descomposicion = {
       });
       U.reemplazar(grafico, cont);
 
-      // Qué parte de los residuos más grandes cae en feriados
-      const conRes = filas.filter((d) => d.residuo != null);
-      const top = [...conRes].sort((a, b) => Math.abs(b.residuo) - Math.abs(a.residuo)).slice(0, 40);
-      const enFeriado = top.filter((d) => d.feriado).length;
-      const pctFer = (100 * d3.mean(conRes, (d) => d.feriado)).toFixed(1).replace(".", ",");
-      lectura.innerHTML = `De los 40 residuos más grandes, <b>${enFeriado}</b> caen en un feriado o día no laborable (puntos rojos), aunque esos días son el ${pctFer} % del período. El modelo no sabe qué es un feriado: lo registra como un error.`;
+      lectura.innerHTML = "El residuo es lo que la tendencia y los dos ciclos no explican. Un residuo grande es un día que no siguió el patrón: una anomalía. Los picos hacia abajo son los días a mirar.";
     }
     controles.append(U.botones([["todo", "Abril 2022 a agosto 2026"], ["zoom", "Marzo a agosto 2025"]], rango, (v) => { rango = v; dibujar(); }));
     dibujar();

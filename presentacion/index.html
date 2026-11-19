@@ -184,6 +184,13 @@
   <div class="fuente">MSTL (statsmodels), períodos de 7 y 365 días, versión robusta. Días sin datos interpolados para el ajuste y omitidos en el gráfico.</div>
 </section>
 
+<section data-estrella>
+  <div class="kicker">Las piezas de una serie</div>
+  <h2>Residuos grandes: ¿qué pasó ese día?</h2>
+  <div data-demo="residuos"></div>
+  <div class="fuente">Residuos de la MSTL del total diario, abril de 2022 a agosto de 2026. Explicaciones: feriados según la Ley 27.399 y decretos; notas de prensa (datos/eventos/eventos_verificados.csv).</div>
+</section>
+
 <section>
   <div class="kicker">Las piezas de una serie</div>
   <h2>Otra forma de estacionalidad</h2>
@@ -195,18 +202,18 @@
 <section class="divisor">
   <div class="kicker">Bloque 3</div>
   <h1>La memoria de una serie</h1>
-  <p>Cuánto se parece cada valor a los anteriores: rezagos, autocorrelación, caminatas aleatorias y estacionariedad.</p>
+  <p>Cuánto se parece cada valor a los anteriores: lags, autocorrelación, random walks y estacionariedad.</p>
 </section>
 
 <section data-estrella>
-  <div class="kicker">Rezagos y autocorrelación</div>
+  <div class="kicker">Lags y autocorrelación</div>
   <h2>Cada día contra el de hace k días</h2>
   <div data-demo="rezagos"></div>
   <div class="fuente">Total diario de pasajeros por molinetes, todas las líneas, 2023 a 2025 (se omiten los 3 días sin datos). Fuente: SBASE, BA Data.</div>
 </section>
 
 <section data-estrella>
-  <div class="kicker">Caminatas aleatorias</div>
+  <div class="kicker">Random walks</div>
   <h2>¿Cuál es la serie real?</h2>
   <div data-demo="cualReal"></div>
   <div class="fuente">Dólar blue, cotización de venta de lunes a viernes, desde junio de 2020. Fuente: Bluelytics. Las otras tres series son simuladas.</div>
@@ -214,9 +221,9 @@
 
 <section>
   <div class="kicker">Correlación espuria</div>
-  <h2>Correlación entre caminatas independientes</h2>
+  <h2>Correlación entre random walks independientes</h2>
   <div data-demo="espuria"></div>
-  <div class="fuente">Caminatas aleatorias simuladas con pasos normales estándar independientes.</div>
+  <div class="fuente">Random walks simuladas con pasos normales estándar independientes.</div>
 </section>
 
 <section data-estrella>
@@ -233,7 +240,7 @@
     <ul class="b3-texto">
       <li>Una serie es estacionaria si su media, su variabilidad y su autocorrelación no dependen del momento en que se la mire.</li>
       <li>Los modelos clásicos (AR, ARMA) estiman esas cantidades con el pasado y las usan para pronosticar. Si cambian con el tiempo, lo estimado deja de describir el período que viene.</li>
-      <li>Diferenciar (restar a cada valor el del período anterior, o el del mismo día de la semana anterior) quita tendencias y ciclos fijos. Las diferencias de una caminata aleatoria son ruido blanco.</li>
+      <li>Diferenciar (restar a cada valor el del período anterior, o el del mismo día de la semana anterior) quita tendencias y ciclos fijos. Las diferencias de una random walk son white noise.</li>
     </ul>
     <div data-demo="estacionariedad"></div>
   </div>
@@ -248,7 +255,7 @@
 </section>
 
 <section>
-  <div class="kicker">Del ruido a la caminata</div>
+  <div class="kicker">De white noise a random walk</div>
   <h2>Un proceso autorregresivo de orden 1</h2>
   <div data-demo="ar1"></div>
   <div class="fuente">Serie simulada: 400 shocks normales estándar, siempre los mismos.</div>
@@ -263,24 +270,24 @@
     <h1>Pronosticar</h1>
     <p class="muted">Un mismo ejercicio para todo el bloque: con los datos disponibles hasta el 31 de mayo de 2025, pronosticar los pasajeros de cada día entre el 1 y el 28 de junio.</p>
     <div class="esquema">
-      <span>Entrenamiento</span><span>Prueba</span><span>Horizonte</span>
+      <span>Train</span><span>Test</span><span>Horizonte</span>
       <b>1/1/2023 al 31/5/2025</b><b>1/6/2025 al 28/6/2025</b><b>28 días</b>
     </div>
   </div>
 </section>
 
 <section data-estrella>
-  <div class="kicker">Entrenamiento y prueba</div>
+  <div class="kicker">Train y test</div>
   <h2>Partición al azar y partición temporal</h2>
   <div data-demo="particion"></div>
   <div class="fuente">Arriba: 60 días de pasajeros del subte, del 5/8/2024 al 3/10/2024. Fuente: SBASE, BA Data.</div>
 </section>
 
 <section data-estrella>
-  <div class="kicker">Referencias</div>
-  <h2>Pronósticos de referencia</h2>
+  <div class="kicker">Baselines</div>
+  <h2>Baselines</h2>
   <div data-demo="referencias"></div>
-  <div class="fuente">Referencias calculadas con los datos hasta el 31/5/2025. Bandas grises: feriados y días no laborables. Fuente: SBASE, BA Data.</div>
+  <div class="fuente">Baselines calculadas con los datos hasta el 31/5/2025. Bandas grises: feriados y días no laborables. Fuente: SBASE, BA Data.</div>
 </section>
 
 <section>
@@ -301,7 +308,7 @@
   <div class="kicker">Comparación</div>
   <h2>Seis modelos sobre los mismos 28 días</h2>
   <div data-demo="comparacion"></div>
-  <div class="fuente">Entrenamiento del 1/1/2023 al 31/5/2025. Modelos ajustados con statsmodels (Holt-Winters, SARIMA, SARIMAX) y scikit-learn (gradient boosting). Fuente: SBASE, BA Data.</div>
+  <div class="fuente">Train del 1/1/2023 al 31/5/2025. Modelos ajustados con statsmodels (Holt-Winters, SARIMA, SARIMAX) y scikit-learn (gradient boosting). Fuente: SBASE, BA Data.</div>
 </section>
 
 <section>
@@ -320,7 +327,7 @@
 
 <section>
   <div class="kicker">Importancia de variables</div>
-  <h2>Importancia por permutación</h2>
+  <h2>Permutation importance</h2>
   <div data-demo="importancia"></div>
   <div class="fuente">Gradient boosting de la comparación, evaluado en los 28 días de junio de 2025 (scikit-learn, permutation_importance).</div>
 </section>
@@ -329,14 +336,14 @@
   <div class="kicker">Pronosticar</div>
   <h2>Resultados en junio de 2025</h2>
   <div data-demo="resultadosB4"></div>
-  <div class="fuente">Prueba: 1/6/2025 al 28/6/2025 (28 días, dos feriados). Entrenamiento: 1/1/2023 al 31/5/2025. Fuente: SBASE, BA Data.</div>
+  <div class="fuente">Test: 1/6/2025 al 28/6/2025 (28 días, dos feriados). Train: 1/1/2023 al 31/5/2025. Fuente: SBASE, BA Data.</div>
 </section>
 
 <section data-estrella>
   <div class="kicker">Contexto</div>
   <h2>Un feriado que cae en domingo</h2>
   <div data-demo="feriadoDomingo"></div>
-  <div class="fuente">SARIMAX (1,0,1)(1,1,1)₇ con feriado, puente, día no laborable y lluvia (statsmodels). Entrenamiento del 1/1/2023 al 31/5/2025. Fuente: SBASE, BA Data; feriados: Ley 27.399 y decretos.</div>
+  <div class="fuente">SARIMAX (1,0,1)(1,1,1)₇ con feriado, puente, día no laborable y lluvia (statsmodels). Train del 1/1/2023 al 31/5/2025. Fuente: SBASE, BA Data; feriados: Ley 27.399 y decretos.</div>
 </section>
 
 
@@ -488,6 +495,7 @@
 <script src="data/ecobici_red.js"></script>
 <script src="data/boleto.js"></script>
 <script src="data/error_fechas.js"></script>
+<script src="data/residuos.js"></script>
 
 <script src="js/app.js"></script>
 <script src="js/mapa.js"></script>
@@ -517,6 +525,7 @@
 <script src="js/demos/feriado_domingo.js"></script>
 <script src="js/demos/calor.js"></script>
 <script src="js/demos/descomposicion.js"></script>
+<script src="js/demos/residuos.js"></script>
 <script src="js/demos/mapa_anios.js"></script>
 <script src="js/demos/contexto.js"></script>
 <script src="js/demos/ecobici_extra.js"></script>

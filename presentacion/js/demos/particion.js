@@ -1,4 +1,4 @@
-/* Partición al azar contra partición temporal (60 días) y validación con origen móvil (animación). */
+/* Partición al azar contra partición temporal (60 días) y validación con rolling origin (animación). */
 DEMOS.particion = {
   montar(el) {
     const { controles, grafico, lectura } = U.armar(el);
@@ -29,18 +29,18 @@ DEMOS.particion = {
       .attr("d", d3.line().x((d) => x(d.fecha)).y((d) => y(d.v)));
     const corte = svg1.append("g").attr("opacity", 0);
     corte.append("line").attr("y1", m1.t - 22).attr("y2", H1 - m1.b).attr("stroke", U.COLORES.ink2).attr("stroke-dasharray", "4,4");
-    const rotIzq = corte.append("text").attr("y", m1.t - 12).attr("text-anchor", "end").attr("font-size", 17).attr("fill", U.COLORES.ink2).attr("font-family", "IBM Plex Sans").text("entrenamiento ←");
-    const rotDer = corte.append("text").attr("y", m1.t - 12).attr("font-size", 17).attr("fill", U.COLORES.modelo).attr("font-family", "IBM Plex Sans").text("→ prueba");
+    const rotIzq = corte.append("text").attr("y", m1.t - 12).attr("text-anchor", "end").attr("font-size", 17).attr("fill", U.COLORES.ink2).attr("font-family", "IBM Plex Sans").text("train ←");
+    const rotDer = corte.append("text").attr("y", m1.t - 12).attr("font-size", 17).attr("fill", U.COLORES.modelo).attr("font-family", "IBM Plex Sans").text("→ test");
     const puntos = svg1.append("g").selectAll("circle").data(datos).join("circle")
       .attr("cx", (d) => x(d.fecha)).attr("cy", (d) => y(d.v)).attr("r", 6)
       .attr("fill", C.train).attr("stroke", U.COLORES.surface).attr("stroke-width", 2);
 
-    /* ---------- Panel inferior: origen móvil ---------- */
+    /* ---------- Panel inferior: rolling origin ---------- */
     const FOLDS = [30, 36, 42, 48, 54].map((t) => ({ train: t, test: 6 }));
     const cab = U.el("div", { style: "display:flex; align-items:center; gap:22px; margin: 14px 0 6px; font-size: 0.52em; color: var(--ink-2);" });
     const bPlay = U.el("button", { type: "button", class: "boton" }, "▶ Reproducir");
-    cab.append(U.el("b", { style: "color: var(--ink); font-weight:600;" }, "Validación con origen móvil"), bPlay,
-      B4.leyenda([["banda", C.train, "entrenamiento"], ["banda", C.test, "prueba"], ["banda", C.fuera, "sin usar"]], "width:auto; margin-left:auto; font-size:1em;"));
+    cab.append(U.el("b", { style: "color: var(--ink); font-weight:600;" }, "Validación con rolling origin"), bPlay,
+      B4.leyenda([["banda", C.train, "train"], ["banda", C.test, "test"], ["banda", C.fuera, "sin usar"]], "width:auto; margin-left:auto; font-size:1em;"));
     const g2 = U.el("div");
     grafico.append(cab, g2);
     const FH = 26, FG = 9, H2 = FOLDS.length * (FH + FG) + 4;
@@ -77,15 +77,15 @@ DEMOS.particion = {
         pintarSerie((d) => (s.has(d.i) ? "test" : "train"), { animar });
         mostrarCorte(null);
         const conPosterior = sorteo.filter((i) => d3.range(i + 1, N).some((j) => !s.has(j))).length;
-        lectura.innerHTML = `Prueba: <b>${NT} días sorteados</b> entre los ${N}. ${conPosterior === NT ? `Para los ${NT}` : `Para ${conPosterior} de ellos`}, el entrenamiento incluye días posteriores: el modelo se evalúa en fechas rodeadas por datos que ya vio.`;
+        lectura.innerHTML = `Test: <b>${NT} días sorteados</b> entre los ${N}. ${conPosterior === NT ? `Para los ${NT}` : `Para ${conPosterior} de ellos`}, el set de train incluye días posteriores: el modelo se evalúa en fechas rodeadas por datos que ya vio.`;
       } else {
         pintarSerie((d) => (d.i >= N - NT ? "test" : "train"), { animar, orden: (d) => Math.max(0, d.i - (N - NT)) });
         mostrarCorte(N - NT);
-        lectura.innerHTML = `Prueba: <b>los últimos ${NT} días</b> (${fmtD(datos[N - NT].fecha)} al ${fmtD(datos[N - 1].fecha)}). El entrenamiento termina el ${fmtD(datos[N - NT - 1].fecha)}: el modelo solo ve fechas anteriores a las que se evalúan.`;
+        lectura.innerHTML = `Test: <b>los últimos ${NT} días</b> (${fmtD(datos[N - NT].fecha)} al ${fmtD(datos[N - 1].fecha)}). El train termina el ${fmtD(datos[N - NT - 1].fecha)}: el modelo solo ve fechas anteriores a las que se evalúan.`;
       }
     }
 
-    /* Reproducción del origen móvil: cada partición se dibuja y la serie de arriba la acompaña */
+    /* Reproducción del rolling origin: cada partición se dibuja y la serie de arriba la acompaña */
     let corriendo = null;
     function reproducir() {
       if (corriendo) clearTimeout(corriendo);
@@ -97,8 +97,8 @@ DEMOS.particion = {
         celdas.filter((d) => d.k === k).transition().duration(260).delay((d) => d.i * 9).attr("fill", (d) => C[rolCelda(d)]);
         pintarSerie((d) => rolCelda({ ...d, f }), { animar: true, orden: (d) => d.i * 0.4 });
         mostrarCorte(f.train);
-        lectura.innerHTML = `Partición ${k + 1} de ${FOLDS.length}: entrenamiento con los primeros <b>${f.train} días</b> (hasta el ${fmtD(datos[f.train - 1].fecha)}), prueba con los <b>${f.test} siguientes</b>.` +
-          (k === FOLDS.length - 1 ? ` El error de validación es el promedio de los errores de las ${FOLDS.length} pruebas.` : "");
+        lectura.innerHTML = `Partición ${k + 1} de ${FOLDS.length}: train con los primeros <b>${f.train} días</b> (hasta el ${fmtD(datos[f.train - 1].fecha)}), test con los <b>${f.test} siguientes</b>.` +
+          (k === FOLDS.length - 1 ? ` El error de validación es el promedio de los errores de las ${FOLDS.length} tests.` : "");
         k++;
         corriendo = k < FOLDS.length ? setTimeout(unaFold, 1500) : null;
       };
@@ -113,7 +113,7 @@ DEMOS.particion = {
     bSortear.addEventListener("click", () => { if (modo !== "azar") return; sortear(); aplicar(); });
     bPlay.addEventListener("click", reproducir);
     controles.append(botones, bSortear, U.el("span", { class: "b4-sep" }),
-      B4.leyenda([["punto", C.train, "entrenamiento"], ["punto", C.test, "prueba"]], "width:auto; font-size:1em;"));
+      B4.leyenda([["punto", C.train, "train"], ["punto", C.test, "test"]], "width:auto; font-size:1em;"));
 
     /* Estado inicial: todas las particiones dibujadas, sin animación */
     celdas.attr("fill", (d) => C[rolCelda(d)]);

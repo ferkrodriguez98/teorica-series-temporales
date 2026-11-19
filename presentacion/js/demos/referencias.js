@@ -1,4 +1,4 @@
-/* Pronósticos de referencia para junio de 2025, calculados en el navegador a partir de abril y mayo. */
+/* Baselines para junio de 2025, calculados en el navegador a partir de abril y mayo. */
 DEMOS.referencias = {
   montar(el) {
     const { controles, grafico, lectura } = U.armar(el);
@@ -13,14 +13,14 @@ DEMOS.referencias = {
 
     const REFS = [
       {
-        id: "ing", nombre: "Ingenuo", color: U.COLORES.modelo,
+        id: "ing", nombre: "Naive", color: U.COLORES.modelo,
         pred: jun.map(() => H[n - 1]),
-        texto: `<b>Ingenuo</b>: repite el último dato, ${B4.fechaDia(ult.fecha)} (${B4.num(ult.valor)}), en los ${h} días.`,
+        texto: `<b>Naive</b>: repite el último dato, ${B4.fechaDia(ult.fecha)} (${B4.num(ult.valor)}), en los ${h} días.`,
       },
       {
-        id: "est", nombre: "Ingenuo estacional", color: U.COLORES.C,
+        id: "est", nombre: "Seasonal naive", color: U.COLORES.C,
         pred: jun.map((_, i) => H[n - 7 + (i % 7)]),
-        texto: `<b>Ingenuo estacional</b>: repite la última semana, del ${B4.fechaDia(hist[n - 7].fecha)} al ${B4.fechaDia(ult.fecha)}.`,
+        texto: `<b>Seasonal naive</b>: repite la última semana, del ${B4.fechaDia(hist[n - 7].fecha)} al ${B4.fechaDia(ult.fecha)}.`,
       },
       {
         id: "prom", nombre: "Promedio de 4 semanas", color: U.COLORES.D,
@@ -52,7 +52,7 @@ DEMOS.referencias = {
       U.el("div", { class: "b4-nota" }, "MAE: error absoluto medio, en pasajeros por día. MAPE: error absoluto medio en porcentaje del valor real."));
 
     function dibujarTabla() {
-      tabla.innerHTML = "<thead><tr><th>Referencia</th><th>MAE</th><th>MAPE</th></tr></thead>";
+      tabla.innerHTML = "<thead><tr><th>Baseline</th><th>MAE</th><th>MAPE</th></tr></thead>";
       const tb = U.el("tbody");
       REFS.forEach((r) => {
         const tr = U.el("tr", { class: activos.has(r.id) ? "" : "tenue" });
@@ -94,7 +94,7 @@ DEMOS.referencias = {
       dibujarTabla();
 
       const r = REFS.find((x) => x.id === ultimo && activos.has(x.id)) || vis[vis.length - 1];
-      if (!r) { lectura.innerHTML = "Sin referencias visibles."; return; }
+      if (!r) { lectura.innerHTML = "Sin baselines visibles."; return; }
       let peor = 0;
       r.pred.forEach((p, i) => { if (Math.abs(P.real[i] - p) > Math.abs(P.real[peor] - r.pred[peor])) peor = i; });
       const d = jun[peor];

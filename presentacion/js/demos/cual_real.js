@@ -1,4 +1,4 @@
-/* ¿Cuál es la real? Tres caminatas aleatorias y el logaritmo del dólar blue en una ventana
+/* ¿Cuál es la real? Tres random walks y el logaritmo del dólar blue en una ventana
    de 500 días (lunes a viernes) elegida al azar. Los pasos simulados son normales con la media y
    el desvío de los log-retornos diarios del dólar en esa misma ventana.
    La ventana empieza desde DESDE: antes de mayo de 2020 la serie incluye fines de semana (con el valor
@@ -66,12 +66,12 @@ DEMOS.cualReal = {
 
     function leer() {
       if (!E.revelado) {
-        lectura.innerHTML = "Tres paneles son caminatas aleatorias: cada paso es un sorteo normal independiente, con la media y el desvío de los log-retornos diarios del dólar blue en la misma ventana. El cuarto es el logaritmo del dólar blue en 500 días seguidos, de lunes a viernes.";
+        lectura.innerHTML = "Tres paneles son random walks: cada paso es un sorteo normal independiente, con la media y el desvío de los log-retornos diarios del dólar blue en la misma ventana. El cuarto es el logaritmo del dólar blue en 500 días seguidos, de lunes a viernes.";
         return;
       }
       const a = D.venta[E.i0], b = D.venta[E.i0 + N - 1];
       const fmtP = (v) => "$" + U.fmt(v, v < 100 ? 2 : 0);
-      lectura.innerHTML = `El real es el panel <b>${E.pos + 1}</b>: el dólar blue pasó de ${fmtP(a)} a ${fmtP(b)} en esos 500 días. En el ${B3.fmtPct(E.sinCambio)} de los días la cotización registrada no cambió respecto del día anterior; en las simuladas, el valor cambia todos los días.`;
+      lectura.innerHTML = `El real es el panel <b>${E.pos + 1}</b>: el dólar blue pasó de ${fmtP(a)} a ${fmtP(b)} en esos 500 días. En el ${B3.fmtPct(E.sinCambio)} de los días la cotización registrada no cambió respecto del día anterior; en las simuladas, el valor cambia todos los días. Fuera de eso no se distinguen: una random walk genera tendencias y rachas sin causa, y para una serie así el mejor pronóstico simple es el último valor.`;
     }
 
     function elegir(i) {

@@ -18,8 +18,8 @@ DEMOS.diferenciar = {
     const fila = U.el("div", { class: "b3-fila" });
     grafico.append(fila);
     const pS = B3.panel(fila, "", 900);
-    const pA = B3.panel(fila, "ACF de lo que se muestra, rezagos 1 a 60", 500);
-    const g = B3.graficoACF(pA.cuerpo, { ancho: 500, alto: H, K, dominio: [-0.6, 1], ticks: d3.range(7, K + 1, 7), etiquetaX: "Rezago (días)" });
+    const pA = B3.panel(fila, "ACF de lo que se muestra, lags 1 a 60", 500);
+    const g = B3.graficoACF(pA.cuerpo, { ancho: 500, alto: H, K, dominio: [-0.6, 1], ticks: d3.range(7, K + 1, 7), etiquetaX: "Lag (días)" });
 
     const diaCorto = (f) => `${U.DIAS[f.getUTCDay()].slice(0, 3)} ${U.fechaCorta(f)}`;
 
@@ -55,10 +55,10 @@ DEMOS.diferenciar = {
       if (modo === "orig") {
         lectura.innerHTML = `La ACF tiene picos en 7, 14, 21… que bajan despacio (${r(7)} en 7, ${r(56)} en 56): además del ciclo semanal, el nivel de la serie cambia a lo largo del año y entre años.`;
       } else if (modo === "d1") {
-        lectura.innerHTML = `Restar el día anterior saca el nivel, pero no el ciclo semanal: la ACF sigue en ${r(7)} en el rezago 7 y repite el pico en cada múltiplo de 7 (${r(56)} en 56).`;
+        lectura.innerHTML = `Restar el día anterior saca el nivel, pero no el ciclo semanal: la ACF sigue en ${r(7)} en el lag 7 y repite el pico en cada múltiplo de 7 (${r(56)} en 56).`;
       } else {
         const resto = d3.max(a.slice(7), (d) => Math.abs(d.r));
-        lectura.innerHTML = `Restar el mismo día de la semana anterior saca el ciclo semanal: quedan ${r(1)} en el rezago 1 y ${r(7)} en el 7; desde el 8, ningún valor pasa de ${B3.fmtR(resto)} en valor absoluto. El negativo en 7 aparece porque un día atípico entra en la diferencia dos veces: sumando ese día y restando siete días después.`;
+        lectura.innerHTML = `Restar el mismo día de la semana anterior saca el ciclo semanal: quedan ${r(1)} en el lag 1 y ${r(7)} en el 7; desde el 8, ningún valor pasa de ${B3.fmtR(resto)} en valor absoluto. El negativo en 7 aparece porque un día atípico entra en la diferencia dos veces: sumando ese día y restando siete días después.`;
       }
     }
 

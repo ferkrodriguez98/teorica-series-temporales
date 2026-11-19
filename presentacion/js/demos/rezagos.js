@@ -1,4 +1,4 @@
-/* Rezagos: pasajeros de hoy contra los de hace k días (2023 a 2025) y la ACF de 1 a 60.
+/* Lags: pasajeros de hoy contra los de hace k días (2023 a 2025) y la ACF de 1 a 60.
    Las barras de la ACF son la misma correlación de Pearson que la del diagrama, para cada k. */
 DEMOS.rezagos = {
   montar(el) {
@@ -14,7 +14,7 @@ DEMOS.rezagos = {
     const fila = U.el("div", { class: "b3-fila" });
     grafico.append(fila);
     const pD = B3.panel(fila, "", 480);
-    const pA = B3.panel(fila, "Autocorrelación (ACF): la misma correlación para cada rezago, de 1 a 60 días", 920);
+    const pA = B3.panel(fila, "Autocorrelación (ACF): la misma correlación para cada lag, de 1 a 60 días", 920);
 
     /* ---------- Diagrama de dispersión ---------- */
     const W = 480, H = 530, m = { t: 14, r: 16, b: 46, l: 66 };
@@ -67,7 +67,7 @@ DEMOS.rezagos = {
     /* ---------- ACF ---------- */
     const g = B3.graficoACF(pA.cuerpo, {
       ancho: 920, alto: H, K: KACF, dominio: [-0.4, 1], ticks: d3.range(7, KACF + 1, 7),
-      etiquetaX: "Rezago (días)", maxClic: KMAX, alClic: (kk) => deslizador.set(kk),
+      etiquetaX: "Lag (días)", maxClic: KMAX, alClic: (kk) => deslizador.set(kk),
     });
 
     /* Picos: múltiplos de 7 */
@@ -89,7 +89,7 @@ DEMOS.rezagos = {
       leer();
     }
 
-    const deslizador = U.slider({ etiqueta: "Rezago k (días)", min: 1, max: KMAX, valor: k, alCambiar: (v) => cambiar(v) });
+    const deslizador = U.slider({ etiqueta: "Lag k (días)", min: 1, max: KMAX, valor: k, alCambiar: (v) => cambiar(v) });
     controles.append(deslizador);
     cambiar(k, false);
     return {};

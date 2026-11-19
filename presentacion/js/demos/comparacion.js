@@ -15,12 +15,12 @@ DEMOS.comparacion = {
     const hw = P.modelos["Holt-Winters"].params, cx = P.modelos.SARIMAX.coef;
     const ordenSar = (P.modelos.SARIMA.orden || "").replace(/7$/, "₇");
     const DESC = {
-      "Ingenuo": "repite el último dato de entrenamiento (sábado 31/5) en los 28 días.",
-      "Ingenuo estacional": "repite la última semana de entrenamiento, del 25 al 31/5.",
+      "Naive": "repite el último dato de train (sábado 31/5) en los 28 días.",
+      "Seasonal naive": "repite la última semana de train, del 25 al 31/5.",
       "Holt-Winters": `nivel, tendencia y ciclo semanal con suavizado exponencial; statsmodels estimó α = ${U.fmt(hw.smoothing_level, 3)}, β = ${U.fmt(hw.smoothing_trend, 0)} y γ = ${U.fmt(hw.smoothing_seasonal, 3)}.`,
       "SARIMA": `orden ${ordenSar}, autorregresivo y de medias móviles con una diferencia estacional de 7 días.`,
       "SARIMAX": `el mismo SARIMA con variables externas (feriados, puentes y no laborables de lunes a viernes, y lluvia). Coeficientes: feriado ${B4.signo(cx.feriado)}, puente ${B4.signo(cx.puente)}, lluvia ${B4.signo(cx.lluvia_mm)} por mm.`,
-      "Gradient boosting": "árboles de decisión en secuencia sobre la serie convertida en tabla: rezagos de 28 días o más, calendario, feriados, lluvia y temperatura.",
+      "Gradient boosting": "árboles de decisión en secuencia sobre la serie convertida en tabla: lags de 28 días o más, calendario, feriados, lluvia y temperatura.",
     };
 
     const grid = U.el("div", { class: "b4-grid ancho-panel-420" });

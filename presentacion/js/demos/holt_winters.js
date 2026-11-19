@@ -11,7 +11,7 @@ DEMOS.holtWinters = {
     const jun = B4.junio();
     const offset = B4.indice(P.historia_inicio) - B4.indice(DESDE);
     const SM = P.modelos["Holt-Winters"].params;
-    const ref = P.modelos["Ingenuo estacional"];
+    const ref = P.modelos["Seasonal naive"];
     let par = { alfa: 0.5, beta: 0, gamma: 0.3 };
 
     const fmtPar = (v) => { let s = v.toFixed(3); if (s.endsWith("0")) s = s.slice(0, -1); return s.replace(".", ","); };
@@ -38,7 +38,7 @@ DEMOS.holtWinters = {
         U.el("div", { class: "b4-nota", style: "margin-top:0" }, "ℓ: nivel · b: tendencia por día · s: efecto del día de la semana")),
       U.el("div", { class: "b4-bloque" }, U.el("h4", {}, "Estado al 31/5/2025"), estado, graficoS),
       U.el("div", { class: "b4-bloque" }, U.el("h4", {}, "Junio de 2025"), cifras,
-        U.el("div", { class: "b4-nota" }, `Ingenuo estacional: MAE ${B4.num(ref.MAE)}, MAPE ${B4.pct(ref.MAPE)}.`)),
+        U.el("div", { class: "b4-nota" }, `Seasonal naive: MAE ${B4.num(ref.MAE)}, MAPE ${B4.pct(ref.MAPE)}.`)),
     );
     lectura.style.cssText = "display:grid; grid-template-columns: repeat(3, 1fr); gap: 32px; line-height: 1.4;";
     const lecA = U.el("div"), lecB = U.el("div"), lecG = U.el("div");

@@ -109,7 +109,7 @@
 .demo .grafico { width: 100%; }
 .demo .grafico svg { overflow: visible; }
 .demo .grafico figure { margin: 0; }
-.demo .lectura { font-size: 0.64em; color: var(--ink-2); margin-top: 10px; min-height: 1.4em; }
+.demo .lectura { font-size: 0.64em; line-height: 1.38; color: var(--ink-2); margin-top: 10px; min-height: 1.4em; }
 .demo .lectura b { color: var(--ink); font-weight: 600; }
 
 input[type="range"] { -webkit-appearance: none; appearance: none; width: 260px; height: 4px; background: var(--rule); border-radius: 2px; outline: none; }
@@ -153,6 +153,7 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 /* Juego "¿qué pasó?" */
 .marca-evento { cursor: pointer; }
 .revelado { font-size: 0.6em; padding: 14px 18px; border-left: 3px solid var(--ink); background: var(--surface-2); border-radius: 0 8px 8px 0; margin-top: 12px; }
+.demo .lectura .revelado { font-size: 0.95em; color: var(--ink); }
 
 .reveal .progress { color: var(--ink); height: 3px; }
 .reveal .slide-number { font-family: var(--mono); font-size: 13px; background: transparent; color: var(--ink-3); right: 22px; top: 14px; bottom: auto; }

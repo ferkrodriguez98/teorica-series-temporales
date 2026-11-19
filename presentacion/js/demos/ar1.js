@@ -21,14 +21,14 @@ DEMOS.ar1 = {
     const fila = U.el("div", { class: "b3-fila" });
     grafico.append(fila);
     const pS = B3.panel(fila, "", 900);
-    const pA = B3.panel(fila, "ACF de la serie simulada, rezagos 1 a 40", 500);
+    const pA = B3.panel(fila, "ACF de la serie simulada, lags 1 a 40", 500);
     const H = 530;
     const g = B3.graficoACF(pA.cuerpo, { ancho: 500, alto: H, K, dominio: [-1, 1], ticks: [1, 10, 20, 30, 40] });
 
     function dibujar() {
       const x = generar(phi);
       const datos = x.map((v, t) => ({ t, v }));
-      pS.titulo.innerHTML = phi === 0 ? "Ruido blanco (φ = 0), 400 períodos" : phi === 1 ? "Caminata aleatoria (φ = 1), 400 períodos" : `AR(1) con φ = ${U.fmt(phi, 2)}, 400 períodos`;
+      pS.titulo.innerHTML = phi === 0 ? "White noise (φ = 0), 400 períodos" : phi === 1 ? "Random walk (φ = 1), 400 períodos" : `AR(1) con φ = ${U.fmt(phi, 2)}, 400 períodos`;
       U.reemplazar(pS.cuerpo, Plot.plot({
         width: 900, height: H, marginLeft: 50, marginRight: 14, marginTop: 12, marginBottom: 46,
         style: { fontFamily: "IBM Plex Sans, sans-serif", fontSize: "18px", color: U.COLORES.ink2, background: "transparent", overflow: "visible" },
@@ -49,13 +49,13 @@ DEMOS.ar1 = {
       const r1 = B3.fmtR(acf[0].r), f = U.fmt(phi, 2);
       const ref = " La línea punteada es φ<sup>k</sup>, la autocorrelación teórica del proceso.";
       let t;
-      if (phi === 0) t = `Con φ = 0 cada valor es un shock nuevo, sin relación con el anterior: ruido blanco. La ACF muestral queda cerca de cero en todos los rezagos (${r1} en el 1).`;
-      else if (phi === 1) t = `Con φ = 1 los shocks se suman sin descontarse: caminata aleatoria. La serie no vuelve a ningún nivel y la ACF muestral baja muy despacio (${r1} en el 1, ${B3.fmtR(acf[K - 1].r)} en el ${K}).`;
+      if (phi === 0) t = `Con φ = 0 cada valor es un shock nuevo, sin relación con el anterior: white noise. La ACF muestral queda cerca de cero en todos los lags (${r1} en el 1).`;
+      else if (phi === 1) t = `Con φ = 1 los shocks se suman sin descontarse: random walk. La serie no vuelve a ningún nivel y la ACF muestral baja muy despacio (${r1} en el 1, ${B3.fmtR(acf[K - 1].r)} en el ${K}).`;
       else if (phi < 0) t = `Con φ = ${f} cada valor tiende a tener el signo contrario del anterior: la serie zigzaguea y la ACF alterna signos (${r1} en el 1).${ref}`;
       else {
         const vida = Math.log(0.5) / Math.log(phi);
         const media = vida < 0.95 ? "en menos de un período" : vida < 1.05 ? "en un período" : `en unos ${U.fmt(vida, vida < 10 ? 1 : 0)} períodos`;
-        t = `Con φ = ${f}, un shock pierde la mitad de su efecto ${media}. ${phi >= 0.9 ? "La serie se aleja del cero y tarda en volver: es persistente." : "La serie vuelve rápido al cero."} ACF en el rezago 1: ${r1}.${ref}`;
+        t = `Con φ = ${f}, un shock pierde la mitad de su efecto ${media}. ${phi >= 0.9 ? "La serie se aleja del cero y tarda en volver: es persistente." : "La serie vuelve rápido al cero."} ACF en el lag 1: ${r1}.${ref}`;
       }
       lectura.innerHTML = t;
     }
