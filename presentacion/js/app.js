@@ -77,6 +77,9 @@ U.slider = ({ etiqueta, min, max, step = 1, valor, formato = (v) => v, alCambiar
   return lab;
 };
 
+/* Alto de la diapositiva para un ancho fijo de 1600: 900 en 16:9, más en pantallas más altas */
+U.altoDiapositiva = () => Math.max(900, Math.min(1200, Math.round((1600 * window.innerHeight) / Math.max(1, window.innerWidth))));
+
 /* Grupo de botones excluyentes */
 U.botones = (opciones, inicial, alCambiar) => {
   const g = U.el("div", { class: "botones", role: "group" });
@@ -204,6 +207,15 @@ U.iniciarDemos = (reveal) => {
     anim.alternar();
   }, true);
   reveal.on("ready", (e) => procesar(e.currentSlide));
+  /* El alto de la diapositiva sigue la proporción de la pantalla (16:9 o más alta, como 16:10 en pantalla completa),
+     así no sobra una franja abajo. Al cambiar, se vuelve a centrar el contenido. */
+  window.addEventListener("resize", () => {
+    const h = U.altoDiapositiva();
+    if (reveal.getConfig().height === h) return;
+    reveal.configure({ height: h });
+    document.querySelectorAll(".cuerpo").forEach((c) => { c._fijo = false; c.style.paddingTop = ""; c.style.justifyContent = ""; });
+    fijarCuerpo(reveal.getCurrentSlide());
+  });
   reveal.on("slidechanged", (e) => procesar(e.currentSlide));
 };
 

@@ -221,7 +221,7 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px 
 .aprendizajes b { color: var(--ink); font-weight: 600; }
 
 /* Botón de pantalla completa, arriba a la derecha junto al número de diapositiva */
-#pantalla-completa { position: fixed; right: 84px; top: 8px; z-index: 40; width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--rule); background: var(--surface, #f4f1ea); color: var(--ink-2); display: grid; place-items: center; cursor: pointer; opacity: 0.75; transition: opacity 0.2s; padding: 0; }
+#pantalla-completa { position: fixed; left: 10px; top: 8px; z-index: 40; width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--rule); background: var(--surface, #f4f1ea); color: var(--ink-2); display: grid; place-items: center; cursor: pointer; opacity: 0.75; transition: opacity 0.2s; padding: 0; }
 #pantalla-completa:hover { opacity: 1; color: var(--ink); }
 #pantalla-completa.oculto { display: none; }
 body.con-escena #pantalla-completa { background: rgba(20,20,20,0.6); color: #ddd; border-color: rgba(255,255,255,0.2); }
