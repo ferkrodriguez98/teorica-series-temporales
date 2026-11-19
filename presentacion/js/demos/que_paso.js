@@ -19,6 +19,7 @@ DEMOS.quePaso = {
     bQue.addEventListener("click", () => { etapa = 2; dibujar(); });
     controles.append(sel, bFecha, bQue);
 
+    const memoria = {};
     function dibujar() {
       const c = casos[i];
       const d = U.dia(c.fecha);
@@ -29,21 +30,22 @@ DEMOS.quePaso = {
         x: { domain: [5, 24], ticks: d3.range(5, 25, 2), tickFormat: (h) => `${h} h`, label: null },
         y: { grid: true, tickFormat: U.tickM, label: null, domain: [0, Math.max(d3.max(c.perfil), d3.max(c.referencia)) * 1.08] },
         marks: [
-          Plot.areaY(ref, { x: "hora", y: "valor", fill: U.COLORES.ink3, fillOpacity: 0.16, curve: "step-after" }),
-          Plot.lineY(ref, { x: "hora", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.4, curve: "step-after" }),
-          Plot.lineY(dia, { x: "hora", y: "valor", stroke: U.COLORES.B, strokeWidth: 2.2, curve: "step-after" }),
+          Plot.areaY(ref, { x: "hora", y: "valor", fill: U.COLORES.ink3, fillOpacity: 0.16, curve: "step-after", className: "anim-area" }),
+          Plot.lineY(ref, { x: "hora", y: "valor", stroke: U.COLORES.ink3, strokeWidth: 1.4, curve: "step-after", className: "anim-ref" }),
+          Plot.lineY(dia, { x: "hora", y: "valor", stroke: U.COLORES.B, strokeWidth: 2.2, curve: "step-after", className: "anim-dia" }),
           Plot.text([{ hora: 5.2, valor: d3.max(c.referencia) }], { x: "hora", y: "valor", text: () => `${c.dia} normal`, fill: U.COLORES.ink3, textAnchor: "start", dy: -10, fontSize: 18 }),
           Plot.tip(dia, Plot.pointerX({ x: "hora", y: "valor", title: (p) => `${String(Math.floor(p.hora)).padStart(2, "0")}:${String((p.hora % 1) * 60).padStart(2, "0")}\neste día: ${U.fmt(p.valor)}\nnormal: ${U.fmt(c.referencia[p.hora * 4])}` })),
         ],
       }));
       U.reemplazar(grafico, plot);
+      B4.animar(grafico, memoria, ["anim-area", "anim-ref", "anim-dia"], 600);
       const tot = d3.sum(c.perfil), totRef = d3.sum(c.referencia);
       const nuevo = i !== casoPrevio;
       const anim = (k) => (!nuevo && etapa >= k && etapaPrevia < k ? " aparece" : "");
       const fecha = etapa >= 1 ? `<div class="panel-fecha${anim(1)}">${U.fechaLarga(d)}</div>` : `<div class="panel-fecha">Un ${c.dia}</div>`;
-      panel.innerHTML = `<div class="kicker" style="margin:0">Caso ${i + 1} de ${casos.length}</div>${fecha}` +
+      U.panelFundido(panel, `<div class="kicker" style="margin:0">Caso ${i + 1} de ${casos.length}</div>${fecha}` +
         `<div>Ese día: <b>${U.fmt(tot)}</b> pasajeros, el ${Math.round((100 * tot) / totRef)} % de un ${c.dia} normal.</div>` +
-        (etapa === 2 ? `<div class="revelado${anim(2)}">${c.descripcion} <span class="muted">Fuente: <a href="${c.fuente}" target="_blank">${new URL(c.fuente).hostname.replace("www.", "")}</a></span></div>` : `<div class="pendiente">¿Qué pasó ese día?</div>`);
+        (etapa === 2 ? `<div class="revelado${anim(2)}">${c.descripcion} <span class="muted">Fuente: <a href="${c.fuente}" target="_blank">${new URL(c.fuente).hostname.replace("www.", "")}</a></span></div>` : `<div class="pendiente">¿Qué pasó ese día?</div>`), nuevo && casoPrevio >= 0);
       etapaPrevia = etapa; casoPrevio = i;
       bFecha.disabled = etapa >= 1;
     }

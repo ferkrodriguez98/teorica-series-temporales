@@ -37,6 +37,7 @@ DEMOS.residuos = {
     const estado = {};
     for (const k in SERIES) estado[k] = { orden: d3.shuffle(d3.range(SERIES[k].casos.length)), pos: 0 };
 
+    const memoria = {};
     function dibujar() {
       const S = SERIES[cual], E = estado[cual];
       const c = S.casos[E.orden[E.pos]];
@@ -50,7 +51,7 @@ DEMOS.residuos = {
         const der = c.f > U.dia("2025-10-01");
         marcas.push(
           Plot.dot(S.casos, { x: "f", y: "residuo", r: 5, stroke: U.COLORES.ink3, strokeWidth: 1.2 }),
-          Plot.dot([c], { x: "f", y: "residuo", r: 11, fill: U.COLORES.B, stroke: U.COLORES.surface, strokeWidth: 2 }),
+          Plot.dot([c], { x: "f", y: "residuo", r: 11, fill: U.COLORES.B, stroke: U.COLORES.surface, strokeWidth: 2, className: "anim-caso" }),
           Plot.text([c], { x: "f", y: "residuo", text: (d) => `${U.DIAS[d.f.getUTCDay()]} ${U.fechaCorta(d.f)}`, dx: der ? -18 : 18, textAnchor: der ? "end" : "start", fill: U.COLORES.B, stroke: U.COLORES.surface, strokeWidth: 5, fontSize: 18, fontWeight: 600 }),
         );
       }
@@ -60,16 +61,19 @@ DEMOS.residuos = {
         y: { grid: true, tickFormat: U.tickM, label: `residuo (${S.unidad})` },
         marks: marcas,
       })));
+      if (!todos && memoria.cual !== cual) { delete memoria["anim-caso"]; memoria.cual = cual; }
+      if (!todos) B4.animar(grafico, memoria, ["anim-caso"], 600); else delete memoria["anim-caso"];
       const vista = `${cual}|${todos}|${E.pos}|${revelado}`;
       const cambio = vista !== vistaPrevia, mismoDia = vistaPrevia.startsWith(`${cual}|false|${E.pos}|`);
+      const vistaPreviaExistia = vistaPrevia !== "";
       vistaPrevia = vista;
       if (todos) {
         const n = (cat) => S.top.filter((d) => d.cat === cat).length;
-        panel.innerHTML = `<div class="kicker" style="margin:0">${S.nombre}: los 40 residuos más grandes</div>` +
+        U.panelFundido(panel, `<div class="kicker" style="margin:0">${S.nombre}: los 40 residuos más grandes</div>` +
           `<div class="${cambio ? "aparece" : ""}"><b style="color:${U.COLORES.B}">${n("feriado")}</b> caen en un feriado o día no laborable, que son el ${pctFer} % de los días.</div>` +
           `<div class="${cambio ? "aparece" : ""}"><b style="color:${U.COLORES.lluvia}">${n("lluvia")}</b>, en un día con ${LLUVIA} mm de lluvia o más (el ${pctLluvia} % de los días restantes).</div>` +
           `<div class="${cambio ? "aparece" : ""}"><b>${n("otro")}</b>, en otros días.</div>` +
-          `<div class="revelado${cambio ? " aparece" : ""}">Estos días no se borran. Para pronosticar, se le dice al modelo qué días son feriado o llueven, como variables; si no, los trata como ruido y le contaminan el ciclo semanal y la tendencia.</div>`;
+          `<div class="revelado${cambio ? " aparece" : ""}">Estos días no se borran. Para pronosticar, se le dice al modelo qué días son feriado o llueven, como variables; si no, los trata como ruido y le contaminan el ciclo semanal y la tendencia.</div>`, false);
       } else {
         const obs = c.observado < 1000 && cual === "subte" ? "No viajó casi nadie" : `${cual === "subte" ? "Viajaron" : "Hubo"} ${U.fmtK(c.observado)}${cual === "ecobici" ? " viajes" : ""}`;
         let extra = "";
@@ -77,10 +81,10 @@ DEMOS.residuos = {
           const otra = SERIES[cual === "subte" ? "ecobici" : "subte"].porClave.get(c.fecha);
           if (otra && otra.valor != null) extra = `<div class="muted" style="margin-top:10px">${S.otro}, el mismo día: ${fmtR(otra.valor)} ${cual === "subte" ? "viajes" : "pasajeros"}, ${pct(otra.valor, otra.obs)} respecto de lo esperado.</div>`;
         }
-        panel.innerHTML = `<div class="kicker" style="margin:0">${S.nombre}, día ${E.pos + 1} de ${S.casos.length}</div>` +
+        U.panelFundido(panel, `<div class="kicker" style="margin:0">${S.nombre}, día ${E.pos + 1} de ${S.casos.length}</div>` +
           `<div class="panel-fecha${cambio && !mismoDia ? " aparece" : ""}">${U.fechaLarga(c.f)}</div>` +
           `<div>${obs}. Residuo: <b>${fmtR(c.residuo)}</b>, ${pct(c.residuo, c.observado)} respecto de lo esperado.</div>` +
-          (revelado ? `<div class="revelado${mismoDia ? " aparece" : ""}">${c.texto}${extra}</div>` : `<div class="pendiente">¿Qué pasó ese día?</div>`);
+          (revelado ? `<div class="revelado${mismoDia ? " aparece" : ""}">${c.texto}${extra}</div>` : `<div class="pendiente">¿Qué pasó ese día?</div>`), cambio && !mismoDia && vistaPreviaExistia);
       }
     }
 

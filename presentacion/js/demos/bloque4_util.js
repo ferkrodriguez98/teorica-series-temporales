@@ -216,11 +216,14 @@
         } else if (nodo.tagName === "rect" && ant && ant.y != null) {
           const y = nodo.getAttribute("y"), h = nodo.getAttribute("height"), x = nodo.getAttribute("x");
           sel.attr("y", ant.y).attr("height", ant.h).attr("x", ant.x ?? x).transition().duration(duracion).ease(d3.easeCubicInOut).attr("y", y).attr("height", h).attr("x", x);
+        } else if (nodo.tagName === "circle" && ant && ant.cx != null) {
+          const cx = nodo.getAttribute("cx"), cy = nodo.getAttribute("cy");
+          sel.attr("cx", ant.cx).attr("cy", ant.cy).transition().duration(duracion).ease(d3.easeCubicInOut).attr("cx", cx).attr("cy", cy);
         } else if (!ant) {
           sel.style("opacity", 0).transition().duration(duracion).style("opacity", 1);
         }
       });
-      memoria[c] = nuevos.map((n) => ({ d: n.getAttribute("d"), y: n.getAttribute("y"), h: n.getAttribute("height"), x: n.getAttribute("x") }));
+      memoria[c] = nuevos.map((n) => ({ d: n.getAttribute("d"), y: n.getAttribute("y"), h: n.getAttribute("height"), x: n.getAttribute("x"), cx: n.getAttribute("cx"), cy: n.getAttribute("cy") }));
     });
   };
 })();

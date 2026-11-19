@@ -104,6 +104,15 @@ U.iconoPlay = (btn, enPausa) => {
     : '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>';
 };
 
+/* Cambia el contenido de un panel con un fundido: se apaga, cambia y vuelve a aparecer */
+U.panelFundido = (panel, html, fundir) => {
+  clearTimeout(panel._fundido);
+  if (!fundir) { panel.style.opacity = ""; panel.innerHTML = html; return; }
+  panel.style.transition = "opacity 0.15s";
+  panel.style.opacity = 0;
+  panel._fundido = setTimeout(() => { panel.innerHTML = html; panel.style.transition = "opacity 0.3s"; panel.style.opacity = 1; }, 150);
+};
+
 /* Esqueleto estándar de una demo: controles arriba, gráfico, lectura abajo */
 U.armar = (el) => {
   el.classList.add("demo");
